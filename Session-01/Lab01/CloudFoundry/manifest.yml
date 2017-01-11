@@ -1,0 +1,9 @@
+﻿---
+applications:
+- name: env
+  random-route: true
+  health-check-type: none
+  memory: 1G
+  stack: windows2012R2
+  env:
+    ASPNETCORE_ENVIRONMENT: production

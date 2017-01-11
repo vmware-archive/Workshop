@@ -1,0 +1,15 @@
+﻿@model Microsoft.Extensions.Configuration.IConfigurationRoot
+@using Microsoft.Extensions.Configuration
+
+@{
+    ViewBag.Title = "Raw Application Configuration data from appsettings.json & appsettings.development.json";
+}
+<h2>@ViewBag.Title</h2>
+
+<h3>Configuration Data</h3>
+@foreach (KeyValuePair<string,string> pair in Model.AsEnumerable())
+{
+    <h4>@pair.Key=@pair.Value</h4>
+
+}
+

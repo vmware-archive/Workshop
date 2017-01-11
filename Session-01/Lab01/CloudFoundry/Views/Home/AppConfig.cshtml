@@ -1,0 +1,9 @@
+﻿@model CloudFoundry.ViewModels.AppConfigViewModel
+@{
+    ViewBag.Title = "Application Configuration data from appsettings.json & appsettings.development.json";
+}
+<h2>@ViewBag.Title</h2>
+
+<h3>Configuration Data</h3>
+<h4>option1 = @Model.AppConfig.Option1</h4>
+<h4>option2 = @Model.AppConfig.Option2</h4>
