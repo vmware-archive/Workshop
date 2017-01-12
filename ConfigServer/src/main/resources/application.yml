@@ -1,0 +1,18 @@
+server:
+  port: 8888
+
+management:
+  context-path: /admin
+  
+logging:
+  level:
+    org.springframework.cloud: 'DEBUG'
+    
+spring:
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: file:///steeltoe/config-repo
