@@ -11,8 +11,8 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Microsoft.EntityFrameworkCore": "1.1.0",
-    "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",
+    "Microsoft.EntityFrameworkCore": "1.0.2",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.0.2",
     "Pivotal.Extensions.Configuration.ConfigServer": "1.0.0-rc2"
   },
 
@@ -32,8 +32,8 @@
         "dotnet5.6",
         "portable-net45+win8"
       ]
-    },
-    "net452": {}
+    }
+  
   },
 
   "buildOptions": {

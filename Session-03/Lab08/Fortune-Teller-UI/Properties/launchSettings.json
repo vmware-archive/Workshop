@@ -1,0 +1,28 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:50488/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "development"
+      }
+    },
+    "Fortune_Teller_UI": {
+      "commandName": "Project",
+      "commandLineArgs": "--server.urls http://*:5555",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5555/",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "production"
+      }
+    }
+  }
+}

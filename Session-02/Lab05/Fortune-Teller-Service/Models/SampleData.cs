@@ -16,7 +16,7 @@ namespace Fortune_Teller_Service.Models
             {
                 var db = serviceScope.ServiceProvider.GetService<FortuneContext>();
 
-                if (await db.Database.EnsureCreatedAsync())
+                if (db.Database.EnsureCreated())
                 {
                     await InsertFortunes(db);
 

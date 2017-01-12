@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fortune_Teller_Service.Models
 {
@@ -17,16 +18,16 @@ namespace Fortune_Teller_Service.Models
 
         public async Task<List<FortuneEntity>> GetAllAsync()
         {
-            var all = _db.Fortunes.ToAsyncEnumerable();
-            return await all.ToList();
+            var all = await _db.Fortunes.ToListAsync();
+            return all;
         }
 
         public async Task<FortuneEntity> RandomFortuneAsync()
         {
             var count = _db.Fortunes.Count();
             var index = _random.Next() % count;
-            var all = _db.Fortunes.ToAsyncEnumerable();
-            return await all.ElementAt(index);
+            var all = await _db.Fortunes.ToListAsync();
+            return all[index];
         }
     }
 }

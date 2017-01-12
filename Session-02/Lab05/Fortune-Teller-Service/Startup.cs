@@ -21,9 +21,11 @@ namespace Fortune_Teller_Service
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+            Environment = env;
         }
 
         public IConfigurationRoot Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
