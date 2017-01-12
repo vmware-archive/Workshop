@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Fortune_Teller_Service.Common.Services;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Fortune_Teller_Service.Models;
+using Microsoft.EntityFrameworkCore;
 using Pivotal.Extensions.Configuration;
+using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
 using Pivotal.Discovery.Client;
 
-namespace Fortune_Teller_UI
+namespace Fortune_Teller_Service
 {
     public class Startup
     {
@@ -20,11 +23,12 @@ namespace Fortune_Teller_UI
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 // Lab07 Start
                 .AddConfigServer(env)
                 // Lab07 End
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
             Environment = env;
         }
@@ -32,15 +36,26 @@ namespace Fortune_Teller_UI
         public IConfigurationRoot Configuration { get; }
         public IHostingEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            // Lab06 Start
-            services.AddSingleton<IFortuneService, FortuneServiceClient>();
+            // Lab08 add
+            if (Environment.IsDevelopment())
+            {
+                // Lab06 Start
+                services.AddEntityFramework()
+                        .AddDbContext<FortuneContext>(options => options.UseInMemoryDatabase());
+            } else
+            {
+                // Lab08 add
+                services.AddEntityFramework()
+                     .AddDbContext<FortuneContext>(options => options.UseMySql(Configuration));
+            }
+
+            services.AddSingleton<IFortuneRepository, FortuneRepository>();
             // Lab06 End
 
             // Lab09 Start
-            services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
             services.AddDiscoveryClient(Configuration);
             // Lab09 End
 
@@ -48,32 +63,20 @@ namespace Fortune_Teller_UI
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Fortunes}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
 
             // Lab09 Start
             app.UseDiscoveryClient();
             // Lab09 End
+
+            // Lab06 Start
+            SampleData.InitializeFortunesAsync(app.ApplicationServices).Wait();
+            // Lab06 End
         }
     }
 }
