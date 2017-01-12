@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Fortune_Teller_Service.Common.Services;
+using Pivotal.Extensions.Configuration;
 
 namespace Fortune_Teller_UI
 {
@@ -19,6 +20,9 @@ namespace Fortune_Teller_UI
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                // Lab07 Start
+                .AddConfigServer(env)
+                // Lab07 End
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }

@@ -7,3 +7,5 @@ applications:
   command: ./Fortune-Teller-UI --server.urls "http://*:$PORT"
   env:
     ASPNETCORE_ENVIRONMENT: production
+  services:
+   - myConfigServer

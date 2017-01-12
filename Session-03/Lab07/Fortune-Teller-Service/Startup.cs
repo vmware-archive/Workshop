@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Fortune_Teller_Service.Models;
 using Microsoft.EntityFrameworkCore;
+using Pivotal.Extensions.Configuration;
 
 namespace Fortune_Teller_Service
 {
@@ -21,6 +22,9 @@ namespace Fortune_Teller_Service
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                // Lab07 Start
+                .AddConfigServer(env)
+                // Lab07 End
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
