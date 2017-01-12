@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{90
 	ProjectSection(SolutionItems) = preProject
 		Common\Services\Fortune.cs = Common\Services\Fortune.cs
 		Common\Services\FortuneServiceClient.cs = Common\Services\FortuneServiceClient.cs
+		Common\Services\FortuneServiceConfig.cs = Common\Services\FortuneServiceConfig.cs
 		Common\Services\IFortuneService.cs = Common\Services\IFortuneService.cs
 	EndProjectSection
 EndProject
