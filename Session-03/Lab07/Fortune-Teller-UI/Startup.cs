@@ -21,7 +21,7 @@ namespace Fortune_Teller_UI
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 // Lab07 Start
-                .AddConfigServer(env)
+                //.AddConfigServer(env)
                 // Lab07 End
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -37,6 +37,10 @@ namespace Fortune_Teller_UI
             // Lab06 Start
             services.AddSingleton<IFortuneService, FortuneServiceClient>();
             // Lab06 End
+
+            // Lab07 Start
+            services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
+            // Lab07 End
 
             // Add framework services.
             services.AddMvc();

@@ -292,7 +292,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="appsettings.json" />
     <Content Include="appsettings.development.json" />
-    <Content Include="logo-inline.svg" />
     <Content Include="manifest.yml" />
     <None Include="Properties\PublishProfiles\CloudFoundry.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />

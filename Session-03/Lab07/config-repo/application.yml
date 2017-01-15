@@ -1,0 +1,6 @@
+Logging: 
+  IncludeScopes: false
+  LogLevel: 
+    Default: Debug
+    System: Information
+    Microsoft: Information

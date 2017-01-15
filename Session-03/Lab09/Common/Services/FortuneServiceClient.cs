@@ -13,36 +13,35 @@ namespace Fortune_Teller_Service.Common.Services
 {
     public class FortuneServiceClient : IFortuneService
     {
-        // Lab09 Start
-        DiscoveryHttpClientHandler _handler;
         ILogger<FortuneServiceClient> _logger;
         IOptionsSnapshot<FortuneServiceConfig> _config;
 
+        // Lab09 Start
+        DiscoveryHttpClientHandler _handler;
+        // Lab09 End
+
         public FortuneServiceClient(IDiscoveryClient client, IOptionsSnapshot<FortuneServiceConfig> config, ILogger<FortuneServiceClient> logger)
         {
+            // Lab09 Start
             _handler = new DiscoveryHttpClientHandler(client);
+            // Lab09 End
             _logger = logger;
             _config = config;
         }
-        // Lab09 End
+
 
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
-            // Lab09
             return await HandleRequest<List<Fortune>>(_config.Value.AllFortunesUrl);
-            // Lab09
         }
 
         public async Task<Fortune> RandomFortuneAsync()
         {
-            // Lab09
             return await HandleRequest<Fortune>(_config.Value.RandomFortuneUrl);
-            // Lab09
         }
 
 
-        // Lab09 Start
         private async Task<T> HandleRequest<T>(string url) where T: class
         {
             try
@@ -79,9 +78,10 @@ namespace Fortune_Teller_Service.Common.Services
 
         private HttpClient GetClient()
         {
+            // Lab09 Start
             var client = new HttpClient(_handler, false);
+            // Lab09 End
             return client;
         }
-        // Lab09 End
     }
 }
