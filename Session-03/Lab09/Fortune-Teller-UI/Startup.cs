@@ -39,12 +39,17 @@ namespace Fortune_Teller_UI
             services.AddSingleton<IFortuneService, FortuneServiceClient>();
             // Lab06 End
 
-            // Lab09 Start
+            // Lab07 Start
             services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
+            // Lab07 End
+
+            // Lab09 Start
             services.AddDiscoveryClient(Configuration);
             // Lab09 End
 
             // Add framework services.
+            services.AddSession();
+
             services.AddMvc();
         }
 
@@ -63,6 +68,8 @@ namespace Fortune_Teller_UI
             }
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

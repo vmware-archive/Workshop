@@ -33,23 +33,26 @@ namespace Fortune_Teller_Service.Common.Services
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
-            return await HandleRequest<List<Fortune>>(_config.Value.AllFortunesUrl);
+            return await HandleRequest<List<Fortune>>(_config.Value.AllFortunesURL());
         }
 
         public async Task<Fortune> RandomFortuneAsync()
         {
-            return await HandleRequest<Fortune>(_config.Value.RandomFortuneUrl);
+            return await HandleRequest<Fortune>(_config.Value.RandomFortuneURL());
         }
 
 
         private async Task<T> HandleRequest<T>(string url) where T: class
         {
+            _logger?.LogDebug("FortuneService call: {0}", url);
             try
             {
                 using (var client = GetClient())
                 {
                     var stream = await client.GetStreamAsync(url);
-                    return Deserialize<T>(stream);
+                    var result = Deserialize<T>(stream);
+                    _logger?.LogDebug("FortuneService returned: {0}", result);
+                    return result;
                 }
             } catch (Exception e)
             {

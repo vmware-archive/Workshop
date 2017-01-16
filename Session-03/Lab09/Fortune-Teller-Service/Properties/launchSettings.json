@@ -13,7 +13,7 @@
       "launchBrowser": true,
       "launchUrl": "api/fortunes/all",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "development"
       }
     },
     "Fortune_Teller_Service": {
@@ -21,7 +21,7 @@
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/api/fortunes/all",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "development"
       }
     }
   }

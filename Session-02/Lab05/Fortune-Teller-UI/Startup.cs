@@ -30,6 +30,8 @@ namespace Fortune_Teller_UI
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddSession();
+
             services.AddMvc();
         }
 
@@ -48,6 +50,8 @@ namespace Fortune_Teller_UI
             }
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

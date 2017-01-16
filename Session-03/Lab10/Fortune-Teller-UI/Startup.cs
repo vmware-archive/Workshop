@@ -50,8 +50,6 @@ namespace Fortune_Teller_UI
                 // Use Redis cache on CloudFoundry to store session data
                 services.AddDistributedRedisCache(Configuration);
             }
-
-            services.AddSession();
             // Lab10 End
        
             // Lab06 Start
@@ -64,6 +62,8 @@ namespace Fortune_Teller_UI
             // Lab09 End
 
             // Add framework services.
+            services.AddSession();
+
             services.AddMvc();
         }
 
@@ -71,10 +71,6 @@ namespace Fortune_Teller_UI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-
-            // Lab10 Start
-            app.UseSession();
-            // Lab10 End 
 
             if (env.IsDevelopment())
             {
@@ -86,6 +82,8 @@ namespace Fortune_Teller_UI
             }
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

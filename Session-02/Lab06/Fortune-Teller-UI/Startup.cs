@@ -35,6 +35,8 @@ namespace Fortune_Teller_UI
             // Lab06 End
 
             // Add framework services.
+            services.AddSession();
+
             services.AddMvc();
         }
 
@@ -53,6 +55,8 @@ namespace Fortune_Teller_UI
             }
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

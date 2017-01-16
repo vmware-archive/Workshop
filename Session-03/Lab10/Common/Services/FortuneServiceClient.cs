@@ -13,46 +13,50 @@ namespace Fortune_Teller_Service.Common.Services
 {
     public class FortuneServiceClient : IFortuneService
     {
-        // Lab09 Start
-        DiscoveryHttpClientHandler _handler;
+
         ILogger<FortuneServiceClient> _logger;
         IOptionsSnapshot<FortuneServiceConfig> _config;
 
+        // Lab09 Start
+        DiscoveryHttpClientHandler _handler;
+        // Lab09 End
         public FortuneServiceClient(IDiscoveryClient client, IOptionsSnapshot<FortuneServiceConfig> config, ILogger<FortuneServiceClient> logger)
         {
+            // Lab09 Start
             _handler = new DiscoveryHttpClientHandler(client);
+            // Lab09 End
             _logger = logger;
             _config = config;
         }
-        // Lab09 End
+
 
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
-            // Lab09
-            return await HandleRequest<List<Fortune>>(_config.Value.AllFortunesUrl);
-            // Lab09
+            return await HandleRequest<List<Fortune>>(_config.Value.AllFortunesURL());
         }
 
         public async Task<Fortune> RandomFortuneAsync()
         {
-            // Lab09
-            return await HandleRequest<Fortune>(_config.Value.RandomFortuneUrl);
-            // Lab09
+            return await HandleRequest<Fortune>(_config.Value.RandomFortuneURL());
         }
 
 
-        // Lab09 Start
-        private async Task<T> HandleRequest<T>(string url) where T: class
+
+        private async Task<T> HandleRequest<T>(string url) where T : class
         {
+            _logger?.LogDebug("FortuneService call: {0}", url);
             try
             {
                 using (var client = GetClient())
                 {
                     var stream = await client.GetStreamAsync(url);
-                    return Deserialize<T>(stream);
+                    var result = Deserialize<T>(stream);
+                    _logger?.LogDebug("FortuneService returned: {0}", result);
+                    return result;
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 _logger?.LogError("FortuneService exception: {0}", e);
             }
@@ -60,14 +64,14 @@ namespace Fortune_Teller_Service.Common.Services
         }
 
 
-        private T Deserialize<T>(Stream stream) where T: class
+        private T Deserialize<T>(Stream stream) where T : class
         {
             try
             {
                 using (JsonReader reader = new JsonTextReader(new StreamReader(stream)))
                 {
                     JsonSerializer serializer = new JsonSerializer();
-                    return (T) serializer.Deserialize(reader, typeof(T));
+                    return (T)serializer.Deserialize(reader, typeof(T));
                 }
             }
             catch (Exception e)
@@ -79,9 +83,10 @@ namespace Fortune_Teller_Service.Common.Services
 
         private HttpClient GetClient()
         {
+            // Lab09 Start
             var client = new HttpClient(_handler, false);
+            // Lab09 End
             return client;
         }
-        // Lab09 End
     }
 }
