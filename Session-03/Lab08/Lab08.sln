@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Fortune-Teller-Service", "Fortune-Teller-Service\Fortune-Teller-Service.xproj", "{B138D8EC-FE51-46C3-99B7-8E9AA74AFE56}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{F5B8DD29-F251-4A01-8DE9-409174A01CEB}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Fortune-Teller-UI", "Fortune-Teller-UI\Fortune-Teller-UI.xproj", "{8DE9C626-EF93-4F3D-9B28-E7919A9C753D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5FCEBC85-E240-4E75-9580-D6EA10E04269}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{783DECF5-6848-434B-9839-4229FB3E53A1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{024D6EC3-41F3-4CE6-A578-72C554031912}"
 	ProjectSection(SolutionItems) = preProject
 		Common\Services\Fortune.cs = Common\Services\Fortune.cs
 		Common\Services\FortuneServiceClient.cs = Common\Services\FortuneServiceClient.cs
@@ -17,10 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{78
 		Common\Services\IFortuneService.cs = Common\Services\IFortuneService.cs
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C38045B-DE17-47DD-A8D7-289C21B5A44F}"
-	ProjectSection(SolutionItems) = preProject
-		config-server.json = config-server.json
-	EndProjectSection
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Fortune-Teller-Service", "Fortune-Teller-Service\Fortune-Teller-Service.xproj", "{B138D8EC-FE51-46C3-99B7-8E9AA74AFE56}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Fortune-Teller-UI", "Fortune-Teller-UI\Fortune-Teller-UI.xproj", "{8DE9C626-EF93-4F3D-9B28-E7919A9C753D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +36,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{783DECF5-6848-434B-9839-4229FB3E53A1} = {5FCEBC85-E240-4E75-9580-D6EA10E04269}
+		{024D6EC3-41F3-4CE6-A578-72C554031912} = {F5B8DD29-F251-4A01-8DE9-409174A01CEB}
 	EndGlobalSection
 EndGlobal

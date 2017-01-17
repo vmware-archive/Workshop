@@ -10,3 +10,4 @@ applications:
     ASPNETCORE_ENVIRONMENT: production
   services:
    - myConfigServer
+   - myDiscoveryService

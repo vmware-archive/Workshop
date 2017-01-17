@@ -8,8 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Fortune_Teller_Service.Common.Services;
-using Pivotal.Extensions.Configuration;
-using Pivotal.Discovery.Client;
 
 namespace Fortune_Teller_UI
 {
@@ -21,9 +19,6 @@ namespace Fortune_Teller_UI
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                // Lab07 Start
-                .AddConfigServer(env)
-                // Lab07 End
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
             Environment = env;
@@ -35,17 +30,6 @@ namespace Fortune_Teller_UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Lab06 Start
-            services.AddSingleton<IFortuneService, FortuneServiceClient>();
-            // Lab06 End
-
-            // Lab07 Start
-            services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
-            // Lab07 End
-
-            // Lab08 Start
-            services.AddDiscoveryClient(Configuration);
-            // Lab08 End
 
             // Add framework services.
             services.AddSession();
@@ -77,10 +61,6 @@ namespace Fortune_Teller_UI
                     name: "default",
                     template: "{controller=Fortunes}/{action=Index}/{id?}");
             });
-
-            // Lab08 Start
-            app.UseDiscoveryClient();
-            // Lab08 End
         }
     }
 }

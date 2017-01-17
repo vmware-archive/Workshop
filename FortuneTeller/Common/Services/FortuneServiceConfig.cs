@@ -27,5 +27,3 @@ namespace Fortune_Teller_Service.Common.Services
 
     }
 }
-
-

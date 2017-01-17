@@ -1,45 +1,33 @@
 ﻿
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Pivotal.Discovery.Client;
-using System.Net.Http;
-using System.IO;
-using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.Extensions.Logging;
+using System.IO;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
+using System.Net.Http;
 
 namespace Fortune_Teller_Service.Common.Services
 {
     public class FortuneServiceClient : IFortuneService
     {
-
         ILogger<FortuneServiceClient> _logger;
-        IOptionsSnapshot<FortuneServiceConfig> _config;
-
-        // Lab08 Start
-        DiscoveryHttpClientHandler _handler;
-        // Lab08 End
-        public FortuneServiceClient(IDiscoveryClient client, IOptionsSnapshot<FortuneServiceConfig> config, ILogger<FortuneServiceClient> logger)
+        public FortuneServiceClient(ILogger<FortuneServiceClient> logger)
         {
-            // Lab08 Start
-            _handler = new DiscoveryHttpClientHandler(client);
-            // Lab08 End
             _logger = logger;
-            _config = config;
         }
-
-
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
-            return await HandleRequest<List<Fortune>>(_config.Value.AllFortunesURL());
+            return await Task.Run(() => new List<Fortune>() { new Fortune() { Id = 1, Text = "I need to be wired up!" } });
         }
 
         public async Task<Fortune> RandomFortuneAsync()
         {
-            return await HandleRequest<Fortune>(_config.Value.RandomFortuneURL());
+            var all = await AllFortunesAsync();
+            return all[0];
         }
+
 
         private async Task<T> HandleRequest<T>(string url) where T : class
         {
@@ -81,10 +69,9 @@ namespace Fortune_Teller_Service.Common.Services
 
         private HttpClient GetClient()
         {
-            // Lab08 Start
-            var client = new HttpClient(_handler, false);
-            // Lab08 End
+            var client = new HttpClient();
             return client;
         }
     }
 }
+

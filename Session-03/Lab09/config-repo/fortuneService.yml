@@ -1,0 +1,5 @@
+mysql: 
+  client: 
+    database: mydatabase
+    username: username
+    password: password

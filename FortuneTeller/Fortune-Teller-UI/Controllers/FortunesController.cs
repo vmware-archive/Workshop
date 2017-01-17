@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Fortune_Teller_Service.Common.Services;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Fortune_Teller_UI.Controllers
 {
@@ -12,19 +11,15 @@ namespace Fortune_Teller_UI.Controllers
     {
         ILogger<FortunesController> _logger;
 
-        // Lab06 Start
-        private IFortuneService _fortunes;
-        public FortunesController(ILogger<FortunesController> logger, IFortuneService fortunes)
+        public FortunesController(ILogger<FortunesController> logger)
         {
             _logger = logger;
-            _fortunes = fortunes;
         }
-        // Lab06 End
 
         public IActionResult Index()
         {
             _logger?.LogDebug("Index");
-            ViewData["MyFortune"] = HttpContext.Session.GetString("MyFortune");// Lab10
+            ViewData["MyFortune"] = HttpContext.Session.GetString("MyFortune");
             return View();
         }
 
@@ -32,13 +27,10 @@ namespace Fortune_Teller_UI.Controllers
         {
             _logger?.LogDebug("RandomFortune");
 
-            // Lab06 Start
-            var fortune = await _fortunes.RandomFortuneAsync();
-            // Lab06 End
-
-            HttpContext.Session.SetString("MyFortune", fortune.Text); 
+            var fortune = await Task.Run(() => new Fortune() { Id = 1, Text = "Hello from FortuneController UI!" });
+            HttpContext.Session.SetString("MyFortune", fortune.Text);
             return View(fortune);
-
+    
         }
 
     }

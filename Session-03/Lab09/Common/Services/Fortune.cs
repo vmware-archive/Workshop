@@ -10,5 +10,6 @@ namespace Fortune_Teller_Service.Common.Services
         {
             return $"Fortune[{this.Id},{this.Text}]";
         }
+
     }
 }

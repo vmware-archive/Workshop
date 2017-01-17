@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Fortune_Teller_Service.Controllers
 {
-
     [Route("api/[controller]")]
     public class FortunesController : Controller, IFortuneService
     {

@@ -39,25 +39,26 @@ namespace Fortune_Teller_Service
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            // Lab08 add
+            // Lab09 add
             if (Environment.IsDevelopment())
             {
                 // Lab06 Start
                 services.AddEntityFramework()
                         .AddDbContext<FortuneContext>(options => options.UseInMemoryDatabase());
+                // Lab06 End
             } else
             {
-                // Lab08 add
+                // Lab09 add
                 services.AddEntityFramework()
                      .AddDbContext<FortuneContext>(options => options.UseMySql(Configuration));
             }
-
+            // Lab06 Start
             services.AddSingleton<IFortuneRepository, FortuneRepository>();
             // Lab06 End
 
-            // Lab09 Start
+            // Lab08 Start
             services.AddDiscoveryClient(Configuration);
-            // Lab09 End
+            // Lab08 End
 
             // Add framework services.
             services.AddMvc();
@@ -70,9 +71,9 @@ namespace Fortune_Teller_Service
 
             app.UseMvc();
 
-            // Lab09 Start
+            // Lab08 Start
             app.UseDiscoveryClient();
-            // Lab09 End
+            // Lab08 End
 
             // Lab06 Start
             SampleData.InitializeFortunesAsync(app.ApplicationServices).Wait();

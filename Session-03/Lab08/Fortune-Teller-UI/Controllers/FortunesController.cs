@@ -34,9 +34,10 @@ namespace Fortune_Teller_UI.Controllers
             // Lab06 Start
             var fortune = await _fortunes.RandomFortuneAsync();
             // Lab06 End
+
             HttpContext.Session.SetString("MyFortune", fortune.Text);
             return View(fortune);
-  
+
         }
 
     }

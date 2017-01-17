@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 using Fortune_Teller_Service.Common.Services;
 using Pivotal.Extensions.Configuration;
 using Pivotal.Discovery.Client;
+using Steeltoe.CloudFoundry.Connector.Redis;
+using Steeltoe.Security.DataProtection;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Fortune_Teller_UI
 {
@@ -35,6 +38,21 @@ namespace Fortune_Teller_UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            // Lab09 Start
+            if (Environment.IsProduction())
+            {
+                // Use Redis cache on CloudFoundry to DataProtection Keys
+                services.AddRedisConnectionMultiplexer(Configuration);
+                services.AddDataProtection()
+                    .PersistKeysToRedis()
+                    .SetApplicationName("fortuneui");
+
+                // Use Redis cache on CloudFoundry to store session data
+                services.AddDistributedRedisCache(Configuration);
+            }
+            // Lab09 End
+       
             // Lab06 Start
             services.AddSingleton<IFortuneService, FortuneServiceClient>();
             // Lab06 End
@@ -43,9 +61,9 @@ namespace Fortune_Teller_UI
             services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
             // Lab07 End
 
-            // Lab09 Start
+            // Lab08 Start
             services.AddDiscoveryClient(Configuration);
-            // Lab09 End
+            // Lab08 End
 
             // Add framework services.
             services.AddSession();
@@ -78,9 +96,9 @@ namespace Fortune_Teller_UI
                     template: "{controller=Fortunes}/{action=Index}/{id?}");
             });
 
-            // Lab09 Start
+            // Lab08 Start
             app.UseDiscoveryClient();
-            // Lab09 End
+            // Lab08 End
         }
     }
 }

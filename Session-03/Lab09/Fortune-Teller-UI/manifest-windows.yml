@@ -11,3 +11,4 @@ applications:
   services:
    - myConfigServer
    - myDiscoveryService
+   - myRedisService

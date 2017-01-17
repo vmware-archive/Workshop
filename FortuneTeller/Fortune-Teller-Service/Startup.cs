@@ -10,8 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Fortune_Teller_Service.Models;
 using Microsoft.EntityFrameworkCore;
-using Pivotal.Extensions.Configuration;
-using Pivotal.Discovery.Client;
 
 namespace Fortune_Teller_Service
 {
@@ -23,9 +21,6 @@ namespace Fortune_Teller_Service
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                // Lab07 Start
-                .AddConfigServer(env)
-                // Lab07 End
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -38,15 +33,6 @@ namespace Fortune_Teller_Service
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            // Lab06 Start
-            services.AddEntityFramework()
-                    .AddDbContext<FortuneContext>(options => options.UseInMemoryDatabase());
-            services.AddSingleton<IFortuneRepository, FortuneRepository>();
-            // Lab06 End
-
-            // Lab08 Start
-            services.AddDiscoveryClient(Configuration);
-            // Lab08 End
 
             // Add framework services.
             services.AddMvc();
@@ -59,13 +45,6 @@ namespace Fortune_Teller_Service
 
             app.UseMvc();
 
-            // Lab08 Start
-            app.UseDiscoveryClient();
-            // Lab08 End
-
-            // Lab06 Start
-            SampleData.InitializeFortunesAsync(app.ApplicationServices).Wait();
-            // Lab06 End
         }
     }
 }
