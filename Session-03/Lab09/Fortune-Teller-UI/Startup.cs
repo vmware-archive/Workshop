@@ -47,9 +47,6 @@ namespace Fortune_Teller_UI
                 services.AddDataProtection()
                     .PersistKeysToRedis()
                     .SetApplicationName("fortuneui");
-
-                // Use Redis cache on CloudFoundry to store session data
-                services.AddDistributedRedisCache(Configuration);
             } else
             {
                 services.AddDistributedMemoryCache();
@@ -69,7 +66,18 @@ namespace Fortune_Teller_UI
             // Lab08 End
 
             // Add framework services.
-            services.AddDistributedMemoryCache();
+
+            // Lab09 Start
+            if (Environment.IsDevelopment())
+            {
+                services.AddDistributedMemoryCache();
+            }
+            else
+            {
+                // Use Redis cache on CloudFoundry to store session data
+                services.AddDistributedRedisCache(Configuration);
+            }
+            // Lab09 End
 
             services.AddSession();
 
