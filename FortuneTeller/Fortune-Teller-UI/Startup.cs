@@ -32,6 +32,8 @@ namespace Fortune_Teller_UI
         {
 
             // Add framework services.
+            services.AddDistributedMemoryCache();
+
             services.AddSession();
 
             services.AddMvc();

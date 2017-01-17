@@ -43,6 +43,8 @@ namespace Fortune_Teller_UI
             // Lab07 End
 
             // Add framework services.
+            services.AddDistributedMemoryCache();
+
             services.AddSession();
 
             services.AddMvc();
