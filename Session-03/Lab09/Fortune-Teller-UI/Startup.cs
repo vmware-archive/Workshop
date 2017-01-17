@@ -40,17 +40,14 @@ namespace Fortune_Teller_UI
         {
 
             // Lab09 Start
-            if (Environment.IsProduction())
+            if (!Environment.IsDevelopment())
             {
                 // Use Redis cache on CloudFoundry to DataProtection Keys
                 services.AddRedisConnectionMultiplexer(Configuration);
                 services.AddDataProtection()
                     .PersistKeysToRedis()
                     .SetApplicationName("fortuneui");
-            } else
-            {
-                services.AddDistributedMemoryCache();
-            }
+            } 
             // Lab09 End
        
             // Lab06 Start
