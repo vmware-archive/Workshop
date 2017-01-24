@@ -1,0 +1,262 @@
+= Lab 6 - Programming ASP.NET Core Micro-services
+
+[abstract]
+--
+Starting with this lab we will begin the process of creating a fully functional Fortune Teller application which uses several of the Steeltoe components.
+You have two paths you can follow when doing the rest of the labs for the workshop:
+
+. For each lab, open up and work with finished code. With this path you won't be writing any new code, instead, you will just be reviewing and running already completed lab code.
+. Open the _FortuneTeller.sln_ solution as your starting point. You will stick with this throughout the workshop, and you will be writing new code and debugging what you write.
+
+If you start with #2 above, you will find the app in its current state is not very useful:
+
+. The ``Fortune Teller Service`` only serves up a single Fortune.
+. The ``Fortune Teller UI`` doesn't know how to communicate with the ``Fortune Teller Service`` so it always returns the same ``Hello world`` Fortune.
+
+The goals for Lab 6 are to understand ASP.NET Core programming and to use our skills to hook up two areas of the code:
+
+. In ``Fortune Teller Service``:
+.. Hook up the ``IFortuneRepository`` to the ``FortuneController``
+.. Add the ``IFortuneRepository`` and the ``FortuneContext`` to the ASP.NET Core service container.
+.. Initialize the ``FortuneContext`` with some Fortunes.
+. In ``Fortune Teller UI``:
+.. Hook up the ``IFortuneService`` to the ``FortuneController``
+.. Add the ``IFortuneService`` to the ASP.NET Core service container.
+
+For some background information on ASP.NET Core programming, have a look at this https://docs.microsoft.com/en-us/aspnet/core/[documentation].
+
+--
+
+== Open VS2015 Solution
+. Start VS2015 and open the solution you wish to start from:
+.. _Workshop/Session-02/Lab06.sln_ if you want to start with finished code.
+.. _Workshop/FortuneTeller/FortuneTeller.sln_ if you will be writing code from scratch.
+
+=== Understand Fortune-Teller-Service project
+
+. Expand the ``Fortune-Teller-Service`` project
+. Open and examine ``Program.cs``, as everything starts in here.
+.. Examine the usage of ``WebHostBuilder``, ``UseKestrel``, ``UseUrls``, ``UseStartup<Startup>``.
+. Open and examine ``Startup.cs`` as this is where the app is configured.
+.. Examine the ``Startup`` constructor, where the apps configuration is read and created.
+.. Examine the ``ConfigureService()`` method, where the services are added to the  ASP.NET Core service container.
+.. Examine the ``Configure()`` method, where  ASP.NET Core middleware is added to the request processing pipeline.
+. Open the ``Models`` folder which holds the code for the ``IFortuneRepository``
+.. Examine ``IFortuneRepository``
+.. Examine ``FortuneRepository``, the implementation class and notice it uses a ``FortuneContext``
+.. Examine ``FortuneContext``, notice it is a ``DbContext`` based on ``EntityFrameworkCore``
+... Notice it has a ``DbSet`` of ``FortuneEntity``
+.. Examine ``SampleData`` and notice ``InitializeFortunesAsync`` method which adds sample data to the ``FortuneContext``
+. Open the ``Controllers`` folder which holds the MVC Controller code
+.. Open the ``FortunesController``, the implementation class for the REST API exposed by this microservice
+.. Notice it implments the ``IFortuneService`` which provides the two REST endpoints
+... AllFortunesAsync() ->  GET: api/fortunes/all
+... RandomFortuneAsync() -> GET api/fortunes/random
+.. Notice the controller methods return hard-coded ``Fortunes``, not ``FortuneEntitys``.
+
+=== Understand Fortune-Teller-UI project
+. Expand the ``Fortune-Teller-UI`` project
+. Open and examine ``Program.cs``, as everything starts in here.
+.. Examine the usage of ``WebHostBuilder``, ``UseKestrel``, ``UseUrls``, ``UseStartup<Startup>``.
+. Open and examine ``Startup.cs`` as this is where the app is configured.
+.. Examine the ``Startup`` constructor, where the apps configuration is read and created.
+.. Examine the ``ConfigureService()`` method, where the services are added to the ASP.NET Core service container.
+.. Examine the ``Configure()`` method, where  ASP.NET Core middleware is added to the request processing pipeline.
+. Open the ``Common/Services`` folder which holds the code for the ``IFortuneService``
+.. Examine ``IFortuneService``
+.. Examine ``FortuneServiceClient``, the implementation and notice it returns hard-coded ``Fortunes``
+. Open the ``Controllers`` folder which holds the MVC Controller code
+.. Open the ``FortunesController``, the implementation for the UI
+.. Notice the ``RandomFortune`` action, it returns a ``Fortune`` to the View
+. Open the ``Views/Fortunes`` folder which holds the Views for the FortuneController
+.. Open ``RandomFortune``, the View used by the ``RandomFortune`` action
+... Notice how it uses the ``Fortune`` returned from the action
+
+=== Modify Fortune Teller Service
+
+We will be using ASP.NET Core ``Dependency Injection`` for much of the next set of exercises. For some background information on it, have a look at this https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection[documentation]
+
+Also, later on we make use of ``Entity Framework Core``. For some background information on it, have a look at this https://docs.microsoft.com/en-us/ef/core/[documentation].
+
+==== Step 01 - Modify FortuneController to use the IFortuneRepository
+
+. To get the ``IFortuneRepository`` into the controller we need to modify the constructor of the ``FortuneController``:
++
+----
+private IFortuneRepository _fortunes;
+public FortunesController(ILogger<FortunesController> logger, IFortuneRepository fortunes)
+{
+   _logger = logger;
+   _fortunes = fortunes;
+}
+----
+. Then to get ``FortuneController`` to use the ``IFortuneRepository`` we have to modify both contoller actions.
+Something like below should work, but feel free to write your own code:
++
+----
+// GET: api/fortunes/all
+[HttpGet("all")]
+public async Task<List<Fortune>> AllFortunesAsync()
+{
+     _logger?.LogDebug("AllFortunesAsync");
+
+    var entities = await _fortunes.GetAllAsync();
+    var result = new List<Fortune>();
+    foreach(var entity in entities)
+    {
+        result.Add(new Fortune() { Id = entity.Id, Text = entity.Text });
+    }
+    return result;
+}
+// GET api/fortunes/random
+[HttpGet("random")]
+public async Task<Fortune> RandomFortuneAsync()
+{
+    _logger?.LogDebug("RandomFortuneAsync");
+
+    var entity = await _fortunes.RandomFortuneAsync();
+    return new Fortune() { Id = entity.Id, Text = entity.Text };
+}
+----
+
+==== Step 02 - Add IFortuneRepository and FortuneContext to Service Container
+. To get the ``IFortuneRepository`` into the service container we need to modify the ``Startup`` class method ``ConfigureServices`` and add ``IFortuneRepository`` to the service container collection.
+ We will add it as a Singleton and when its created, it will come from its implementation class ``FortuneRepository``.
++
+----
+public void ConfigureServices(IServiceCollection services)
+{
+    .....
+
+    services.AddSingleton<IFortuneRepository, FortuneRepository>();
+
+    // Add framework services.
+    services.AddMvc();
+}
+----
+{sp}+
+Notice that the ``FortuneRepository`` takes a ``FortuneContext`` as a argument to its constructor.
+So we also need to add a ``FortuneContext`` to the container.
+But ``FortuneContext`` is built on the EntityFrameworkCore library, so we also need to add that to the container as well.
+We do that with the ``AddEntityFramework()`` method below.
+Once both are added to the container (i.e. ``AddEntityFramework()`` & ``AddDbContext<FortuneContext>()``), then we also need to configure the ``FortuneContext`` to use some backend database for its storage.
+At this point in the workshop, we will just configure it to use an in-memory database.
+Clearly, if this context was being updated, this in-memory database would be a bad choice as it would prohibit us from scaling this micro-service horizontally.
+So in an upcoming Lab on scaling, we will show you how to use Steeltoe connectors to connect the ``DbContext`` to a real backend database.
++
+----
+public void ConfigureServices(IServiceCollection services)
+{
+    .....
+    services.AddEntityFramework()
+            .AddDbContext<FortuneContext>(options => options.UseInMemoryDatabase());
+
+    services.AddSingleton<IFortuneRepository, FortuneRepository>();
+
+    // Add framework services.
+    services.AddMvc();
+}
+----
+
+==== Step 03 - Initialize FortuneContext with some Fortunes
+. To add some Fortunes to the ``FortuneContext`` we have already written the code to do that for you. You can make use of the static method ``SampleData.InitializeFortunesAsync()`` to do this.
+The question is, where do you add this? Have a look at the method and notice that the code asks the container for an instance of the ``FortuneContext`` in order to initialize it with samples.
+As a result, the container needs to be built before we call this method and also before we start handling any requests.
+So the best place to add this call is in the ``Configure`` method in the ``Startup`` class.
++
+----
+public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+{
+    loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
+    app.UseMvc();
+
+    SampleData.InitializeFortunesAsync(app.ApplicationServices).Wait();
+}
+----
+
+==== Step 04 - Run Locally
+. Using the skills you picked up from Lab05, run the app from VS2015 and from the command line.
+.. CTRL-F5 or F5
+.. ``dotnet run --server.urls http://*:5000``
+
+==== Step 05 - Push to Cloud Foundry
+. Using the skills you picked up from Lab05, publish and push the app to a Linux cell on Cloud Foundry.
+
+If you are using the finished lab code on Windows:
+
+.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-Service``
+.. ``dotnet restore``
+.. ``dotnet build ``
+.. ``dotnet publish -o %CD%\publish -f netcoreapp1.1 -r ubuntu.14.04-x64``
+.. ``cf push -f manifest.yml -p .\publish``
+
+If you are using the finished lab code on Mac/Linux:
+
+.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-Service``
+.. ``dotnet restore``
+.. ``dotnet build ``
+.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+.. ``cf push -f manifest.yml -p publish``
+
+=== Modify Fortune Teller UI
+
+==== Step 01 - Modify FortuneController to use the IFortuneService
+. To get the ``IFortuneService`` into the controller we need to modify a constructor in the ``FortuneController``:
++
+----
+private IFortuneService _fortunes;
+public FortunesController(ILogger<FortunesController>  logger, IFortuneService fortunes)
+{
+    _logger = logger;
+    _fortunes = fortunes;
+}
+----
+. Then to get ``FortuneController`` to use the ``IFortuneService`` we have to modify the contoller action:
++
+----
+public async Task<IActionResult> RandomFortune()
+{
+    _logger?.LogDebug("RandomFortune");
+
+    var fortune = await _fortunes.RandomFortuneAsync();
+    return View(fortune);
+}
+----
+
+==== Step 02 - Add IFortuneService to Service Container
+. To get the ``IFortuneService`` into the service container we need to modify the ``Startup`` class method ``ConfigureServices`` and add ``IFortuneService`` to the service container collection.
+We will add it as a Singleton and when its created it will be created using its implementation class ``FortuneServiceClient``.
++
+----
+public void ConfigureServices(IServiceCollection services)
+{
+    .....
+    services.AddSingleton<IFortuneService, FortuneServiceClient>();
+    ....
+}
+----
+
+==== Step 03 - Run Locally
+. Using the skills you learned from Lab05, run the app from VS2015 and from the command line.
+.. CTRL-F5 or F5
+.. ``dotnet run --server.urls http://*:5555``
+
+==== Step 04 Push to Cloud Foundry
+. Using the skills you learned from Lab05, publish and push the app to a Linux cell on Cloud Foundry.
+
+If you are using the finished lab code on Windows:
+
+.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-UI``
+.. ``dotnet restore``
+.. ``dotnet build ``
+.. ``dotnet publish -o %CD%\publish -f netcoreapp1.1 -r ubuntu.14.04-x64``
+.. ``cf push -f manifest.yml -p .\publish``
+
+If you are using the finished lab code on Mac/Linux:
+
+.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-UI``
+.. ``dotnet restore``
+.. ``dotnet build ``
+.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+.. ``cf push -f manifest.yml -p publish``
