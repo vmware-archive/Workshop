@@ -24,14 +24,14 @@ $ cd Workshop
   - [Lab 1 - Pushing Your First Application](Session-01/Lab01/lab_01.adoc)
   - [Lab 2 - Binding to Cloud Foundry Services](Session-01/Lab02/lab_02.adoc)
   - [Lab 3 - Scaling and Operating Applications](Session-01/Lab03/lab_03.adoc)
-  - [Lab 4 - Monitoring Applications](Session-01/lab_04/Lab04.adoc)
+  - [Lab 4 - Monitoring Applications](Session-01/Lab04/Lab04.adoc)
 
 #### Session 2 : _Cloud Native Design, Microservices_& ASP.NET Core
   - [Lab 5 - Run, Publish, Push ASP.NET Core Fortune Teller](Session-02/Lab05/lab_05.adoc)
   - [Lab 6 - ASP.NET Core Programming](Session-02/Lab06/lab_06.adoc)
 
 #### Session 3 : _Spring Cloud Services & SteelToe_
-  - [Lab 7 - Configuration & Steeltoe Config Server Client](Session03/Lab07/lab_07.adoc)
-  - [Lab 8 - Discovery & Steeltoe Eureka Client](Session_03/lab_08/Lab08.adoc)
-  - [Lab 9 - Scaling & Steeltoe Connectors & DataProtection provider](Session_03/Lab09/lab_09.adoc)
-  - [Lab 10 - Security & Steeltoe](Session_03/Lab10/lab_10.adoc)
+  - [Lab 7 - Configuration & Steeltoe Config Server Client](Session-03/Lab07/lab_07.adoc)
+  - [Lab 8 - Discovery & Steeltoe Eureka Client](Session-03/Lab08/lab_08.adoc)
+  - [Lab 9 - Scaling & Steeltoe Connectors & DataProtection provider](Session-03/Lab09/lab_09.adoc)
+  - [Lab 10 - Security & Steeltoe](Session-03/Lab10/lab_10.adoc)
