@@ -11,6 +11,7 @@ $ cd Workshop
 ```
 
 **Lab Prerequisites**
+- Windows is required for building Lab1 code, all others can be done cross platform
 - [Cloud Foundry CLI](https://github.com/cloudfoundry/cli)
 - [Git Client](https://git-scm.com/downloads)
 - [VisualStudio (min: Visual Studio 2015 Update 3)]( https://go.microsoft.com/fwlink/?LinkId=691978)
@@ -24,7 +25,7 @@ $ cd Workshop
   - [Lab 1 - Pushing Your First Application](Session-01/Lab01/lab_01.adoc)
   - [Lab 2 - Binding to Cloud Foundry Services](Session-01/Lab02/lab_02.adoc)
   - [Lab 3 - Scaling and Operating Applications](Session-01/Lab03/lab_03.adoc)
-  - [Lab 4 - Monitoring Applications](Session-01/Lab04/Lab04.adoc)
+  - [Lab 4 - Monitoring Applications](Session-01/Lab04/lab_04.adoc)
 
 #### Session 2 : _Cloud Native Design, Microservices_& ASP.NET Core
   - [Lab 5 - Run, Publish, Push ASP.NET Core Fortune Teller](Session-02/Lab05/lab_05.adoc)
