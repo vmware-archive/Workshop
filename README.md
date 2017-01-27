@@ -18,7 +18,7 @@ $ cd Workshop
 - [VisualStudio Tools Preview 2](https://www.microsoft.com/net/download/core#/current)
 - [.NET Core SDK 1.1](https://www.microsoft.com/net/download/core#/current)
 
-## Course Materials
+## Workshop Materials
 #### Slides : [Workshop Slides](Slides/Workshop.pdf)
 #### Session 1 : _Intro to Pivotal Cloud Foundry_
   - [Lab 0 - Accessing the Workshop Environment](Session-01/Lab00/lab_00.adoc)

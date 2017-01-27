@@ -1,4 +1,4 @@
-= Lab 09 - Scaling and Steeltoe
+= Lab 9 - Scaling and Steeltoe
 
 [abstract]
 --
