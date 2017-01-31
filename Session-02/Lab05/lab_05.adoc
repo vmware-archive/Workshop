@@ -30,8 +30,6 @@ In future labs we will systematically make the changes necessary to make them a 
 . Start Visual Studio 2015 and open the solution _Workshop/Session-02/Lab05.sln_
 .. Set ``Fortune-Teller-Service`` as active project (i.e. Select Project->Right Click->Set As Startup project)
 .. Select  ``Framework`` to be ``.NET 4.5.2``
-... Right click on a project
-... Select Publish, follow the wizard and make sure you select the ``.NET 4.5.2`` Target Framework and Target Runtime
 .. Select a ``Hosting environment`` to be ``Fortune_Teller_Service``
 .. Start application (e.g. CTRL-F5 or F5)
 .. Notice command window opens with app running
@@ -47,8 +45,6 @@ In future labs we will systematically make the changes necessary to make them a 
 . Start Visual Studio 2015 and open the solution _Workshop/Session-02/Lab05.sln_
 .. Set ``Fortune-Teller-Service`` as active project (i.e. Select Project->Right Click->Set As Startup project)
 .. Select  ``Framework`` to be ``.NET Core App, 1.1``
-... Right click on a project
-... Select Publish, follow the wizard and make sure you select the ``.NET Core App, 1.1`` Target Framework and Target Runtime
 .. Select a ``Hosting environment`` to be ``Fortune_Teller_Service``
 .. Start application (e.g. CTRL-F5 or F5)
 .. Try setting breakpoints in the FortunesController if you're running in the debugger.
