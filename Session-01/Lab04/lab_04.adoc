@@ -228,8 +228,6 @@ instances: 2/2
 usage: 512M x 2 instances
 urls: env-grumous-imperativeness.cfapps.haas-76.pez.pivotal.io
 last uploaded: Mon Oct 17 00:13:08 UTC 2016
-stack: windows2012R2
-buildpack: binary_buildpack
 
      state     since                    cpu    memory           disk         details
 #0   running   2016-10-16 11:14:20 PM   0.0%   105.2M of 512M   3.8M of 1G

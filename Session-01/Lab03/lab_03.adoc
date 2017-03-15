@@ -32,8 +32,6 @@ instances: 3/3
 usage: 512M x 3 instances
 urls: env-grumous-imperativeness.cfapps.haas-76.pez.pivotal.io
 last uploaded: Mon Oct 17 00:13:08 UTC 2016
-stack: windows2012R2
-buildpack: binary_buildpack
 
      state      since                    cpu    memory           disk         details
 #0   running    2016-10-16 08:37:52 PM   0.2%   113.4M of 512M   3.8M of 1G
@@ -57,8 +55,6 @@ instances: 3/3
 usage: 512M x 3 instances
 urls: env-grumous-imperativeness.cfapps.haas-76.pez.pivotal.io
 last uploaded: Mon Oct 17 00:13:08 UTC 2016
-stack: windows2012R2
-buildpack: binary_buildpack
 
      state     since                    cpu    memory           disk         details
 #0   running   2016-10-16 08:37:52 PM   0.2%   113.4M of 512M   3.8M of 1G
@@ -102,8 +98,7 @@ instances: 1/1
 usage: 512M x 1 instances
 urls: env-grumous-imperativeness.cfapps.haas-76.pez.pivotal.io
 last uploaded: Mon Oct 17 00:13:08 UTC 2016
-stack: windows2012R2
-buildpack: binary_buildpack
+
 
      state     since                    cpu    memory           disk         details
 #0   running   2016-10-16 08:37:52 PM   0.0%   113.8M of 512M   3.8M of 1G
@@ -131,8 +126,7 @@ instances: 1/1
 usage: 512M x 1 instances
 urls: env-grumous-imperativeness.cfapps.haas-76.pez.pivotal.io
 last uploaded: Mon Oct 17 00:13:08 UTC 2016
-stack: windows2012R2
-buildpack: binary_buildpack
+
 
      state     since                    cpu    memory           disk         details
 #0   running   2016-10-16 08:37:52 PM   0.2%   116.9M of 512M   3.8M of 1G
