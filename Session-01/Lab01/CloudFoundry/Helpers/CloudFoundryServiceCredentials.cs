@@ -1,47 +1,55 @@
-﻿using Steeltoe.Extensions.Configuration.CloudFoundry;
 using System.Collections.Generic;
-using System.Text;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
+
 
 namespace CloudFoundry.Helpers
 {
-    public static class CloudFoundryServiceCredentials
+   
+    /// <summary>
+    /// Tag helper for generating the HTML for the service credentials in a VCAP_SERVICES entry
+    /// </summary>
+    [HtmlTargetElement("service-credentials", Attributes ="credentials")]
+    public class ServiceCredentialsTagHelper : TagHelper
     {
-        public static MvcHtmlString ShowCredentials(this HtmlHelper helper, Dictionary<string, Credential> credentials)
+        [HtmlAttributeName("credentials")]
+        public Dictionary<string, Credential> Credentials { set; get; }
+
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("<ul>");
-            if (credentials != null)
+            output.Content.AppendHtml("<ul>");
+            if (Credentials != null)
             {
-                foreach (KeyValuePair<string, Credential> pair in credentials)
+                foreach(KeyValuePair<string, Credential> pair in Credentials)
                 {
-                    GenerateCredentialHtml(pair.Key, pair.Value, sb);
+                    GenerateCredentialHtml(pair.Key, pair.Value, output);
                 }
             }
-            sb.Append("</ul>");
-            return new MvcHtmlString(sb.ToString());
+            output.Content.AppendHtml("</ul>");
+          
+            base.Process(context, output);
         }
-        private static void GenerateCredentialHtml(string key, Credential credential, StringBuilder output)
+
+        private void GenerateCredentialHtml(string key, Credential credential, TagHelperOutput output)
         {
             if (!string.IsNullOrEmpty(credential.Value))
             {
-                output.Append("<li>");
-                output.Append(key + "=" + credential.Value);
-                output.Append("</li>");
-            }
-            else
+                output.Content.AppendHtml("<li>");
+                output.Content.Append(key + "=" + credential.Value);
+                output.Content.AppendHtml("</li>");
+            } else
             {
 
-                output.Append("<li>");
-                output.Append(key);
-                output.Append("</li>");
+                output.Content.AppendHtml("<li>");
+                output.Content.Append(key);
+                output.Content.AppendHtml("</li>");
 
-                output.Append("<ul>");
+                output.Content.AppendHtml("<ul>");
                 foreach (KeyValuePair<string, Credential> pair in credential)
                 {
                     GenerateCredentialHtml(pair.Key, pair.Value, output);
                 }
-                output.Append("</ul>");
+                output.Content.AppendHtml("</ul>");
             }
         }
     }

@@ -1,8 +1,8 @@
-= Lab 1 - Pushing Your First ASP.NET 4.5 Application
+= Lab 1 - Pushing Your First ASP.NET Core Application
 
 [abstract]
 --
-In this lab we will push a pre-built ASP.NET 4.5 MVC application to Cloud Foundry. The application makes use of the Steeltoe CloudFoundry Configuration provider to parse the configuration data and make it available to the application as configurtaion data.
+In this lab we will push a pre-built ASP.NET Core MVC application to Cloud Foundry. The application makes use of the Steeltoe CloudFoundry Configuration provider to parse the configuration data and make it available to the application as configurtaion data.
 
 Note: We will use this same application for all of the rest of the labs in this section of the workshop (i.e. labs1-4).
 --
@@ -10,7 +10,7 @@ Note: We will use this same application for all of the rest of the labs in this 
 == The App
 This is the first application we will look at that is leveraging Steeltoe.
 
-This application was created using the out of the box ASP.NET 4 Web Application template found in Visual Studio 2015. It makes use of the Steeltoe Configuration provider called https://github.com/SteeltoeOSS/Configuration/tree/master/src/Steeltoe.Extensions.Configuration.CloudFoundry[CloudFoundry]. This provider enables the CloudFoundry environment variables, `VCAP_APPLICATION`, `VCAP_SERVICES` and `CF_*` to be parsed and accessed as configuration data within a .NET application.
+This application was created using the out of the box ASP.NET Core MVC template found in the dotnet CLI. It makes use of the Steeltoe Configuration provider called https://github.com/SteeltoeOSS/Configuration/tree/master/src/Steeltoe.Extensions.Configuration.CloudFoundry[CloudFoundry]. This provider enables the CloudFoundry environment variables, `VCAP_APPLICATION`, `VCAP_SERVICES` and `CF_*` to be parsed and accessed as configuration data within a .NET application.
 
 When Microsoft developed ASP.NET Core, the next generation of ASP.NET, they created a number of new `Extension` frameworks that provide services(e.g. Configuration, Logging, Dependency Injection, etc) commonly used/needed when building applications. While these `Extensions` certainly can be used in ASP.NET Core apps, they can also be leveraged in other app types including ASP.NET 4, Console Apps, UWP Apps, etc. With Steeltoe, we have added to the Microsoft https://github.com/aspnet/Configuration[Configuration Extension providers] by adding two additional providers:
 
@@ -19,13 +19,13 @@ When Microsoft developed ASP.NET Core, the next generation of ASP.NET, they crea
 
 To get a better understanding of the `Microsoft Configuration Extensions` have a look at the https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration[ASP.NET Core Documentation].
 
-As you might expect, all most all of Steeltoe components make use of the CloudFoundry configuration provider in one way or another.
+As you might expect, virtually all of Steeltoe components make use of the CloudFoundry configuration provider in one way or another.
 
 Later on in the workshop we will take a closer look at the `Configuration Extensions`  and the `Steeltoe CloudFoundry Configuration provider`.
 
 == Download code
 
-. If you haven't already done so, download or clone the git repo using the command below. If you don't have git installed, you can click 'Download ZIP' on the right side of the page https://github.com/SteeltoeOSS/Workshop[here].
+If you haven't already done so, download or clone the git repo using the command below. If you don't have git installed, you can click 'Download ZIP' on the right side of the page https://github.com/SteeltoeOSS/Workshop[here].
 +
 ----
 > git clone https://github.com/SteeltoeOSS/Workshop
@@ -33,7 +33,7 @@ Later on in the workshop we will take a closer look at the `Configuration Extens
 
 == Target
 
-. If you haven't already, set the API target for the CLI: (set appropriate end point for your environment)
+If you haven't already, set the API target for the CLI: (set appropriate end point for your environment)
 +
 ----
 > cf api https://api.run.haas-76.pez.pivotal.io --skip-ssl-validation
@@ -47,46 +47,102 @@ and login to Pivotal Cloud Foundry:
 Follow the prompts. 
 
 == Publish and Push It!
-. Start Visual Studio 2015 and open the solution _Workshop/Session-01/Lab01.sln_
-. Right click on a project and right click on CloudFoundry within the lab and select publish
-. Publish the application. A CloudFoundry publish profile has already been setup and can be used to publish to the directory _C:/publish_
-. Change to the publish directory, _C:/publish_.(this is the default folder the publish profile uses):
+. Open a command prompt and cd _Workshop/Session-01/Lab01/CloudFoundry_
 +
 ----
-> cd C:/publish
+> cd Workshop/Session-01/Lab01/CloudFoundry
+----
+
+. Restore the NuGet references
++
+----
+> dotnet restore --configfile nuget.config
+----
+
+. Publish the application.
++
+----
+> dotnet publish -o $PWD/publish -r ubuntu.14.04-x64  or  dotnet publish -o %CD%\publish -r ubuntu.14.04-x64
 ----
 
 . Push the application!
 +
 ----
-> cf push
+> cf push -f manifest.yml -p $PWD/publish 
 ----
 +
 You should see output similar to the following listing. Take a look at the listing callouts for a play-by-play of what's happening:
 +
 ====
 ----
-c:\publish>cf push
-Using manifest file c:\publish\manifest.yml
+Using manifest file manifest.yml
 
-Using stack windows2012R2...
-OK
 Creating app env in org test / space test as admin...
 OK
 
-Creating route env-uninebriating-impaler.apps.testcloud.com...
+Creating route env-peperine-flannelette.apps.testcloud.com...
 OK
 
-Binding env-uninebriating-impaler.apps.testcloud.com to env...
+Binding env-peperine-flannelette.apps.testcloud.com to env...
 OK
 
 Uploading env...
-Uploading app files from: C:\publish
-Uploading 797K, 95 files
-Done uploading
+Uploading app files from: /Users/DaveT/workspace/dotnet/Workshop/Session-01/Lab01/CloudFoundry/publish/
+Uploading 9.6M, 291 files
+Done uploading               
 OK
 
 Starting app env in org test / space test as admin...
+Downloading binary_buildpack...
+Downloading nodejs_buildpack...
+Downloading staticfile_buildpack...
+Downloading java_buildpack_offline...
+Downloading ruby_buildpack...
+Downloaded java_buildpack_offline
+Downloading python_buildpack...
+Downloaded staticfile_buildpack
+Downloading go_buildpack...
+Downloaded nodejs_buildpack
+Downloading php_buildpack...
+Downloaded binary_buildpack
+Downloaded ruby_buildpack
+Downloading dotnet_core_buildpack...
+Downloaded go_buildpack
+Downloaded php_buildpack
+Downloaded dotnet_core_buildpack
+Downloaded python_buildpack
+Creating container
+Successfully created container
+Downloading app package...
+Downloaded app package (24M)
+Staging...
+-----> Buildpack version 1.0.12
+ASP.NET Core buildpack version: 1.0.12
+ASP.NET Core buildpack starting compile
+-----> Restoring files from buildpack cache
+       OK
+-----> Restoring NuGet packages cache
+       OK
+-----> Extracting libunwind
+       libunwind version: 1.2
+       file:///tmp/buildpacks/0d9923c85070a88b0dde407ea8202d62/dependencies/https___buildpacks.cloudfoundry.org_dependencies_manual-binaries_dotnet_libunwind-1.2-linux-x64-f56347d4.tgz
+       OK
+-----> Saving to buildpack cache
+       Copied 38 files from /tmp/app/libunwind to /tmp/cache
+       OK
+-----> Cleaning staging area
+       OK
+ASP.NET Core buildpack is done creating the droplet
+Exit status 0
+Staging complete
+Uploading droplet, build artifacts cache...
+Uploading droplet...
+Uploading build artifacts cache...
+Uploaded build artifacts cache (992K)
+Uploaded droplet (24.2M)
+Uploading complete
+Destroying container
+Successfully destroyed container
 
 1 of 1 instances running
 
@@ -95,7 +151,7 @@ App started
 
 OK
 
-App env was started using this command `..\tmp\lifecycle\WebAppServer.exe`
+App env was started using this command `cd . && ./CloudFoundry --server.urls http://0.0.0.0:${PORT}`
 
 Showing health and status for app env in org test / space test as admin...
 OK
@@ -103,18 +159,16 @@ OK
 requested state: started
 instances: 1/1
 usage: 1G x 1 instances
-urls: env-uninebriating-impaler.apps.testcloud.com
-last uploaded: Fri Jan 13 13:43:48 UTC 2017
-stack: windows2012R2
-buildpack: windows
+urls: env-peperine-flannelette.apps.testcloud.com
+last uploaded: Wed Mar 15 20:57:22 UTC 2017
+stack: cflinuxfs2
+buildpack: ASP.NET Core (buildpack-1.0.12)
 
-     state     since                    cpu    memory    disk      details
-#0   running   2017-01-13 06:44:25 AM   0.0%   0 of 1G   0 of 1G
-
-c:\publish>
+     state     since                    cpu    memory    disk      details   
+#0   running   2017-03-15 02:57:55 PM   0.0%   0 of 1G   0 of 1G      
 
 ----
-<1> The CLI is using a manifest to provide necessary configuration details such as application name, memory to be allocated, the stack to be used (in this case Windows2012R2), the number of instances requested to start, and path to the application artifact.
+<1> The CLI is using a manifest to provide necessary configuration details such as application name, memory to be allocated, the stack to be used (in this case Linux), the number of instances requested to start, and path to the application artifact.
 In Visual Studio, take a look at `manifest.yml` to see how.
 <2> In most cases, the CLI indicates each Cloud Foundry API call as it happens.
 In this case, the CLI has created an application record for _env_ in your assigned space.
@@ -123,7 +177,7 @@ Here the CLI is creating a route with random word tokens inserted (again, see `m
 <4> Now the CLI is _binding_ the created route to the application.
 Routes can actually be bound to multiple applications to support techniques such as https://docs.pivotal.io/pivotalcf/1-7/devguide/deploy-apps/blue-green.html[blue-green deployments].
 <5> The CLI finally uploads the application bits to Pivotal Cloud Foundry. Notice that it's uploading _39 files_! This is because Cloud Foundry actually uploads all the files for the deployment for caching purposes.
-<6> Now we begin the staging process. By choosing the Windows2012R2 stack a container is created on the runtime to prepare the application to run, a second container is then generated that will host your application...in this case using the WebAppServer process in Windows.  If you want to try with other languages you can push an application on the Linux stack.
+<6> Now we begin the staging process. By choosing the Linux stack a container is created on the runtime to prepare the application to run, a second container is then generated that will host your application.  If you want to try with other languages you can push an application.
 <7> The complete package of your application and all of its necessary runtime components is called a _droplet_.
 Here the droplet is being uploaded to Pivotal Cloudfoundry's internal blobstore so that it can be easily copied to one or more Cells in the _https://docs.pivotal.io/pivotalcf/1-7/concepts/diego/diego-architecture.html[Diego Architecture]_ for execution.
 <8> The CLI tells you exactly what command and argument set was used to start your application.
@@ -197,7 +251,7 @@ Start with the ``CloudFoundryConfig()`` action in the ``HomeController``.
 +
 image::../../Common/images/lab-01-application-config.png[]
 {sp}+
-What you are seeing here is the configuration information from ``appsettings.json`` and ``appsettings-development.json``, both configuration files found in the Visual Studio solution.
+What you are seeing here is the configuration information from ``appsettings.json`` and ``appsettings-development.json``, both configuration files found in the application solution.
 Take some time and see if you can find in the code how this is accomplished.
 Start with the ``AppConfig()`` action in the ``HomeController``.
 . Click on the `Subsection Config` menu item:

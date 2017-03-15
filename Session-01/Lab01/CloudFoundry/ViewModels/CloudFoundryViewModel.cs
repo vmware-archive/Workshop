@@ -1,4 +1,4 @@
-﻿using Steeltoe.Extensions.Configuration.CloudFoundry;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 
 
 namespace CloudFoundry.ViewModels

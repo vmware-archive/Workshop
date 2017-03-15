@@ -1,5 +1,5 @@
-﻿@model CloudFoundry.ViewModels.CloudFoundryViewModel
-@using CloudFoundry.Helpers;
+@model CloudFoundry.ViewModels.CloudFoundryViewModel
+
 @{
     ViewBag.Title = "CloudFoundry Configuration Data";
 }
@@ -41,14 +41,6 @@
         { @(tag + " ") }
     </h5>
     <h5>vcap:services:@(service.Label):credentials =</h5>
-    @Html.ShowCredentials(@service.Credentials)
+    <service-credentials credentials="@service.Credentials"></service-credentials>
 
 }
-
-
-
-
-
-
-
-

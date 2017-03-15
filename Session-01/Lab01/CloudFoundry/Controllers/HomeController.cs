@@ -1,9 +1,10 @@
-﻿using CloudFoundry.ViewModels;
+﻿
+using System;
+using CloudFoundry.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
-using System;
-using System.Web.Mvc;
 
 namespace CloudFoundry.Controllers
 {
@@ -27,32 +28,31 @@ namespace CloudFoundry.Controllers
             AppConfiguration = appConfig;
             SubSectionConfiguration = subsectionConfig;
         }
-
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
-        public ActionResult CloudFoundryConfig()
+        public IActionResult CloudFoundryConfig()
         {
             return View(new CloudFoundryViewModel(CloudFoundryApplication.Value,CloudFoundryServices.Value));
         }
 
-        public ActionResult AppConfig()
+        public IActionResult AppConfig()
         {
             return View(new AppConfigViewModel(AppConfiguration.Value));
         }
 
-        public ActionResult SubSectionConfig()
+        public IActionResult SubSectionConfig()
         {
             return View(new SubSectionConfigViewModel(SubSectionConfiguration.Value));
         }
-        public ActionResult RawConfig()
+
+        public IActionResult RawConfig()
         {
             var items = Config.AsEnumerable();
             return View(Config);
         }
-
-        public ActionResult KillApp()
+        public IActionResult KillApp()
         {
             Console.WriteLine("Kaboom.");
             Environment.Exit(-1);
