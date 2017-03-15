@@ -26,7 +26,8 @@ Later on in the workshop we will take a closer look at the `Configuration Extens
 == Download code
 
 If you haven't already done so, download or clone the git repo using the command below. If you don't have git installed, you can click 'Download ZIP' on the right side of the page https://github.com/SteeltoeOSS/Workshop[here].
-+
+
+
 ----
 > git clone https://github.com/SteeltoeOSS/Workshop
 ----
@@ -34,16 +35,18 @@ If you haven't already done so, download or clone the git repo using the command
 == Target
 
 If you haven't already, set the API target for the CLI: (set appropriate end point for your environment)
-+
+
+
 ----
 > cf api https://api.run.haas-76.pez.pivotal.io --skip-ssl-validation
 ----
 and login to Pivotal Cloud Foundry:
-+
+
+
 ----
 > cf login
 ----
-+
+
 Follow the prompts. 
 
 == Publish and Push It!
