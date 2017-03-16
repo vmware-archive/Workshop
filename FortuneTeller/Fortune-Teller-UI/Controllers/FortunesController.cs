@@ -16,6 +16,7 @@ namespace Fortune_Teller_UI.Controllers
             _logger = logger;
         }
 
+
         public IActionResult Index()
         {
             _logger?.LogDebug("Index");

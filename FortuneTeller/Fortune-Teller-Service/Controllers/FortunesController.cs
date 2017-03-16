@@ -12,7 +12,6 @@ namespace Fortune_Teller_Service.Controllers
     public class FortunesController : Controller, IFortuneService
     {
         ILogger<FortunesController> _logger;
-
         public FortunesController(ILogger<FortunesController> logger)
         {
             _logger = logger;
@@ -25,6 +24,7 @@ namespace Fortune_Teller_Service.Controllers
         {
             _logger?.LogDebug("AllFortunesAsync");
             return await Task.Run(() => new List<Fortune>() { new Fortune() { Id = 1, Text = "Hello from FortuneController Web API!" } });
+       
         }
 
         // GET api/fortunes/random
