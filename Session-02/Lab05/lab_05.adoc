@@ -11,25 +11,25 @@ The ``Fortune Teller Service`` only serves up a single Fortune and the ``Fortune
 
 In this lab we will work with both of them, running them and pushing them to Cloud Foundry in their current state.
 In future labs we will systematically make the changes necessary to make them a working application.
+
+Note: If you are doing this Lab on a Mac you will need to install Mono. The simple way to do that is to use ``brew``. At a command prompt enter ``brew install mono``. Once thats complete you will need to export an enviroment variable in the command window you will be working in to work around a problem with the ``dotnet`` tooling.  You will have to locate where ``brew`` installed Mono. Once you have determined that then based on that you will need to export the path to the Mono libraries. Something like this:  ``export FrameworkPathOverride=/usr/local/Cellar/mono/4.8.0.495/lib/mono/4.5/``
 --
 
 == Open Visual Studio Solution
-. Start VS2015 and open the solution _Workshop/Session-02/Lab05.sln_
-.. Open _Fortune-Teller-Service/project.json_ or  _Fortune-Teller-UI/project.json_.
-... Notice the ``frameworks`` section specifies ``netcoreapp1.1`` and ``net452``. This ASP.NET Core app is intended to run on ``.NET Core 1.1`` and ``.NET Framework 4.5.2``.
-... Notice the ``dependencies`` section specifies all the NuGets the application depends on.
-... Notice the ``dependencies`` section under ``netcoreapp1.1``. With .NET core you have to specify all of the dependencies, nothing is included by default. With ``net452`` you get the normal ``mscorlib`` classes by default.
-... Notice ``Microsoft.NETCore.App`` has ``type`` commented out. When targeting .NET Core, this causes the app to be fully self-contained when we publish it. Otherwise we get a `portable` app.
-... Notice the ``runtimes`` section specifies lots of operating systems, including ``Windows`` and ``Ubuntu``. This is a X-Plat app and these are the runtimes it can operate on.
+. Start Visual Studio and open the solution/folder  _Workshop/Session-02/Lab05.sln_
+.. Open _Fortune-Teller-Service/Fortune-Teller-Service.csproj_ or  _Fortune-Teller-UI/Fortune-Teller-UI.csproj_.
+... Notice the ``TargetFrameworks`` specifies ``netcoreapp1.1`` and ``net462``. This ASP.NET Core app is intended to run on ``.NET Core 1.1`` and ``.NET Framework 4.6.2``.
+... Notice the ``PackageReference`` items as they specify all the NuGets the application depends on.
+... Notice the ``RuntimeIdentifiers`` specifies what runtimes you can publish this application for.  When targeting .NET Core, this causes the app to be fully self-contained when published. Otherwise without it we get a `portable` app.
 .. Open Visual Studio Debug Launch dropdown.
 ... Notice ``Framework`` selection allows either ``netcoreapp1.1`` or ``net452`` to be selected.
 ... Notice hosting environment can be ``IIS Express`` or ``Fortune-Teller-Service`` and either can be selected.
 
-== Run Fortune Teller Service in VS2015, on .NET 4.x
+== Run Fortune Teller Service in VS2017, on .NET 4.x (Windows only)
 
-. Start Visual Studio 2015 and open the solution _Workshop/Session-02/Lab05.sln_
+. Start Visual Studio 2017 and open the solution _Workshop/Session-02/Lab05.sln_
 .. Set ``Fortune-Teller-Service`` as active project (i.e. Select Project->Right Click->Set As Startup project)
-.. Select  ``Framework`` to be ``.NET 4.5.2``
+.. Select  ``Framework`` to be ``.NET 4.6.2``
 .. Select a ``Hosting environment`` to be ``Fortune_Teller_Service``
 .. Start application (e.g. CTRL-F5 or F5)
 .. Notice command window opens with app running
@@ -40,9 +40,9 @@ In future labs we will systematically make the changes necessary to make them a 
 .. Notice no command window opens with app running.
 .. Use browser to hit the REST endpoint.
 
-== Run Fortune Teller Service in VS2015, on .NET Core
+== Run Fortune Teller Service in VS2017, on .NET Core (Windows only)
 
-. Start Visual Studio 2015 and open the solution _Workshop/Session-02/Lab05.sln_
+. Start Visual Studio 2017 and open the solution _Workshop/Session-02/Lab05.sln_
 .. Set ``Fortune-Teller-Service`` as active project (i.e. Select Project->Right Click->Set As Startup project)
 .. Select  ``Framework`` to be ``.NET Core App, 1.1``
 .. Select a ``Hosting environment`` to be ``Fortune_Teller_Service``
@@ -54,17 +54,17 @@ In future labs we will systematically make the changes necessary to make them a 
 .. Notice no command window opens with app running.
 .. Use browser to hit the REST endpoint.
 
-== Run Fortune Teller UI in VS2015, both on .NET 4.x and .NET Core
+== Run Fortune Teller UI in VS2017, both on .NET 4.x and .NET Core (Windows only)
 
 Hint: Shutdown Fortune Service before proceeding
 
 . Use the instructions above, but apply them to the Fortune Teller UI.
 
-== Run Fortune Teller Service in Command Window on .NET 4.x
+== Run Fortune Teller Service in Command Window on .NET 4.x (Windows only)
 
-. Make sure the path variable points to bower executable directory
+. On Windows make sure the path variable points to bower executable directory. If you have Visual Studio 2017 installed, this should work.
 
- C:\Program Files\Docker Toolbox;c:\pcf-dev-env-1.0;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Web\External
+ C:\Program Files (x86)\Microsoft Visual Studio 14.0\Web\External
 
 . Start a command window.
 . Change directory to the ``Fortune Teller Service``
@@ -80,7 +80,7 @@ Hint: Shutdown Fortune Service before proceeding
 . Run the application on .NET 4.x
 +
 ----
-> dotnet run -f net452
+> dotnet run -f net462
 ----
 . Hit the REST endpoint ``http://localhost:5000/api/fortunes/all``.
 . Examine help for ``dotnet run``
@@ -110,6 +110,8 @@ Hint: Shutdown Fortune Service before proceeding
 
 == Run Fortune Teller UI in Command Window, both on .NET 4.x and .NET Core
 . Use the instructions above, but apply them to the Fortune Teller UI.
+. Hint: You can specify what port the server listens on as follows:
+.. dotnet run -f netcoreapp1.1 --server.urls http://*:5555
 
 == Publish and Push Fortune Teller Service to Cloud Foundry Linux Cell
 . Start a command window.
@@ -118,8 +120,6 @@ Hint: Shutdown Fortune Service before proceeding
 ----
 > cd Workshop/Session-02/Lab05/Fortune-Teller-Service
 ----
-
-. (Mac/Linux only) Modify project.json commenting out legacy dependency line in project.json: "net452": {} 
 
 . Restore the nuget dependencies for the application
 +
@@ -139,10 +139,10 @@ Hint: Shutdown Fortune Service before proceeding
 ----
 > Windows: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o %CD%\publish
 
-> Mac/Linux: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish
+> Mac/Linux: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish
 ----
 
-. In VS2015 (VSC on a Mac/Linux), examine the `manifest.yml` and `manifest-windows.yml` files.
+. In Visual Studio, examine the `manifest.yml` and `manifest-windows.yml` files.
 .. ``manifest.yml`` -> for pushing to Linux cell
 .. ``manifest-windows.yml`` -> for pushing to Windows cell
 . Push the published app to a Linux cell using ``manifest.yml``.
@@ -181,14 +181,16 @@ image::../../Common/images/lab-05-fortuneservice-all.png[]
 . Remove any previously published artifacts if they exist
 +
 ----
-> rmdir /s /q .\publish
+> Windows: rmdir /s /q .\publish
+
+> Mac/Linux: rm -rf publish
 ----
-. Publish for Windows and .NET 4.5.2
+. Publish for Windows and .NET 4.6.2
 +
 ----
-> dotnet publish -f net452 -r win7-x64 -o %CD%\publish
+> dotnet publish -f net462 -r win10-x64 -o %CD%\publish
 ----
-. In VS2015, examine the `manifest.yml` and `manifest-windows.yml` files.
+. In Visual Studio, examine the `manifest.yml` and `manifest-windows.yml` files.
 .. ``manifest.yml`` -> for pushing to Linux cell
 .. ``manifest-windows.yml`` -> for pushing to Windows cell
 . Push the published app to a Windows cell using ``manifest-windows.yml``.
