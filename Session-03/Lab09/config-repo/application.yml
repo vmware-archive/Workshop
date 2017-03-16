@@ -4,3 +4,6 @@ Logging:
     Default: Information
     System: Information
     Microsoft: Information
+eureka:
+  client:
+    serviceUrl: http://localhost:8761/eureka/        

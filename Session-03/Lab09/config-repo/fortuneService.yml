@@ -1,3 +1,9 @@
+eureka:
+  client:
+    shouldFetchRegistry: false
+  instance:
+    port: 5000
+    hostName: localhost
 mysql: 
   client: 
     database: mydatabase

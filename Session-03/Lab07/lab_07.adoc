@@ -338,7 +338,7 @@ Specifically the section on logging:
 }
 ----
 So we will go ahead and centralize that in a YAML file ``application.yml`` in the _file:./steeltoe/config-repo_ directory.
-Use your favorite editor (e.g. Notepad.exe) to create the file and put the following into it:
+Use your favorite editor to create the file and put the following into it:
 ----
 Logging:
   IncludeScopes: false
@@ -351,7 +351,7 @@ Next, remove this section from ``appsettings.json`` in both projects.
 
 Also notice that the contents of ``appsettings-Development.json`` is common for both Fortune_Tellers.
 So we will also centralize that in a YAML file ``application-Development.yml`` in the _file:./steeltoe/config-repo_ directory.
-So again,  use your favorite editor (e.g. Notepad.exe) to create the file and put the following into it:
+So again,  use your favorite editor to create the file and put the following into it:
 ----
 Logging:
   IncludeScopes: false
@@ -366,7 +366,7 @@ Next, remove the contents from ``appsettings-Development.json`` in both projects
 
 Then finally, in the ``appsettings.json`` file for Fortune-Teller-UI there is the ``fortuneService`` section that we would certainly like to manage centrally.
 So lets move that content to a YAML file named ``fortuneui.yml`` in the _file:./steeltoe/config-repo_ directory.
-Again use your favorite editor (e.g. Notepad.exe) to create the file and put the following into it:
+Again use your favorite editor to create the file and put the following into it:
 ----
 fortuneService:
   scheme: http
@@ -401,9 +401,9 @@ You must first create an instance of the Config Server service in your org/space
 . Optional: Create your own github repo to hold the Config Server data
 
 .. Fork github repository https://github.com/SteeltoeOSS/workshop-config-repo
-.. Open the ``config-server.json`` file in the Solution Items folder.
+.. Open the ``config-server.json`` file in the Solution folder.
 .. Modify it to point to the github repo you just forked.
-.. Add the contents of _file:./steeltoe/config-repo_ to the github repo you just created
+.. Add the contents of _file:./steeltoe/config-repo_ to the github repo you just created. Note you will have to modify the files
 . Using the command window, create an instance of the config server and set its configuration up with a github repo referenced in the config-server.json file:
 +
 ----

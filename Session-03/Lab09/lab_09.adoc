@@ -62,7 +62,7 @@ We are still using the Eureka Server, so we need to make sure it is still runnin
 . To run Eureka Server you will need Java JDK installed on your machine and the JAVA_HOME environment variable set to the JDK's installed location:
 +
 ----
-e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
+e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112 or equivalent on Linux/Mac
 ----
 
 . Open a command window.
@@ -86,16 +86,10 @@ We are still using the Config Server, so we need to make sure it is still runnin
 . To run Config Server you will need Java JDK installed on your machine and the JAVA_HOME environment variable set to the JDK's installed location:
 +
 ----
-e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
+e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112 or equivalent on Linux/Mac
 ----
 
 . Open a command window.
-. Create the directory _c:/steeltoe/config-repo_ if you haven't already done so.
- This will be the location the Config Server reads its configuration data from.
-+
-----
- > mkdir c:\steeltoe\config-repo
-----
 
 . Change directory to _Workshop/ConfigServer_
 +
@@ -109,27 +103,29 @@ e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
 > mvnw spring-boot:run
 ----
 {sp}+
-It will start up on port 8888 and serve configuration data from "file:///steeltoe/config-repo"
+It will start up on port 8888 and serve configuration data from "file:./steeltoe/config-repo". This will be the directory _Workshop/ConfigServer/steeltoe/config-repo_.
+
 
 === Step 03 - Add Steeltoe MySql Connector Nuget
 Here we add the appropriate Steeltoe MySql Connector Nuget to the ``Fortune Teller Service``.
 You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.MySql``.
 
 . Expand the ``Fortune-Teller-Service`` project.
-. Open ``project.json`` and add the following line to the ``dependencies``:
-..  "Steeltoe.CloudFoundry.Connector.MySql": "1.0.0-rc2"
+. Open ``.csproj`` and add the``PackageReference``:
+..  Include="Steeltoe.CloudFoundry.Connector.MySql" Version="1.0.0-rc2"
+
 +
 ----
-"dependencies": {
+  <ItemGroup>
    .......
-   "Microsoft.EntityFrameworkCore": "1.0.2",
-    "Microsoft.EntityFrameworkCore.InMemory": "1.0.2",
-    "Pivotal.Extensions.Configuration.ConfigServer": "1.0.0-rc2",
-    "Steeltoe.CloudFoundry.Connector.MySql": "1.0.0-rc2"
-    },
-    ......
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.MySql" version="1.0.0-rc2" />
+  </ItemGroup>
 ----
-. Save project.json and notice that a ``dotnet restore`` is done for you.
+. Save the ``csproj`` and make sure that a ``dotnet restore`` is done.
 
 === Step 04 - Add Steeltoe MySql Connector
 Next we need to configure the ``DbContext`` to use MySql.
@@ -176,8 +172,7 @@ public void ConfigureServices(IServiceCollection services)
     },
     "cloud": {
       "config": {
-        "uri": "http://localhost:8888",
-        "validate_certificates": false
+        "uri": "http://localhost:8888"
       }
     }
   },
@@ -190,7 +185,7 @@ public void ConfigureServices(IServiceCollection services)
   }
 }
 ----
-But since we are not running MySQL locally, we will instead configure things to use an In-Memory database when in ``development`` mode, but then use a MySql database when in any other.
+But since we are not running MySQL locally, we will instead configure things to use an In-Memory database when in ``Development`` mode, but then use a MySql database when in any other.
 To do that we will modify the ``ConfigureServices()`` method as follows:
 ----
 public void ConfigureServices(IServiceCollection services)
@@ -216,8 +211,8 @@ At this point you should be ready to run both Fortune-Tellers locally and test.
 Every thing should work as it did before, as you will still be using the In-Memory database when running locally.
 In an upcoming exercise, we will push the Fortune-Tellers to Cloud Foundry and test the MySql connection.
 
-. Using the skills you picked up in Lab05, run the apps from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 on VS2017
 .. ``dotnet run --server.urls http://*:5000``
 .. ``dotnet run --server.urls http://*:5555``
 
@@ -240,20 +235,22 @@ Here we add the appropriate Steeltoe Redis Connector Nuget to the ``Fortune Tell
 You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.Redis``.
 
 . Expand the ``Fortune-Teller-UI`` project.
-. Open ``project.json`` and add the following line to the ``dependencies``:
-..  "Steeltoe.CloudFoundry.Connector.Redis": "1.0.0-rc2"
+. Open ``.csproj`` and add the``PackageReference``:
+..  Include="Steeltoe.CloudFoundry.Connector.Redis" Version="1.0.0-rc2"
+
 +
 ----
-"dependencies": {
+  <ItemGroup>
    .......
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Pivotal.Discovery.Client": "1.0.0-rc2",
-    "Pivotal.Extensions.Configuration.ConfigServer": "1.0.0-rc2",
-    "Steeltoe.CloudFoundry.Connector.Redis": "1.0.0-rc2"
-    },
-    ......
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0-rc2" />
+  </ItemGroup>
 ----
-. Save ``project.json`` and notice that a ``dotnet restore`` is done for you.
+
+. Save ``csproj`` and ensure that a ``dotnet restore`` is done.
 
 === Step 04 - Add Steeltoe Redis Connector
 Currently the ``Fortune-Teller-UI`` is using an In-memory cache for its session storage.
@@ -308,7 +305,6 @@ public void ConfigureServices(IServiceCollection services)
     "cloud": {
       "config": {
         "uri": "http://localhost:8888",
-        "validate_certificates": false
       }
     }
   },
@@ -321,7 +317,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ----
 But, just like the case with MySQL, we are not running Redis locally, so we will instead have to configure things similar to MySql.
-That is to use an In-Memory database when in ``development`` mode, but then use a Redis cache when in any other.
+That is to use an In-Memory database when in ``Development`` mode, but then use a Redis cache when in any other.
 To do that we will modify the ``ConfigureServices()`` method as follows:
 ----
 public void ConfigureServices(IServiceCollection services)
@@ -353,8 +349,8 @@ At this point you should be ready to run both Fortune-Tellers locally and test.
 Every thing should work as it did before, as you will still be using the In-Memory cache when running locally.
 In an upcoming exercise, we will push the Fortune-Tellers to Cloud Foundry and test the cache connection.
 
-. Using the skills you picked up in Lab05, run the apps from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 on VS2017
 .. ``dotnet run --server.urls http://*:5000``
 .. ``dotnet run --server.urls http://*:5555``
 
@@ -382,21 +378,23 @@ Here we add the appropriate Steeltoe Redis DataProtection Key Storage provider N
 You will make use of the Nuget: ``"Steeltoe.Security.DataProtection.Redis``.
 
 . Expand the ``Fortune-Teller-UI`` project.
-. Open ``project.json`` and add the following line to the ``dependencies``:
-..  ""Steeltoe.Security.DataProtection.Redis": "1.0.0-rc2"
+. Open ``.csproj`` and add the``PackageReference``:
+..  Include="Steeltoe.Security.DataProtection.Redis" Version="1.0.0-rc2"
+
 +
 ----
-"dependencies": {
+  <ItemGroup>
    .......
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Pivotal.Discovery.Client": "1.0.0-rc2",
-    "Pivotal.Extensions.Configuration.ConfigServer": "1.0.0-rc2",
-    "Steeltoe.CloudFoundry.Connector.Redis": "1.0.0-rc2",
-    "Steeltoe.Security.DataProtection.Redis": "1.0.0-rc2"
-    },
-    ......
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0-rc2" />
+    <PackageReference Include="Steeltoe.Security.DataProtection.Redis" version="1.0.0-rc2" />
+  </ItemGroup>
 ----
-. Save ``project.json`` and notice that a ``dotnet restore`` is done for you.
+
+. Save ``csproj`` and ensure that a ``dotnet restore`` is done.
 
 
 === Step 05 - Add Steeltoe Redis DataProtection Key Storage provider
@@ -475,8 +473,8 @@ At this point you should be ready to run both Fortune-Tellers locally and test.
 Every thing should work as it did before, as you will still be using the default DataProtection provider which stores keys to local file system.
 In the next exercise, we will push the Fortune-Tellers to Cloud Foundry and test using Redis to store the key ring.
 
-. Using the skills you picked up in Lab05, run the apps from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 on VS2017
 .. ``dotnet run --server.urls http://*:5000``
 .. ``dotnet run --server.urls http://*:5555``
 
@@ -506,18 +504,15 @@ You must first create an instance of the Redis service in your org/space.
 . Examine the ``manfest.yml`` files for both projects and notice ``services`` additions shown below.
 You need to make these changes in your ``manifest.yml`` before you push to Cloud Foundry.
 Also, notice the ``ASPNETCORE_ENVIRONMENT`` setting.
-Feel free to change that to ``development`` if you want to turn on debug logging.
+Feel free to change that to ``Development`` if you want to turn on debug logging.
 +
 ----
 ---
 applications:
 - name: fortuneService
   random-route: true
-  memory: 512M
-  buildpack: https://github.com/cloudfoundry-community/asp.net5-buildpack.git
-  command: ./Fortune-Teller-Service --server.urls "http://*:$PORT"
   env:
-    ASPNETCORE_ENVIRONMENT: production
+    ASPNETCORE_ENVIRONMENT: Production
   services:
    - myConfigServer
    - myMySqlService
@@ -526,11 +521,8 @@ applications:
 applications:
 - name: fortuneui
   random-route: true
-  memory: 512M
-  buildpack: https://github.com/cloudfoundry-community/asp.net5-buildpack.git
-  command: ./Fortune-Teller-UI --server.urls "http://*:$PORT"
   env:
-    ASPNETCORE_ENVIRONMENT: production
+    ASPNETCORE_ENVIRONMENT: Production
   services:
    - myConfigServer
    - myDiscoveryService
@@ -547,7 +539,7 @@ applications:
 ... ``cd Workshop/Session-03/Lab09/Fortune-Teller-Service``
 ... ``dotnet restore``
 ... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 ... ``cf push -f manifest.yml -p publish``
 .. Pushing Fortune Teller UI - If you are using the finished lab code on Windows:
 ... ``cd Workshop/Session-03/Lab09/Fortune-Teller-UI``
@@ -559,7 +551,7 @@ applications:
 .. ``cd Workshop/Session-03/Lab09/Fortune-Teller-UI``
 .. ``dotnet restore``
 .. ``dotnet build ``
-.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 .. ``cf push -f manifest.yml -p publish``
 
 Try hitting the ``Fortune Teller UI`` and if it fails to communicate with the ``Fortune Teller Service``.
