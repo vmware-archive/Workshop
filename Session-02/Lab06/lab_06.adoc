@@ -6,7 +6,7 @@ Starting with this lab we will begin the process of creating a fully functional 
 You have two paths you can follow when doing the rest of the labs for the workshop:
 
 . For each lab, open up and work with finished code. With this path you won't be writing any new code, instead, you will just be reviewing and running already completed lab code.
-. Open the _FortuneTeller.sln_ solution as your starting point. You will stick with this throughout the workshop, and you will be writing new code and debugging what you write.
+. Open the _FortuneTeller.sln_ solution as your starting point. You will then stick with this throughout the workshop, and you will be writing new code and debugging what you write.
 
 If you start with #2 above, you will find the app in its current state is not very useful:
 
@@ -27,8 +27,8 @@ For some background information on ASP.NET Core programming, have a look at this
 
 --
 
-== Open VS2015 Solution
-. Start VS2015 and open the solution you wish to start from:
+== Open Visual Studio Solution
+. Start Visual Studio and open the solution/folder you wish to start from:
 .. _Workshop/Session-02/Lab06.sln_ if you want to start with finished code.
 .. _Workshop/FortuneTeller/FortuneTeller.sln_ if you will be writing code from scratch.
 
@@ -176,8 +176,8 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 ----
 
 ==== Step 04 - Run Locally
-. Using the skills you picked up from Lab05, run the app from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up from Lab05, run the app from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 in Visual Studio 2017
 .. ``dotnet run --server.urls http://*:5000``
 
 ==== Step 05 - Push to Cloud Foundry
@@ -196,7 +196,7 @@ If you are using the finished lab code on Mac/Linux:
 .. ``cd Workshop/Session-02/Lab06/Fortune-Teller-Service``
 .. ``dotnet restore``
 .. ``dotnet build ``
-.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 .. ``cf push -f manifest.yml -p publish``
 
 === Modify Fortune Teller UI
@@ -238,8 +238,8 @@ public void ConfigureServices(IServiceCollection services)
 ----
 
 ==== Step 03 - Run Locally
-. Using the skills you learned from Lab05, run the app from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you learned from Lab05, run the app from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 in Visual Studio 2017
 .. ``dotnet run --server.urls http://*:5555``
 
 ==== Step 04 Push to Cloud Foundry
@@ -258,5 +258,5 @@ If you are using the finished lab code on Mac/Linux:
 .. ``cd Workshop/Session-02/Lab06/Fortune-Teller-UI``
 .. ``dotnet restore``
 .. ``dotnet build ``
-.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 .. ``cf push -f manifest.yml -p publish``
