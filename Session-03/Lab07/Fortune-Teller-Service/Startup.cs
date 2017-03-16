@@ -18,6 +18,7 @@ namespace Fortune_Teller_Service
     {
         public Startup(IHostingEnvironment env)
         {
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

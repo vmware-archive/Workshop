@@ -16,7 +16,7 @@ The goals for Lab 7 are to:
 . Understand ASP.NET Core Configuration.
 . Understand ASP.NET Core Enironments
 . Understand ASP.NET Core Options services.
-. Use Environments to have seperate configuration for ``development`` and ``production``.
+. Use Environments to have seperate configuration for ``Development`` and ``Production``.
 . Use Options to configure the ``FortuneServiceClient`` with the address of the ``Fortune Teller Service``
 . Use Spring Cloud Config Server to centralize configurations
 
@@ -49,20 +49,20 @@ And finally, for some background information on ASP.NET Core Options, have a loo
 ... Notice ``loggerFactory.AddConsole(...)`` in ``Configure`` method.
 
 == Use different configurations for development and production.
-In this exercise we will be creating a ``appsettings-development.json`` file that will hold the configuration data for when we are running in ``development`` mode.
+In this exercise we will be creating a ``appsettings-Development.json`` file that will hold the configuration data for when we are running in ``Development`` mode.
 
-=== Step 01 - Add appsettings-development.json configuration source
-Here we add a JSON configuration file to each project which contains configuration parameters specific to when we are running in ``development`` mode.
-Basically, we are going to change all logging to ``Debug`` when running the app in ``development`` mode.
+=== Step 01 - Add appsettings-Development.json configuration source
+Here we add a JSON configuration file to each project which contains configuration parameters specific to when we are running in ``Development`` mode.
+Basically, we are going to change all logging to ``Debug`` when running the app in ``Development`` mode.
 
 . Expand the ``Fortune-Teller-UI`` project
-.. Add new json file ``appsettings-development.json``.
-.. Copy contents of ``appsettings.json`` to ``appsetttings-development.json``.
+.. Add new json file ``appsettings-Development.json``.
+.. Copy contents of ``appsettings.json`` to ``appsetttings-Development.json``.
 .. Modify all ``LogLevels`` to ``Debug``.
 .. Then also add ``"Fortune_Teller_Service": "Debug"`` and ``"Fortune_Teller_UI": "Debug"`` to end of the file.
 . Expand ``Fortune-Teller-Service`` project
 .. Do the same steps as above.
-. Save all files and when you're done both projects ``appsettings-development.json`` files should look like:
+. Save all files and when you're done both projects ``appsettings-Development.json`` files should look like:
 
 +
 ----
@@ -89,7 +89,7 @@ At this point you should be ready to run both Fortune-Tellers locally and test:
 .. ``dotnet run --server.urls http://*:5555``
 . Modify ``ASPNETCORE_ENVIRONMENT`` in ``launchsettings.json`` for each project and verify you are getting the appropriate logging information when you run the application.
 .. Hint: Amoung other places, look at the ``FortunesController`` action methods for logging calls.
-. Change the log levels in  ``appsettings-development.json`` while ``Fortune-Teller-Service`` and ``Fortune-Teller-UI`` are running to see if changes are picked up.
+. Change the log levels in  ``appsettings-Development.json`` while ``Fortune-Teller-Service`` and ``Fortune-Teller-UI`` are running to see if changes are picked up.
 
 == Use Options to configure the FortuneServiceClient
 In this exercise we will be using the ASP.NET Core Configuration and Options services to inject configuration data into the ``FortuneServiceClient``.
@@ -191,16 +191,10 @@ Here we do the steps to setup and run a Spring Cloud Config Server locally so it
 . To run Config Server you will need Java JDK installed on your machine and the JAVA_HOME environment variable set to the JDK's installed location:
 +
 ----
-e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
+e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112 or equivalent on Linux/MacOS
 ----
 
 . Open a command window.
-. Create the directory _c:/steeltoe/config-repo_ if you haven't already done so.
- This will be the location the Config Server reads its configuration data from.
-+
-----
- > mkdir c:\steeltoe\config-repo
-----
 
 . Change directory to _Workshop/ConfigServer_
 +
@@ -214,7 +208,7 @@ e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
 > mvnw spring-boot:run
 ----
 {sp}+
-It will start up on port 8888 and serve configuration data from "file:///steeltoe/config-repo"
+It will start up on port 8888 and serve configuration data from "file:./steeltoe/config-repo". This will be the directory _Workshop/ConfigServer/steeltoe/config-repo_.
 
 === Step 02 - Add Steeltoe Config Server Client Nuget
 Here we add the appropriate Steeltoe Config Server client Nuget to each Fortune Teller application.
@@ -240,7 +234,7 @@ Here we need to use the Config Server client to retrieve the configuration from 
 We do this bby adding it as another provider to the Configuration Builder setup.
 Notice that we add the provider after the ``AddJsonFile()`` calls for two reasons:
 
-* Config Server client will then be able to pickup its configuration from ``appsettings.json`` or ``appsettings-development.json``.
+* Config Server client will then be able to pickup its configuration from ``appsettings.json`` or ``appsettings-Development.json``.
 * We want the ability for the config values retrieved from the Config Server to 'override' any values in the json files.
 
 . Expand the ``Fortune-Teller-UI`` and ``Fortune-Teller-Service`` projects.
@@ -281,8 +275,7 @@ We do this by adding the following to the ``appsettings.json`` files in each pro
     },
     "cloud": {
       "config": {
-        "uri": "http://localhost:8888",
-        "validate_certificates": false
+        "uri": "http://localhost:8888"
       }
     }
   }
@@ -312,8 +305,7 @@ We do this by adding the following to the ``appsettings.json`` files in each pro
     },
     "cloud": {
       "config": {
-        "uri": "http://localhost:8888",
-        "validate_certificates": false
+        "uri": "http://localhost:8888"
       }
     }
   }
@@ -323,11 +315,11 @@ We do this by adding the following to the ``appsettings.json`` files in each pro
 For more detail on what configuration parameters can be used with the Steeltoe Config Server Client, have a look at https://github.com/SteeltoeOSS/Configuration/blob/master/src/Steeltoe.Extensions.Configuration.ConfigServer/ConfigServerClientSettings.cs[this]
 
 Once complete, you should be ready to run both and they should both fetch any configuration data from the Config Server.
-But, of course we haven't put anything in the Config Servers directory _c/\steeltoe/config-repo_ , the directory its using for its data.
+But, of course we haven't put anything in the Config Servers directory _file:./steeltoe/config-repo_ , the directory its using for its data.
 That's what we'll do in the next step.
 
 === Step 05 - Centralize configuration data
-In this step we move some of the configuration data from the ``appsettings`` files to files in the _c:/steeltoe/config-repo_; the directory the Config Server uses to serve configuration data.
+In this step we move some of the configuration data from the ``appsettings`` files to files in the _file:./steeltoe/config-repo_; the directory the Config Server uses to serve configuration data.
 Notice that in ``appsettings.json`` there are some configuration settings for logging that are common to both Fortune_Tellers.
 Specifically the section on logging:
 
@@ -345,7 +337,7 @@ Specifically the section on logging:
    .....
 }
 ----
-So we will go ahead and centralize that in a YAML file ``application.yml`` in the _c:/steeltoe/config-repo_ directory.
+So we will go ahead and centralize that in a YAML file ``application.yml`` in the _file:./steeltoe/config-repo_ directory.
 Use your favorite editor (e.g. Notepad.exe) to create the file and put the following into it:
 ----
 Logging:
@@ -357,8 +349,8 @@ Logging:
 ----
 Next, remove this section from ``appsettings.json`` in both projects.
 
-Also notice that the contents of ``appsettings-development.json`` is common for both Fortune_Tellers.
-So we will also centralize that in a YAML file ``application-development.yml`` in the _c:/steeltoe/config-repo_ directory.
+Also notice that the contents of ``appsettings-Development.json`` is common for both Fortune_Tellers.
+So we will also centralize that in a YAML file ``application-Development.yml`` in the _file:./steeltoe/config-repo_ directory.
 So again,  use your favorite editor (e.g. Notepad.exe) to create the file and put the following into it:
 ----
 Logging:
@@ -370,10 +362,10 @@ Logging:
     Fortune_Teller_Service: Debug
     Fortune_Teller_UI: Debug
 ----
-Next, remove the contents from ``appsettings-development.json`` in both projects.
+Next, remove the contents from ``appsettings-Development.json`` in both projects.
 
 Then finally, in the ``appsettings.json`` file for Fortune-Teller-UI there is the ``fortuneService`` section that we would certainly like to manage centrally.
-So lets move that content to a YAML file named ``fortuneui.yml`` in the _c:/steeltoe/config-repo_ directory.
+So lets move that content to a YAML file named ``fortuneui.yml`` in the _file:./steeltoe/config-repo_ directory.
 Again use your favorite editor (e.g. Notepad.exe) to create the file and put the following into it:
 ----
 fortuneService:
@@ -411,7 +403,7 @@ You must first create an instance of the Config Server service in your org/space
 .. Fork github repository https://github.com/SteeltoeOSS/workshop-config-repo
 .. Open the ``config-server.json`` file in the Solution Items folder.
 .. Modify it to point to the github repo you just forked.
-.. Add the contents of _c:/steeltoe/config-repo_ to the github repo you just created
+.. Add the contents of _file:./steeltoe/config-repo_ to the github repo you just created
 . Using the command window, create an instance of the config server and set its configuration up with a github repo referenced in the config-server.json file:
 +
 ----
@@ -430,18 +422,15 @@ You must first create an instance of the Config Server service in your org/space
 . Examine the ``manfest.yml`` files for both projects and notice ``services`` addition shown below.
 You need to make this change in your ``manifest.yml`` before you push to Cloud Foundry.
 Also, notice the ``ASPNETCORE_ENVIRONMENT`` setting.
-Feel free to change that to ``development`` if you want to turn on debug logging.
+Feel free to change that to ``Development`` if you want to turn on debug logging.
 +
 ----
 ---
 applications:
 - name: fortuneService
   random-route: true
-  memory: 512M
-  buildpack: https://github.com/cloudfoundry-community/asp.net5-buildpack.git
-  command: ./Fortune-Teller-Service --server.urls "http://*:$PORT"
   env:
-    ASPNETCORE_ENVIRONMENT: production
+    ASPNETCORE_ENVIRONMENT: Production
   services:
    - myConfigServer
 
@@ -449,11 +438,8 @@ applications:
 applications:
 - name: fortuneui
   random-route: true
-  memory: 512M
-  buildpack: https://github.com/cloudfoundry-community/asp.net5-buildpack.git
-  command: ./Fortune-Teller-Service --server.urls "http://*:$PORT"
   env:
-    ASPNETCORE_ENVIRONMENT: production
+    ASPNETCORE_ENVIRONMENT: Production
   services:
    - myConfigServer
 ----
@@ -468,7 +454,7 @@ applications:
 ... ``cd Workshop/Session-02/Lab07/Fortune-Teller-Service``
 ... ``dotnet restore``
 ... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 ... ``cf push -f manifest.yml -p publish``
 .. Pushing Fortune Teller UI - If you are using the finished lab code on Windows:
 ... ``cd Workshop/Session-02/Lab07/Fortune-Teller-UI``
@@ -480,7 +466,7 @@ applications:
 ... ``cd Workshop/Session-02/Lab07/Fortune-Teller-UI``
 ... ``dotnet restore``
 ... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 ... ``cf push -f manifest.yml -p publish``
 
 
