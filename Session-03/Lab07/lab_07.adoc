@@ -28,8 +28,8 @@ And finally, for some background information on ASP.NET Core Options, have a loo
 
 --
 
-== Open VS2015 Solution
-. Start VS2015 and open the solution you wish to use:
+== Open Visual Studio Solution
+. Start Visual Studio and open the solution/folder you wish to use:
 .. _Workshop/Session-03/Lab07.sln_ if you want to start with finished code.
 .. _Workshop/FortuneTeller/FortuneTeller.sln_ if you are writing code from scratch.
 
@@ -73,7 +73,7 @@ Basically, we are going to change all logging to ``Debug`` when running the app 
       "Default": "Debug",
       "System": "Debug",
       "Microsoft": "Debug",
-      "Fortune_Teller_Service": "Debug"
+      "Fortune_Teller_Service": "Debug",
       "Fortune_Teller_UI": "Debug"
     }
   }
@@ -83,8 +83,8 @@ Basically, we are going to change all logging to ``Debug`` when running the app 
 === Step 02 - Run Locally
 At this point you should be ready to run both Fortune-Tellers locally and test:
 
-. Using the skills you picked up from Lab05, run the apps from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 in VS2017
 .. ``dotnet run --server.urls http://*:5000``
 .. ``dotnet run --server.urls http://*:5555``
 . Modify ``ASPNETCORE_ENVIRONMENT`` in ``launchsettings.json`` for each project and verify you are getting the appropriate logging information when you run the application.
@@ -172,8 +172,8 @@ public async Task<Fortune> RandomFortuneAsync()
 At this point you should be ready to run both Fortune-Tellers locally and test.
 The ``Fortune-Teller-UI`` should now be fetching Fortunes from the ``Fortune-Teller-Service``.
 
-. Using the skills you picked up from Lab05, run the apps from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 in VS2017
 .. ``dotnet run --server.urls http://*:5000``
 .. ``dotnet run --server.urls http://*:5555``
 
@@ -222,19 +222,18 @@ When targeting Spring Cloud Services on PCF, we use the Nuget: ``Pivotal.Extensi
 When targeting Spring Cloud Open Source, we can use Nuget: ``Steeltoe.Extensions.Configuration.ConfigServer``.
 
 . Expand the ``Fortune-Teller-UI`` and ``Fortune-Teller-Service`` projects.
-. Open ``project.json`` for EACH project and add the following line to the ``dependencies``:
-..  "Pivotal.Extensions.Configuration.ConfigServer": "1.0.0-rc2"
+. Open ``csproj`` for EACH project and add the``PackageReference``:
+..  Include="Pivotal.Extensions.Configuration.ConfigServer" Version="1.0.0-rc2"
 +
 ----
-"dependencies": {
+  <ItemGroup>
    .......
-   "Microsoft.EntityFrameworkCore": "1.0.2",
-    "Microsoft.EntityFrameworkCore.InMemory": "1.0.2",
-    "Pivotal.Extensions.Configuration.ConfigServer": "1.0.0-rc2"
-    },
-    ......
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
+  </ItemGroup>
 ----
-. Save each ``project.json`` and notice that a ``dotnet restore`` is done for you.
+. Save each ``csproj`` and ensure a dotnet restore is done.
 
 === Step 03 - Add Steeltoe Config Server provider to ConfigurationBuilder
 Here we need to use the Config Server client to retrieve the configuration from the Config Server.
@@ -389,8 +388,8 @@ Next, remove this section from ``appsettings.json``.
 At this point you should be ready to run both Fortune-Tellers locally and test.
 Every thing should work as it did before, even though now much of the configuration is coming from the Config Server.
 
-. Using the skills you picked up from Lab05, run the apps from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 in VS2017
 .. ``dotnet run --server.urls http://*:5000``
 .. ``dotnet run --server.urls http://*:5555``
 
