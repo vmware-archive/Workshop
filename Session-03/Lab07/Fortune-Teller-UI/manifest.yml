@@ -4,3 +4,5 @@ applications:
   random-route: true
   env:
     ASPNETCORE_ENVIRONMENT: Production
+  services:
+   - myConfigServer    

@@ -17,8 +17,8 @@ The goals for Lab 8 are to:
 . Use Steeltoe Discovery client to register and discover the ``Fortune Teller Service``
 --
 
-== Open VS2015 Solution
-. Start VS2015 and open the solution you wish to use:
+== Open Visual Studio Solution
+. Start Visual Studio and open the solution/folder you wish to use:
 .. _Workshop/Session-03/Lab08.sln_ if you want to start with finished code.
 .. _Workshop/FortuneTeller/FortuneTeller.sln_ if you are writing code from scratch.
 
@@ -26,12 +26,12 @@ The goals for Lab 8 are to:
 == Use Spring Cloud Eureka Server as a Discovery server
 
 === Step 01 - Run Spring Cloud Eureka Server Locally
-Here we need to make sure a Spring Cloud Eureka Server is running locally so its easier to development and test with.
+Here we need to make sure a Spring Cloud Eureka Server is running locally so its easier to develop and test with.
 
 . To run Eureka Server you will need Java JDK installed on your machine and the JAVA_HOME environment variable set to the JDK's installed location:
 +
 ----
-e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
+e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112 or equivalent on Linux/Mac
 ----
 
 . Open a command window.
@@ -50,21 +50,15 @@ e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
 It will start up on port 8761 and serve the Eureka API from "/eureka".
 
 === Step 02 - Run Spring Cloud Config Server Locally
-We are still using the Config Server, so we make sure it is running locally so its easier to development and test with.
+We are still using the Config Server, so we make sure it is running locally so its easier to develop and test with.
 
 . To run Config Server you will need Java JDK installed on your machine and the JAVA_HOME environment variable set to the JDK's installed location:
 +
 ----
-e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
+e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112 or equivalent on Linux/Mac
 ----
 
 . Open a command window.
-. Create the directory _c:/steeltoe/config-repo_ if you haven't already done so.
- This will be the location the Config Server reads its configuration data from.
-+
-----
- > mkdir c:\steeltoe\config-repo
-----
 
 . Change directory to _Workshop/ConfigServer_
 +
@@ -78,7 +72,8 @@ e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112
 > mvnw spring-boot:run
 ----
 {sp}+
-It will start up on port 8888 and serve configuration data from "file:///steeltoe/config-repo"
+It will start up on port 8888 and serve configuration data from "file:./steeltoe/config-repo". This will be the directory _Workshop/ConfigServer/steeltoe/config-repo_.
+
 
 === Step 03 - Add Steeltoe Discovery Client Nuget
 Here we add the appropriate Spring Cloud Eureka Server client Nuget to each Fortune Teller application.
@@ -86,20 +81,20 @@ When targeting Spring Cloud Services on PCF, we use the Nuget: ``Pivotal.Discove
 When targeting Spring Cloud Open Source, we can use Nuget: ``Steeltoe.Discovery.Client``.
 
 . Expand the ``Fortune-Teller-UI`` and ``Fortune-Teller-Service`` projects.
-. Open ``project.json`` for EACH project and add the following line to the ``dependencies``:
-..  "Pivotal.Discovery.Client": "1.0.0-rc2"
+. Open ``.csproj`` for EACH project and add the``PackageReference``:
+..  Include="Pivotal.Discovery.Client" Version="1.0.0-rc2"
+
 +
 ----
-"dependencies": {
+  <ItemGroup>
    .......
-    "Microsoft.EntityFrameworkCore": "1.0.2",
-    "Microsoft.EntityFrameworkCore.InMemory": "1.0.2",
-    "Pivotal.Extensions.Configuration.ConfigServer": "1.0.0-rc2",
-    "Pivotal.Discovery.Client": "1.0.0-rc2"
-    },
-    ......
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
+  </ItemGroup>
 ----
-. Save each ``project.json`` and notice that a ``dotnet restore`` is done for you.
+. Save each ``csproj`` and make sure that a ``dotnet restore`` is done.
 
 === Step 04 - Add Steeltoe Discovery Client to Container
 In this step we need to add the Steeltoe Discovery Client to the service container and the start it up, running in the background, fetching Service information.
@@ -142,7 +137,7 @@ For the ``Fortune Teller Service`` we want it to register itself with the Eureka
 For the ``Fortune Teller UI`` we want it to fetch registered services, but we don't need to register, as it has no external REST endpoints it needs to expose.
 And finally, for both, we need to configure the URL endpoint of the Eureka Server, so that both know how to contact the server.
 
-. Modify the ``application.yml`` file in _c:/steeltoe/config-repo_ to contain:
+. Modify the ``application.yml`` file in _file:./steeltoe/config-repo_ to contain:
 +
 ----
 Logging:
@@ -154,12 +149,11 @@ Logging:
 eureka:
   client:
     serviceUrl: http://localhost:8761/eureka/
-    validate_certificates: false
 ----
 {sp}+
 So in the above, we configure the usage of the ``eureka client`` and we configure the endpoint (``serviceUrl`` of the Eureka server.
 Since this data is contained in ``application.yml`` it will be returned for ALL (e.g. fortuneService and fortuneui) applications which fetch data from this server.
-. Modify the ``fortuneService.yml`` file in _c:/steeltoe/config-repo_ to contain:
+. Modify the ``fortuneService.yml`` file in _file:./steeltoe/config-repo_ to contain:
 +
 ----
 eureka:
@@ -176,7 +170,7 @@ Then we tell it to register itself as an ``instance``, listening at the address 
 Note that the name for ``Fortune Teller Service`` comes from ``appsettings.json``. (``spring:name`` = ``fortuneService``).
 All of this should work fine when running locally and we will override some of it with the Eureka service binding when we push it to Cloud Foundry.
 
-. Modify the ``fortuneui.yml`` file in _c:/steeltoe/config-repo_ to contain:
+. Modify the ``fortuneui.yml`` file in _file:./steeltoe/config-repo_ to contain:
 +
 ----
 eureka:
@@ -233,8 +227,8 @@ private HttpClient GetClient()
 At this point you should be ready to run both Fortune-Tellers locally and test.
 Every thing should work as it did before, but now we are using Eureka for service registration and discovery.
 
-. Using the skills you picked up from Lab05, run the apps from VS2015 and from the command line.
-.. CTRL-F5 or F5
+. Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
+.. CTRL-F5 or F5 on VS2017
 .. ``dotnet run --server.urls http://*:5000``
 .. ``dotnet run --server.urls http://*:5555``
 
@@ -272,7 +266,7 @@ Make sure you still have an instance of the Config Server service in your org/sp
 .. Optional: Fork github repository https://github.com/SteeltoeOSS/workshop-config-repo
 .. Optional: Open the ``config-server.json`` file in the Solution Items folder.
 .. Optional: Modify it to point to the github repo you just created.
-.. Optional: Add the contents of _c:/steeltoe/config-repo_ to the github repo you just created
+.. Optional: Add the contents of _file:./steeltoe/config-repo_ to the github repo you just created
 . Using the command window, create an instance of the config server and set its configuration up with a github repo referenced in the config-server.json file:
 +
 ----
@@ -292,18 +286,15 @@ Make sure you still have an instance of the Config Server service in your org/sp
 . Examine the ``manfest.yml`` files for both projects and notice ``services`` addition shown below.
 You need to make this change in your ``manifest.yml`` before you push to Cloud Foundry.
 Also, notice the ``ASPNETCORE_ENVIRONMENT`` setting.
-Feel free to change that to ``development`` if you want to turn on debug logging.
+Feel free to change that to ``Development`` if you want to turn on debug logging.
 +
 ----
 ---
 applications:
 - name: fortuneService
   random-route: true
-  memory: 512M
-  buildpack: https://github.com/cloudfoundry-community/asp.net5-buildpack.git
-  command: ./Fortune-Teller-Service --server.urls "http://*:$PORT"
   env:
-    ASPNETCORE_ENVIRONMENT: production
+    ASPNETCORE_ENVIRONMENT: Production
   services:
    - myConfigServer
    - myDiscoveryService
@@ -312,11 +303,8 @@ applications:
 applications:
 - name: fortuneui
   random-route: true
-  memory: 512M
-  buildpack: https://github.com/cloudfoundry-community/asp.net5-buildpack.git
-  command: ./Fortune-Teller-UI --server.urls "http://*:$PORT"
   env:
-    ASPNETCORE_ENVIRONMENT: production
+    ASPNETCORE_ENVIRONMENT: Production
   services:
    - myConfigServer
    - myDiscoveryService
@@ -333,7 +321,7 @@ applications:
 ... ``cd Workshop/Session-03/Lab08/Fortune-Teller-Service``
 ... ``dotnet restore``
 ... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 ... ``cf push -f manifest.yml -p publish``
 .. Pushing Fortune Teller UI - If you are using the finished lab code on Windows:
 ... ``cd Workshop/Session-03/Lab08/Fortune-Teller-UI``
@@ -345,7 +333,7 @@ applications:
 ... ``cd Workshop/Session-03/Lab08/Fortune-Teller-UI``
 ... ``dotnet restore``
 ... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $cd\publish``
+... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
 ... ``cf push -f manifest.yml -p publish``
 
 Try hitting the ``Fortune Teller UI`` and if it fails to communicate with the ``Fortune Teller Service``.

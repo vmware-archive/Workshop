@@ -1,5 +1,6 @@
-mysql: 
-  client: 
-    database: mydatabase
-    username: username
-    password: password
+eureka:
+  client:
+    shouldFetchRegistry: false
+  instance:
+    port: 5000
+    hostName: localhost
