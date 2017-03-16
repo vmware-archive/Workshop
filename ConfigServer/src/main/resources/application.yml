@@ -15,4 +15,4 @@ spring:
     config:
       server:
         native:
-          searchLocations: file:///steeltoe/config-repo
+          searchLocations: file:./steeltoe/config-repo
