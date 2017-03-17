@@ -229,8 +229,8 @@ Every thing should work as it did before, but now we are using Eureka for servic
 
 . Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
 .. CTRL-F5 or F5 on VS2017
-.. ``dotnet run --server.urls http://*:5000``
-.. ``dotnet run --server.urls http://*:5555``
+.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
+.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
 
 == Deploy to Cloud Foundry
 

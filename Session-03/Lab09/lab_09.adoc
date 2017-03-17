@@ -8,7 +8,7 @@ We will explore some of the existing horizontal scaling issues with the app and 
 If you started with the _FortuneTeller.sln_, and completed Lab 8, you have an app that is still not where we would like it to be:
 
 . The ``Fortune Teller Service`` can not scale horizontally, as it uses a backend in-memory datastore to hold Fortunes.
-. The ``Fortune Teller UI`` can not scale horizontally, as its session state (i.e. Users Fortune) gets lost.
+. The ``Fortune Teller UI`` can not scale horizontally, as its session state (i.e. Users Fortune) gets lost since the Session is not shared between instances.
 
 The goals for Lab 9 are to:
 
@@ -31,8 +31,8 @@ Also, for Steeltoe Sample apps illustrating the use of Connectors, explore the c
 And for Steeltoe Sample apps illustrating the use of various Security providers, explore the code in this https://github.com/SteeltoeOSS/Samples/tree/master/Security[repository].
 --
 
-== Open VS2015 Solution
-. Start VS2015 and open the solution you wish to use:
+== Open Visual Studio Solution
+. Start Visual Studio and open the solution/folder you wish to use:
 .. _Workshop/Session-03/Lab09.sln_ if you want to start with finished code.
 .. _Workshop/FortuneTeller/FortuneTeller.sln_ if you are writing code from scratch.
 
@@ -45,14 +45,14 @@ And for Steeltoe Sample apps illustrating the use of various Security providers,
 .. Examine ``Configure()``
 ... Explain ``UseSession()``
 ... Explain implied ``UseCookies()``
-. Explain how ``DataProtection`` is used for encryption.
+. Understand how ``DataProtection`` is used for encryption.
 .. How its used to encrypt data stored in session
 .. How its use to encrypt session ids.
-.. Explain key ring
+.. Understand key ring
 
 
 == Use Steeltoe MySQL Connector
-In this exercise we will be adding code to the ``Fortune Teller Service`` to make use of the Steeltoe MySQL connector.
+In this section we will be adding code to the ``Fortune Teller Service`` to make use of the Steeltoe MySQL connector.
 
 For some background information on the Steeltoe MySql Connector, explore the Readme in this https://github.com/SteeltoeOSS/Connectors/tree/master/src/Steeltoe.CloudFoundry.Connector.MySql[repository].
 
@@ -213,12 +213,12 @@ In an upcoming exercise, we will push the Fortune-Tellers to Cloud Foundry and t
 
 . Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
 .. CTRL-F5 or F5 on VS2017
-.. ``dotnet run --server.urls http://*:5000``
-.. ``dotnet run --server.urls http://*:5555``
+.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
+.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
 
 == Use Redis for Session Storage
-In this exercise we will be adding code to the ``Fortune Teller UI`` to make use of the Steeltoe Redis connector.
-We will use it to hook up the ASP.NET Core DistributedCache to a Redis service instance.
+In this section we will be adding code to the ``Fortune Teller UI`` to make use of the Steeltoe Redis connector.
+We will use it to hook up the ASP.NET Core DistributedCache to a Redis service instance. Remember, Session uses the DistributedCache to store session state.
 
 For some background information on the Steeltoe Redis Connector, explore the Readme in this https://github.com/SteeltoeOSS/Connectors/tree/master/src/Steeltoe.CloudFoundry.Connector.Redis[repository].
 
@@ -351,8 +351,8 @@ In an upcoming exercise, we will push the Fortune-Tellers to Cloud Foundry and t
 
 . Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
 .. CTRL-F5 or F5 on VS2017
-.. ``dotnet run --server.urls http://*:5000``
-.. ``dotnet run --server.urls http://*:5555``
+.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
+.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
 
 == Use Redis for Data Protection Key Storage
 In this exercise we will be adding code to the ``Fortune Teller UI`` to make use of the Steeltoe Redis DataProtection Key Storage provider.
@@ -475,8 +475,8 @@ In the next exercise, we will push the Fortune-Tellers to Cloud Foundry and test
 
 . Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
 .. CTRL-F5 or F5 on VS2017
-.. ``dotnet run --server.urls http://*:5000``
-.. ``dotnet run --server.urls http://*:5555``
+.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
+.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
 
 == Deploy to Cloud Foundry
 

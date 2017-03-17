@@ -39,12 +39,12 @@ And finally, for some background information on ASP.NET Core Options, have a loo
 .. Examine ``ConfigurationBuilder`` and ``SetBasePath``
 .. Examine ``AddJsonFile()`` methods.  These are adding Configuration sources to the ``ConfigurationBuilder``.
 ... Notice the  ``AddEnvironmentVariables()`` as another provider added to builder.
-... Explain Environments (e.g. development, staging, etc) and ``IHostingEnvironment.EnvironmentName``
-... Explain setting Environments using ``ASPNETCORE_ENVIRONMENT`` and point out ``launchSettings.json``
+... Understand Environments (e.g. Development, Staging, etc) and ``IHostingEnvironment.EnvironmentName``
+... Understand setting Environments using ``ASPNETCORE_ENVIRONMENT`` and point out ``launchSettings.json``
 .. Examine the arguments to ``AddJsonFile``
 .. Notice ``appsettings-<<EnvironmentName>>.json`` is not present.
 .. Notice ``Configuration = builder.Build()``. It actually builds the configuration at this point.
-... Explain how one providers configuration values can override the others.
+... Understand how one providers configuration values can override the others.
 .. Open ``appsettings.json``. Current contents is used to configuring logging.
 ... Notice ``loggerFactory.AddConsole(...)`` in ``Configure`` method.
 
@@ -56,7 +56,7 @@ Here we add a JSON configuration file to each project which contains configurati
 Basically, we are going to change all logging to ``Debug`` when running the app in ``Development`` mode.
 
 . Expand the ``Fortune-Teller-UI`` project
-.. Add new json file ``appsettings-Development.json``.
+.. Add new json file ``appsettings-Development.json`` if it doesn't already exist.
 .. Copy contents of ``appsettings.json`` to ``appsetttings-Development.json``.
 .. Modify all ``LogLevels`` to ``Debug``.
 .. Then also add ``"Fortune_Teller_Service": "Debug"`` and ``"Fortune_Teller_UI": "Debug"`` to end of the file.
@@ -85,8 +85,8 @@ At this point you should be ready to run both Fortune-Tellers locally and test:
 
 . Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
 .. CTRL-F5 or F5 in VS2017
-.. ``dotnet run --server.urls http://*:5000``
-.. ``dotnet run --server.urls http://*:5555``
+.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
+.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
 . Modify ``ASPNETCORE_ENVIRONMENT`` in ``launchsettings.json`` for each project and verify you are getting the appropriate logging information when you run the application.
 .. Hint: Amoung other places, look at the ``FortunesController`` action methods for logging calls.
 . Change the log levels in  ``appsettings-Development.json`` while ``Fortune-Teller-Service`` and ``Fortune-Teller-UI`` are running to see if changes are picked up.
@@ -136,7 +136,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ----
 {sp}+
-This method call actually causes a couple things to happen:
+The changes to this method actually cause several things to happen:
 * It uses the configuration we built in the ``Startup`` constructor and gets the ``fortuneService`` section from it.
 * It passes that configuration data into the ``Configure<FortuneServiceConfig>`` which binds the values from the configuration into the properties in ``FortuneServiceConfig``.
 * And, finally it will make ``FortuneServiceConfig`` available for inject as a ``IOptions<FortuneServiceConfig>`` or ``IOptionsSnapshot<FortuneServiceConfig>``.
@@ -174,8 +174,8 @@ The ``Fortune-Teller-UI`` should now be fetching Fortunes from the ``Fortune-Tel
 
 . Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
 .. CTRL-F5 or F5 in VS2017
-.. ``dotnet run --server.urls http://*:5000``
-.. ``dotnet run --server.urls http://*:5555``
+.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
+.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
 
 == Use Spring Cloud Config Server as a Configuration source
 In this exercise we will startup a Spring Cloud Config Server locally and move some of our configuration data to the locally running Config Server.
@@ -382,8 +382,8 @@ Every thing should work as it did before, even though now much of the configurat
 
 . Using the skills you picked up from Lab05, run the apps from VS2017 and/or from the command line.
 .. CTRL-F5 or F5 in VS2017
-.. ``dotnet run --server.urls http://*:5000``
-.. ``dotnet run --server.urls http://*:5555``
+.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
+.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
 
 == Deploy to Cloud Foundry
 
@@ -473,9 +473,9 @@ applications:
 
 === Step 03 - Configure for CloudFoundry
 . Try hitting the ``Fortune Teller UI`` and notice that it fails to communicate with the ``Fortune Teller Service``.
-Why -> Remember the ``fortuneService`` configuration is pointing to ``localhost:5000``.
+Why -> Remember the ``fortuneService`` configuration is pointing to ``localhost:5000``. In the next lab, we will fix this by making use of the Netflix Eureka Discovery service.
 . Optional: If you're using your own github repo to hold Config Server data, modify the ``fortuneService`` configuration to make it work and restart the UI.
 Some hints:
 .. Check the application fortuneService URL in the Route tab within Pivotal Cloud Foundry apps manager
 
-.. Update fortuneui.yml in https://github.com/<github username>/workshop-config-repo and restart fortuneui application
+.. Update fortuneui.yml in your github repo and restart fortuneui application
