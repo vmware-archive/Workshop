@@ -6,7 +6,7 @@ Starting with this lab we will begin the process of creating a fully functional 
 You have two paths you can follow when doing the rest of the labs for the workshop:
 
 . For each lab, open up and work with finished code. With this path you won't be writing any new code, instead, you will just be reviewing and running already completed lab code.
-. Open the _FortuneTeller.sln_ solution as your starting point. You will then stick with this throughout the workshop, and you will be writing new code and debugging what you write.
+. Open the _FortuneTeller.sln_ solution as your starting point. You will then stick with this solution throughout the workshop, and you will be writing new code and debugging what you write.
 
 If you start with #2 above, you will find the app in its current state is not very useful:
 
@@ -30,7 +30,7 @@ For some background information on ASP.NET Core programming, have a look at this
 == Open Visual Studio Solution
 . Start Visual Studio and open the solution/folder you wish to start from:
 .. _Workshop/Session-02/Lab06.sln_ if you want to start with finished code.
-.. _Workshop/FortuneTeller/FortuneTeller.sln_ if you will be writing code from scratch.
+.. _Workshop/FortuneTeller/FortuneTeller.sln_ if you want to be writing code from scratch.
 
 === Understand Fortune-Teller-Service project
 
@@ -52,7 +52,7 @@ For some background information on ASP.NET Core programming, have a look at this
 .. Notice it implments the ``IFortuneService`` which provides the two REST endpoints
 ... AllFortunesAsync() ->  GET: api/fortunes/all
 ... RandomFortuneAsync() -> GET api/fortunes/random
-.. Notice the controller methods return hard-coded ``Fortunes``, not ``FortuneEntitys``.
+.. Notice the controller methods return ``Fortunes``, not ``FortuneEntitys``.
 
 === Understand Fortune-Teller-UI project
 . Expand the ``Fortune-Teller-UI`` project
@@ -64,12 +64,16 @@ For some background information on ASP.NET Core programming, have a look at this
 .. Examine the ``Configure()`` method, where  ASP.NET Core middleware is added to the request processing pipeline.
 . Open the ``Common/Services`` folder which holds the code for the ``IFortuneService``
 .. Examine ``IFortuneService``
-.. Examine ``FortuneServiceClient``, the implementation and notice it returns hard-coded ``Fortunes``
+.. Examine ``FortuneServiceClient``, the implementation and notice it returns ``Fortunes``
 . Open the ``Controllers`` folder which holds the MVC Controller code
 .. Open the ``FortunesController``, the implementation for the UI
 .. Notice the ``RandomFortune`` action, it returns a ``Fortune`` to the View
+.. Notice that ``RandomFortune`` puts tht last Fortune it received in Session.
+.. Notice that ``Index`` pulls the last retrieved Fortune from Session and returns it to the View.
 . Open the ``Views/Fortunes`` folder which holds the Views for the FortuneController
 .. Open ``RandomFortune``, the View used by the ``RandomFortune`` action
+... Notice how it uses the ``Fortune`` returned from the action
+.. Open ``Index``, the View used by the ``Index`` action
 ... Notice how it uses the ``Fortune`` returned from the action
 
 === Modify Fortune Teller Service

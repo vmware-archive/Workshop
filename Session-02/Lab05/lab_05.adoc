@@ -9,10 +9,10 @@ The app consists of a ``Fortune Teller Service`` which provides a REST API to se
 In its current state, this app is not fully functional.
 The ``Fortune Teller Service`` only serves up a single Fortune and the ``Fortune Teller UI`` doesn't know how to communicate with the ``Fortune Teller Service`` so it always returns a single ``Hello world`` Fortune.
 
-In this lab we will work with both of them, running them and pushing them to Cloud Foundry in their current state.
+In this lab we will work with both of them, running them locally and pushing them to Cloud Foundry in their current state.
 In future labs we will systematically make the changes necessary to make them a working application.
 
-Note: If you are doing this Lab on a Mac you will need to install Mono. The simple way to do that is to use ``brew``. At a command prompt enter ``brew install mono``. Once thats complete you will need to export an enviroment variable in the command window you will be working in to work around a problem with the ``dotnet`` tooling.  You will have to locate where ``brew`` installed Mono. Once you have determined that then based on that you will need to export the path to the Mono libraries. Something like this:  ``export FrameworkPathOverride=/usr/local/Cellar/mono/4.8.0.495/lib/mono/4.5/``
+Note: If you are doing this Lab on a Mac you will need to install Mono. The simple way to do that is to use ``brew``. At a command prompt enter ``brew install mono``. Once complete you will need to export an environment variable in the command window you will be working within in order to work around a problem with the ``dotnet`` tooling.  To do this, you will first need to locate where ``brew`` installed Mono. Then, once you have that determined then you will need to use that information to export the path to the Mono core libraries. Something like this:  ``export FrameworkPathOverride=/usr/local/Cellar/mono/4.8.0.495/lib/mono/4.5/`` will need to be entered.
 --
 
 == Open Visual Studio Solution
@@ -21,8 +21,8 @@ Note: If you are doing this Lab on a Mac you will need to install Mono. The simp
 ... Notice the ``TargetFrameworks`` specifies ``netcoreapp1.1`` and ``net462``. This ASP.NET Core app is intended to run on ``.NET Core 1.1`` and ``.NET Framework 4.6.2``.
 ... Notice the ``PackageReference`` items as they specify all the NuGets the application depends on.
 ... Notice the ``RuntimeIdentifiers`` specifies what runtimes you can publish this application for.  When targeting .NET Core, this causes the app to be fully self-contained when published. Otherwise without it we get a `portable` app.
-.. Open Visual Studio Debug Launch dropdown.
-... Notice ``Framework`` selection allows either ``netcoreapp1.1`` or ``net452`` to be selected.
+.. If your using Visual Studio 2017 you can open the Debug Launch dropdown.
+... Notice ``Framework`` selection allows either ``netcoreapp1.1`` or ``net462`` to be selected.
 ... Notice hosting environment can be ``IIS Express`` or ``Fortune-Teller-Service`` and either can be selected.
 
 == Run Fortune Teller Service in VS2017, on .NET 4.x (Windows only)
@@ -112,6 +112,7 @@ Hint: Shutdown Fortune Service before proceeding
 . Use the instructions above, but apply them to the Fortune Teller UI.
 . Hint: You can specify what port the server listens on as follows:
 .. dotnet run -f netcoreapp1.1 --server.urls http://*:5555
+.. dotnet run -f net462 --server.urls http://*:5555
 
 == Publish and Push Fortune Teller Service to Cloud Foundry Linux Cell
 . Start a command window.
