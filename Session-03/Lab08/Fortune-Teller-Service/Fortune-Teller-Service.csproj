@@ -16,8 +16,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
-    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0" />
   </ItemGroup>
 
 </Project>

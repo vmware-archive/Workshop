@@ -112,7 +112,7 @@ You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.MySql``.
 
 . Expand the ``Fortune-Teller-Service`` project.
 . Open ``.csproj`` and add the``PackageReference``:
-..  Include="Steeltoe.CloudFoundry.Connector.MySql" Version="1.0.0-rc2"
+..  Include="Steeltoe.CloudFoundry.Connector.MySql" Version="1.0.0"
 
 +
 ----
@@ -120,9 +120,9 @@ You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.MySql``.
    .......
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
-    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.MySql" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0" />
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.MySql" version="1.0.0" />
   </ItemGroup>
 ----
 . Save the ``csproj`` and make sure that a ``dotnet restore`` is done.
@@ -236,7 +236,7 @@ You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.Redis``.
 
 . Expand the ``Fortune-Teller-UI`` project.
 . Open ``.csproj`` and add the``PackageReference``:
-..  Include="Steeltoe.CloudFoundry.Connector.Redis" Version="1.0.0-rc2"
+..  Include="Steeltoe.CloudFoundry.Connector.Redis" Version="1.0.0"
 
 +
 ----
@@ -244,9 +244,9 @@ You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.Redis``.
    .......
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
-    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0" />
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0" />
   </ItemGroup>
 ----
 
@@ -379,7 +379,7 @@ You will make use of the Nuget: ``"Steeltoe.Security.DataProtection.Redis``.
 
 . Expand the ``Fortune-Teller-UI`` project.
 . Open ``.csproj`` and add the``PackageReference``:
-..  Include="Steeltoe.Security.DataProtection.Redis" Version="1.0.0-rc2"
+..  Include="Steeltoe.Security.DataProtection.Redis" Version="1.0.0"
 
 +
 ----
@@ -387,10 +387,10 @@ You will make use of the Nuget: ``"Steeltoe.Security.DataProtection.Redis``.
    .......
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0-rc2" />
-    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0-rc2" />
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0-rc2" />
-    <PackageReference Include="Steeltoe.Security.DataProtection.Redis" version="1.0.0-rc2" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0" />
+    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0" />
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0" />
+    <PackageReference Include="Steeltoe.Security.DataProtection.Redis" version="1.0.0" />
   </ItemGroup>
 ----
 
