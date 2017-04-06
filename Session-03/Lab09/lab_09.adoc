@@ -375,7 +375,7 @@ Since we already did this in the previous exercise, we will not have to do it ag
 
 === Step 04 - Add Steeltoe Redis DataProtection Key Storage provider Nuget
 Here we add the appropriate Steeltoe Redis DataProtection Key Storage provider Nuget to the ``Fortune Teller UI``.
-You will make use of the Nuget: ``"Steeltoe.Security.DataProtection.Redis``.
+You will make use of the Nuget: ``"Steeltoe.Security.DataProtection.Redis"``.
 
 . Expand the ``Fortune-Teller-UI`` project.
 . Open ``.csproj`` and add the``PackageReference``:
