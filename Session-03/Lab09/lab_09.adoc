@@ -361,6 +361,7 @@ We will use it to configure the ASP.NET Core DataProtection service to persist i
 For some background information on the Steeltoe Redis DataProtection Key Storage provider, explore the Readme in this https://github.com/SteeltoeOSS/Security/tree/master/src/Steeltoe.Security.DataProtection.Redis[repository].
 
 For some background information on Configuring ASP.NET Core Data Protection, explore this https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview[documentation].
+
 === Step 01 - Run Spring Cloud Eureka Server Locally
 We are still using the Eureka Server, so make sure it is still running locally.
 See above if its not!
