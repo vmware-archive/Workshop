@@ -67,13 +67,17 @@ Follow the prompts.
 . Publish the application.
 +
 ----
-> dotnet publish -o $PWD/publish -r ubuntu.14.04-x64  or  dotnet publish -o %CD%\publish -r ubuntu.14.04-x64
+> Windows: dotnet publish -o %CD%\publish -r ubuntu.14.04-x64
+
+> Mac/Linux: dotnet publish -o $PWD/publish -r ubuntu.14.04-x64
 ----
 
 . Push the application!
 +
 ----
-> cf push -f manifest.yml -p $PWD/publish 
+> Windows: cf push -f manifest.yml -p %CD%/publish 
+
+> Mac/Linux: cf push -f manifest.yml -p $PWD/publish 
 ----
 +
 You should see output similar to the following listing. Take a look at the listing callouts for a play-by-play of what's happening:
@@ -275,7 +279,7 @@ What you are seeing here is the raw listing of all the configuration information
 Take some time and see if you can find in the code how this is accomplished.
 Start with the ``RawConfig()`` action in the ``HomeController``.
 
-. To get an understanding on how the configurtion for the app is created from all the different sources have a look at the ``AppConfig`` class in the ``App_Start`` folder and the static method ``BuildConfiguration()` method.
+. To get an understanding on how the configurtion for the app is created from all the different sources have a look at the ``Startup`` class in project folder and the method ``ConfigureServices(IServiceCollection services)``.
 See if you can figure out how Steeltoe is used to add to the Configuration.  In later labs we will explore this in more depth.
 
 == Interact with App from CF CLI
