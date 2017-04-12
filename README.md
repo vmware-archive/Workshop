@@ -15,6 +15,7 @@ $ cd Workshop
 - [Git Client](https://git-scm.com/downloads)
 - [.NET Core SDK 1.1](https://www.microsoft.com/net/download/core#/current)
 - [Visual Studio Code](https://code.visualstudio.com/) or [Visual Studio 2017]( https://www.visualstudio.com/downloads/ )
+- [.NET 4.6.2 Developer Pack (Windows requirement for building with .NET 4.x)](https://support.microsoft.com/en-us/help/3151934/microsoft-.net-framework-4.6.2-developer-pack-and-language-packs)
 - [Visual Studio 2017 .NET Core Workload](https://www.microsoft.com/net/core#windowsvs2017)
 
 
