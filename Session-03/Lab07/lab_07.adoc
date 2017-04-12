@@ -454,7 +454,7 @@ applications:
 ... ``cd Workshop/Session-02/Lab07/Fortune-Teller-Service``
 ... ``dotnet restore``
 ... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
+... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish``
 ... ``cf push -f manifest.yml -p publish``
 .. Pushing Fortune Teller UI - If you are using the finished lab code on Windows:
 ... ``cd Workshop/Session-02/Lab07/Fortune-Teller-UI``
@@ -466,7 +466,7 @@ applications:
 ... ``cd Workshop/Session-02/Lab07/Fortune-Teller-UI``
 ... ``dotnet restore``
 ... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
+... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish``
 ... ``cf push -f manifest.yml -p publish``
 
 
