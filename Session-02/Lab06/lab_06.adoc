@@ -262,5 +262,5 @@ If you are using the finished lab code on Mac/Linux:
 .. ``cd Workshop/Session-02/Lab06/Fortune-Teller-UI``
 .. ``dotnet restore``
 .. ``dotnet build ``
-.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish``
+.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish``
 .. ``cf push -f manifest.yml -p publish``
