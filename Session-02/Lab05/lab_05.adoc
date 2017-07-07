@@ -140,7 +140,7 @@ Hint: Shutdown Fortune Service before proceeding
 ----
 > Windows: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o %CD%\publish
 
-> Mac/Linux: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD\publish
+> Mac/Linux: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish
 ----
 
 . In Visual Studio, examine the `manifest.yml` and `manifest-windows.yml` files.
