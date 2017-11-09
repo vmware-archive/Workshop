@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
 
 
-namespace CloudFoundry.Helpers
+namespace CloudFoundry.TagHelpers
 {
    
     /// <summary>

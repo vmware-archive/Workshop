@@ -1,6 +1,6 @@
 namespace CloudFoundry
 {  
-    public class SubSectionConfiguration
+    public class SubSectionConfigurationOptions
     {
         public string Suboption1 { get; set; }
     }

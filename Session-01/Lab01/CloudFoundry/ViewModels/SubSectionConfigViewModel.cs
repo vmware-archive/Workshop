@@ -4,10 +4,10 @@ namespace CloudFoundry.ViewModels
 {
     public class SubSectionConfigViewModel
     {
-        public SubSectionConfiguration SubSectionConfig { get; }
-        public SubSectionConfigViewModel(SubSectionConfiguration sectionConfig)
+        public SubSectionConfigurationOptions SubSectionConfig { get; }
+        public SubSectionConfigViewModel(SubSectionConfigurationOptions sectionConfig)
         {
-            SubSectionConfig = sectionConfig ?? new SubSectionConfiguration();
+            SubSectionConfig = sectionConfig ?? new SubSectionConfigurationOptions();
         }
     }
 }

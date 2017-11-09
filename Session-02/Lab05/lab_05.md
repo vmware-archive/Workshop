@@ -1,16 +1,10 @@
-= Lab 5 - Running, Publishing and Deploying ASP.NET Core Micro-services
+# Lab 5 - Running, Publishing and Pushing ASP.NET Core 
 
-[abstract]
---
-In this lab we will become comfortable with running ASP.NET Core Web applications locally on our PC and publishing and deploying them to Cloud Foundry.
+>In this lab we will become comfortable with running ASP.NET Core Web applications locally on our PC and publishing and deploying them to Cloud Foundry.
 
-We will be using a ``Fortune Teller`` micro-services based application as our sample.
-The app consists of a ``Fortune Teller Service`` which provides a REST API to serve up Fortunes and a ``Fortune Teller UI`` that can be used to display the Fortunes.
-In its current state, this app is not fully functional.
-The ``Fortune Teller Service`` only serves up a single Fortune and the ``Fortune Teller UI`` doesn't know how to communicate with the ``Fortune Teller Service`` so it always returns a single ``Hello world`` Fortune.
+>We will be using a ``Fortune Teller`` micro-services based application as our sample. The app consists of a ``Fortune Teller Service`` which provides a REST API to serve up Fortunes and a ``Fortune Teller UI`` that can be used to display the Fortunes. In its current state, this app is not fully functional. The ``Fortune Teller Service`` only serves up a single Fortune and the ``Fortune Teller UI`` doesn't know how to communicate with the ``Fortune Teller Service`` so it always returns a single ``Hello world`` Fortune.
 
-In this lab we will work with both of them, running them locally and pushing them to Cloud Foundry in their current state.
-In future labs we will systematically make the changes necessary to make them a working application.
+>In this lab we will work with both of them, running them locally and pushing them to Cloud Foundry in their current state. In future labs we will systematically make the changes necessary to make them a working application.
 
 Note: If you are doing this Lab on a Mac you will need to install Mono. The simple way to do that is to use ``brew``. At a command prompt enter ``brew install mono``. Once complete you will need to export an environment variable in the command window you will be working within in order to work around a problem with the ``dotnet`` tooling.  To do this, you will first need to locate where ``brew`` installed Mono. Then, once you have that determined then you will need to use that information to export the path to the Mono core libraries. Something like this:  ``export FrameworkPathOverride=/usr/local/Cellar/mono/4.8.0.495/lib/mono/4.5/`` will need to be entered.
 --

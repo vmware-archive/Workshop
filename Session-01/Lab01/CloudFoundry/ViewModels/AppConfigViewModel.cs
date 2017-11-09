@@ -2,10 +2,10 @@ namespace CloudFoundry.ViewModels
 {
     public class AppConfigViewModel
     {
-        public AppConfiguration AppConfig { get; }
-        public AppConfigViewModel(AppConfiguration appConfig)
+        public AppConfigurationOptions AppConfig { get; }
+        public AppConfigViewModel(AppConfigurationOptions appConfig)
         {
-            AppConfig = appConfig ?? new AppConfiguration();
+            AppConfig = appConfig ?? new AppConfigurationOptions();
         }
     }
 }

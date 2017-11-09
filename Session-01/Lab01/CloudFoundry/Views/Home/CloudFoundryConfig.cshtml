@@ -30,7 +30,7 @@
 
 <h3>Service Configuration Data</h3>
 
-@foreach (var service in Model.CloudFoundryServices.Services)
+@foreach (var service in Model.CloudFoundryServices.ServicesList)
 {
     <h4>Service:  @service.Label</h4>
     <h5>vcap:services:@(service.Label):label = @service.Label</h5>

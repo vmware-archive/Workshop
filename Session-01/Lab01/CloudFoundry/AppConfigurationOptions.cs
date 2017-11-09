@@ -1,8 +1,8 @@
 namespace CloudFoundry
 {
-  public class AppConfiguration
+  public class AppConfigurationOptions
     {
-        public AppConfiguration()
+        public AppConfigurationOptions()
         {
             // Set default value.
             Option1 = "value1_from_ctor";

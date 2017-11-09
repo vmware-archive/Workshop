@@ -10,17 +10,17 @@ namespace CloudFoundry.Controllers
 {
     public class HomeController : Controller
     {
-        private IOptionsSnapshot<AppConfiguration> AppConfiguration { get; set; }
-        private IOptionsSnapshot<SubSectionConfiguration> SubSectionConfiguration { get; set; }
+        private IOptionsSnapshot<AppConfigurationOptions> AppConfiguration { get; set; }
+        private IOptionsSnapshot<SubSectionConfigurationOptions> SubSectionConfiguration { get; set; }
         private IOptions<CloudFoundryServicesOptions> CloudFoundryServices { get; set; }
         private IOptions<CloudFoundryApplicationOptions> CloudFoundryApplication { get; set; }
-        private IConfigurationRoot Config { get; set; }
+        private IConfiguration Config { get; set; }
 
-        public HomeController(IConfigurationRoot config,
+        public HomeController(IConfiguration config,
             IOptions<CloudFoundryApplicationOptions> cloudAppOptions,
             IOptions<CloudFoundryServicesOptions> cloudServiceOptions,
-            IOptionsSnapshot<AppConfiguration> appConfig,
-            IOptionsSnapshot<SubSectionConfiguration> subsectionConfig)
+            IOptionsSnapshot<AppConfigurationOptions> appConfig,
+            IOptionsSnapshot<SubSectionConfigurationOptions> subsectionConfig)
         {
             Config = config;
             CloudFoundryApplication = cloudAppOptions;
@@ -34,7 +34,7 @@ namespace CloudFoundry.Controllers
         }
         public IActionResult CloudFoundryConfig()
         {
-            return View(new CloudFoundryViewModel(CloudFoundryApplication.Value,CloudFoundryServices.Value));
+            return View(new CloudFoundryViewModel(CloudFoundryApplication.Value, CloudFoundryServices.Value));
         }
 
         public IActionResult AppConfig()
