@@ -1,4 +1,4 @@
-# Lab 5 - Running, Publishing and Pushing ASP.NET Core 
+# Lab 5 - Running, Publishing and Pushing ASP.NET Core
 
 >In this lab we will become comfortable with running ASP.NET Core Web applications locally on our PC and publishing and deploying them to Cloud Foundry.
 
