@@ -1,0 +1,6 @@
+﻿---
+applications:
+- name: fortuneService
+  random-route: true
+  env:
+    ASPNETCORE_ENVIRONMENT: Production

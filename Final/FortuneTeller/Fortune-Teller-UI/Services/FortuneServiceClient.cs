@@ -1,17 +1,20 @@
 ﻿
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Pivotal.Discovery.Client;
 using System.Net.Http;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using System;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
-using Steeltoe.Common.Discovery;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using System.Net.Http.Headers;
+
+// Lab07 Start
+using Steeltoe.Common.Discovery;
+// Lab07 End
 
 namespace Fortune_Teller_UI.Services
 {
@@ -29,28 +32,32 @@ namespace Fortune_Teller_UI.Services
             }
         }
 
-        // Lab08 Start
+        // Lab07 Start
         DiscoveryHttpClientHandler _handler;
-        // Lab08 End
+        // Lab07End
 
-        // Lab10 Start
+        // Lab09 Start
         IHttpContextAccessor _reqContext;
-        // Lab10 End
+        // Lab09 End
 
-        public FortuneServiceClient(IDiscoveryClient client,
+        public FortuneServiceClient(
             IOptionsSnapshot<FortuneServiceConfig> config, 
             ILogger<FortuneServiceClient> logger,
-            // Lab10 Start
-            IHttpContextAccessor context = null)
-            // Lab10 End
-        {
-            // Lab08 Start
-            _handler = new DiscoveryHttpClientHandler(client);
-            // Lab08 End
+            // Lab07 Start
+            IDiscoveryClient client,
+            // Lab07 End
 
-            // Lab10 Start
+            // Lab09 Start
+            IHttpContextAccessor context = null)
+            // Lab09 End
+        {
+            // Lab07 Start
+            _handler = new DiscoveryHttpClientHandler(client);
+            // Lab07 End
+
+            // Lab09 Start
             _reqContext = context;
-            // Lab10 End
+            // Lab09 End
 
             _logger = logger;
             _config = config;
@@ -61,12 +68,16 @@ namespace Fortune_Teller_UI.Services
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
+            // Lab05 Start
             return await HandleRequest<List<Fortune>>(Config.AllFortunesURL);
+            // Lab05 End
         }
 
         public async Task<Fortune> RandomFortuneAsync()
         {
+            // Lab05 Start
             return await HandleRequest<Fortune>(Config.RandomFortuneURL);
+            // Lab05 End
         }
 
         private async Task<T> HandleRequest<T>(string url) where T : class
@@ -109,11 +120,11 @@ namespace Fortune_Teller_UI.Services
 
         private async Task<HttpClient> GetClientAsync()
         {
-            // Lab08 Start
+            // Lab07 Start
             var client = new HttpClient(_handler, false);
-            // Lab08 End
+            // Lab07 End
 
-            // Lab10 Start
+            // Lab09 Start
             if (_reqContext != null)
             {
                 var token = await _reqContext.HttpContext.GetTokenAsync("access_token");
@@ -125,7 +136,7 @@ namespace Fortune_Teller_UI.Services
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 }
             }
-            // Lab10 End
+            // Lab09 End
 
             return client;
         }

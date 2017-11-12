@@ -1,0 +1,17 @@
+Logging: 
+  IncludeScopes: false
+  Debug:
+    LogLevel: 
+      Default: Information
+  Console:
+    LogLevel: 
+      Default: Information
+eureka:
+  client:
+    serviceUrl: http://localhost:8761/eureka/
+    validate_certificates: false
+management: 
+  endpoints: 
+    path: /cloudfoundryapplication
+    cloudfoundry: 
+      validateCertificates: false

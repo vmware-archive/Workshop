@@ -12,26 +12,26 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <!-- Lab07 Start-->
+    <!-- Lab06 Start-->
     <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServerCore" Version="2.0.0-dev-00118" />
+    <!-- Lab06 End-->
+
+    <!-- Lab07 Start-->
+    <PackageReference Include="Pivotal.Discovery.ClientCore" Version="2.0.0-dev-00114" />
     <!-- Lab07 End-->
 
     <!-- Lab08 Start-->
-    <PackageReference Include="Pivotal.Discovery.ClientCore" Version="2.0.0-dev-00114" />
-    <!-- Lab08 End-->
-
-    <!-- Lab09 Start-->
     <PackageReference Include="Steeltoe.CloudFoundry.Connector.EFCore" Version="2.0.0-dev-00193" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0" />
-    <!-- Lab09 End-->
+    <!-- Lab08 End-->
     
-    <!-- Lab10 Start-->
+    <!-- Lab09 Start-->
     <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version="2.0.0-dev-00081" />
-    <!-- Lab10 End-->
+    <!-- Lab09 End-->
     
   </ItemGroup>
 
-  <!-- Lab12 Start-->
+  <!-- Lab11 Start-->
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.0.1" />
     <PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version="2.0.0-dev-00049" />
@@ -51,7 +51,7 @@
     <WriteLinesToFile File="git.properties" Lines="git.build.user.name=$([System.Environment]::GetEnvironmentVariable('USERNAME'))" Overwrite="false" />
     <WriteLinesToFile File="git.properties" Lines="git.build.host=$([System.Environment]::GetEnvironmentVariable('COMPUTERNAME'))" Overwrite="false" />
   </Target>
-  <!-- Lab12 End-->
+  <!-- Lab11 End-->
   
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />

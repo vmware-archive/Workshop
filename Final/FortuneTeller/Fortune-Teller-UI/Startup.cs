@@ -7,14 +7,30 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 
+using Fortune_Teller_UI.Services;
+
+// Lab07 Start
 using Pivotal.Discovery.Client;
+// Lab07 End
+
+// Lab08 Start
 using Steeltoe.CloudFoundry.Connector.Redis;
 using Steeltoe.Security.DataProtection;
-using Steeltoe.Security.Authentication.CloudFoundry;
+// Lab08 End
 
-using Fortune_Teller_UI.Services;
+// Lab09 Start
+using Steeltoe.Security.Authentication.CloudFoundry;
+// Lab09 End
+
+// Lab10 Start
 using Steeltoe.CircuitBreaker.Hystrix;
+// Lab10 End
+
+// Lab11 Start
 using Steeltoe.Management.CloudFoundry;
+// Lab11 End
+
+
 
 namespace Fortune_Teller_UI
 {
@@ -34,7 +50,7 @@ namespace Fortune_Teller_UI
         {
             services.AddOptions();
 
-            // Lab09 Start
+            // Lab08 Start
             if (!Environment.IsDevelopment())
             {
                 // Use Redis cache on CloudFoundry to DataProtection Keys
@@ -43,21 +59,21 @@ namespace Fortune_Teller_UI
                     .PersistKeysToRedis()
                     .SetApplicationName("fortuneui");
             }
-            // Lab09 End
+            // Lab08 End
 
-            // Lab06 Start
+            // Lab05 Start
             services.AddScoped<IFortuneService, FortuneServiceClient>();
-            // Lab06 End
+            // Lab05 End
+
+            // Lab05 Start
+            services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
+            // Lab05 End
 
             // Lab07 Start
-            services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
+            services.AddDiscoveryClient(Configuration);
             // Lab07 End
 
             // Lab08 Start
-            services.AddDiscoveryClient(Configuration);
-            // Lab08 End
-
-            // Lab09 Start
             if (Environment.IsDevelopment())
             {
                 services.AddDistributedMemoryCache();
@@ -67,9 +83,9 @@ namespace Fortune_Teller_UI
                 // Use Redis cache on CloudFoundry to store session data
                 services.AddDistributedRedisCache(Configuration);
             }
-            // Lab09 End
+            // Lab08 End
 
-            // Lab10 Start
+            // Lab09 Start
             services.AddAuthentication((options) =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -85,24 +101,22 @@ namespace Fortune_Teller_UI
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("testgroup", policy => policy.RequireClaim("scope", "testgroup"));
-                options.AddPolicy("testgroup1", policy => policy.RequireClaim("scope", "testgroup1"));
+                options.AddPolicy("read.fortunes", policy => policy.RequireClaim("scope", "read.fortunes"));
 
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            // Lab10 End
+            // Lab09 End
 
-            // Lab11 Start
+            // Lab10 Start
             services.AddHystrixCommand<FortuneServiceCommand>("FortuneService", Configuration);
             services.AddHystrixMetricsStream(Configuration);
-            // Lab11 End
+            // Lab10 End
 
-            // Add framework services.
             services.AddSession();
 
-            // Lab12 Start
+            // Lab11 Start
             services.AddCloudFoundryActuators(Configuration);
-            // Lab12 End
+            // Lab11 End
 
             services.AddMvc();
         }
@@ -122,19 +136,19 @@ namespace Fortune_Teller_UI
 
             app.UseStaticFiles();
 
-            // Lab12
-            app.UseCloudFoundryActuators();
-            // Lab12
-
             // Lab11 Start
-            app.UseHystrixRequestContext();
+            app.UseCloudFoundryActuators();
             // Lab11 End
+
+            // Lab10 Start
+            app.UseHystrixRequestContext();
+            // Lab10 End
 
             app.UseSession();
 
-            // Lab10 Start
+            // Lab09 Start
             app.UseAuthentication();
-            // Lab10 End
+            // Lab09 End
 
             app.UseMvc(routes =>
             {
@@ -144,16 +158,16 @@ namespace Fortune_Teller_UI
             });
 
 
-            // Lab08 Start
+            // Lab07 Start
             app.UseDiscoveryClient();
-            // Lab08 End
+            // Lab07 End
 
-            // Lab11 Start
+            // Lab10 Start
             if (!Environment.IsDevelopment())
             {
                 app.UseHystrixMetricsStream();
             }
-            // Lab11 End
+            // Lab10 End
         }
     }
 }

@@ -1,0 +1,10 @@
+﻿---
+applications:
+- name: fortuneui
+  env:
+    ASPNETCORE_ENVIRONMENT: Production
+  services:
+   - myConfigServer
+   - myDiscoveryService
+   - myRedisService
+   - myOAuthService

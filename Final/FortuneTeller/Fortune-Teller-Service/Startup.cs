@@ -8,11 +8,23 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using Fortune_Teller_Service.Models;
 
-using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
+
+// Lab07 Start
 using Pivotal.Discovery.Client;
+// Lab07 End
+
+// Lab08 Start
+using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
+// Lab08 End
+
+// Lab09 Start
 using Steeltoe.Security.Authentication.CloudFoundry;
+// Lab09 End
+
+// Lab11 Start
 using Steeltoe.Management.Endpoint.Health;
 using Steeltoe.Management.CloudFoundry;
+// Lab11 End
 
 namespace Fortune_Teller_Service
 {
@@ -32,42 +44,42 @@ namespace Fortune_Teller_Service
         {
             services.AddOptions();
 
-            // Lab09 add
+            // Lab08 add
             if (Environment.IsDevelopment())
             {
-                // Lab06 Start
+                // Lab05 Start
                 services.AddEntityFrameworkInMemoryDatabase().AddDbContext<FortuneContext>(
                     options => options.UseInMemoryDatabase("Fortunes"), ServiceLifetime.Singleton);
-                // Lab06 End
+                // Lab05 End
             }
             else
             {
-                // Lab09 add
+                // Lab08 add
                 services.AddDbContext<FortuneContext>(options => options.UseMySql(Configuration));
             }
-            // Lab06 Start
+
+            // Lab05 Start
             services.AddSingleton<IFortuneRepository, FortuneRepository>();
-            // Lab06 End
+            // Lab05 End
 
-            // Lab08 Start
+            // Lab07 Start
             services.AddDiscoveryClient(Configuration);
-            // Lab08 End
+            // Lab07 End
 
-            // Lab10 Start
+            // Lab09 Start
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddCloudFoundryJwtBearer(Configuration);
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("testgroup", policy => policy.RequireClaim("scope", "testgroup"));
-                options.AddPolicy("testgroup1", policy => policy.RequireClaim("scope", "testgroup1"));
+                options.AddPolicy("read.fortunes", policy => policy.RequireClaim("scope", "read.fortunes"));
             });
-            // Lab10 End
+            // Lab09 End
 
-            // Lab12 Start
+            // Lab11 Start
             services.AddSingleton<IHealthContributor, MySqlHealthContributor>();
             services.AddCloudFoundryActuators(Configuration);
-            // Lab12 End
+            // Lab11 End
 
             services.AddMvc();
         }
@@ -80,23 +92,23 @@ namespace Fortune_Teller_Service
                 app.UseDeveloperExceptionPage();
             }
 
-            // Lab12
+            // Lab11
             app.UseCloudFoundryActuators();
-            // Lab12
+            // Lab11
 
-            // Lab10 Start
+            // Lab09 Start
             app.UseAuthentication();
-            // Lab10 End
+            // Lab09 End
 
             app.UseMvc();
 
-            // Lab08 Start
-            app.UseDiscoveryClient();
-            // Lab08 End
-
-            // Lab06 Start
+            // Lab05 Start
             SampleData.InitializeFortunesAsync(app.ApplicationServices).Wait();
-            // Lab06 End
+            // Lab05 End
+
+            // Lab07 Start
+            app.UseDiscoveryClient();
+            // Lab07 End
         }
     }
 }

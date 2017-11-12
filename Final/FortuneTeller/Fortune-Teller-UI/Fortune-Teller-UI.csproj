@@ -9,25 +9,25 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
 
-    <!-- Lab07 Start-->
+    <!-- Lab06 Start-->
     <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServerCore" Version="2.0.0-dev-00118" />
+    <!-- Lab06 End-->
+    
+    <!-- Lab07 Start-->
+    <PackageReference Include="Pivotal.Discovery.ClientCore" Version="2.0.0-dev-00114" />
     <!-- Lab07 End-->
     
     <!-- Lab08 Start-->
-    <PackageReference Include="Pivotal.Discovery.ClientCore" Version="2.0.0-dev-00114" />
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" version="2.0.0-dev-00193" />
+    <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" version="2.0.0-dev-00081" />
     <!-- Lab08 End-->
     
     <!-- Lab09 Start-->
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" version="2.0.0-dev-00193" />
-    <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" version="2.0.0-dev-00081" />
-    <!-- Lab09 End-->
-    
-    <!-- Lab10 Start-->
     <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version="2.0.0-dev-00081" />
-    <!-- Lab10 End-->
+    <!-- Lab09 End-->
   </ItemGroup>
 
-  <!-- Lab11 Start-->
+  <!-- Lab10 Start-->
   <ItemGroup Condition="'$(BUILD)' == ''">
     <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00081" />
     <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version="2.0.0-dev-00081" />
@@ -38,9 +38,9 @@
     <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00081" />
     <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version="2.0.0-dev-00081" />
   </ItemGroup>
-  <!-- Lab11 Start-->
+  <!-- Lab10 Start-->
   
- <!-- Lab12 Start--> 
+ <!-- Lab11 Start--> 
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.0.1" />
     <PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version="2.0.0-dev-00049" />
@@ -60,7 +60,7 @@
     <WriteLinesToFile File="git.properties" Lines="git.build.user.name=$([System.Environment]::GetEnvironmentVariable('USERNAME'))" Overwrite="false" />
     <WriteLinesToFile File="git.properties" Lines="git.build.host=$([System.Environment]::GetEnvironmentVariable('COMPUTERNAME'))" Overwrite="false" />
   </Target>
-  <!-- Lab12 End-->
+  <!-- Lab11 End-->
   
   
   <ItemGroup>

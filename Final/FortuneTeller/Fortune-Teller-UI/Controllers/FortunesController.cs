@@ -13,48 +13,38 @@ namespace Fortune_Teller_UI.Controllers
     {
         ILogger<FortunesController> _logger;
 
-        // Lab11 Start
+        // Lab10 Start
         private FortuneServiceCommand _fortunes;
         public FortunesController(ILogger<FortunesController> logger, FortuneServiceCommand fortunes)
         {
             _logger = logger;
             _fortunes = fortunes;
         }
-        // Lab11 End
-
-        // Lab06 Start
-        //private IFortuneService _fortunes;
-        //public FortunesController(ILogger<FortunesController> logger, IFortuneService fortunes)
-        //{
-        //    _logger = logger;
-        //    _fortunes = fortunes;
-        //}
-        // Lab06 End
-
+        // Lab10 End
+        
         public IActionResult Index()
         {
             _logger?.LogDebug("Index");
-            ViewData["MyFortune"] = HttpContext.Session.GetString("MyFortune");// Lab09
+            ViewData["MyFortune"] = HttpContext.Session.GetString("MyFortune");
             return View();
         }
 
-        // Lab10 Start
-        [Authorize(Policy = "testgroup")] 
-        // Lab10 End
+        // Lab09 Start
+        [Authorize(Policy = "read.fortunes")] 
+        // Lab09 End
         public async Task<IActionResult> RandomFortune()
         {
             _logger?.LogDebug("RandomFortune");
 
-            // Lab06 Start
+            // Lab05 Start
             var fortune = await _fortunes.RandomFortuneAsync();
-            // Lab06 End
+            // Lab05 End
 
-            HttpContext.Session.SetString("MyFortune", fortune.Text); // Lab09
+            HttpContext.Session.SetString("MyFortune", fortune.Text); 
             return View(fortune);
 
         }
 
-        // Lab10 Start
         [HttpPost]
         public async Task<IActionResult> LogOff()
         {
@@ -65,7 +55,9 @@ namespace Fortune_Teller_UI.Controllers
         }
 
         [HttpGet]
+        // Lab09 Start
         [Authorize]
+        // Lab09 Start
         public IActionResult Login()
         {
             return RedirectToAction(nameof(FortunesController.Index), "Fortunes");
@@ -82,7 +74,6 @@ namespace Fortune_Teller_UI.Controllers
             ViewData["Message"] = "Insufficient permissions.";
             return View();
         }
-        // Lab10 End
 
         public IActionResult Error()
         {

@@ -16,6 +16,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{A6F8
 		scripts\deleteCloudFoundryServices.sh = scripts\deleteCloudFoundryServices.sh
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config-repo", "config-repo", "{CBC04407-7B9D-43E3-B417-84A82EDA7A78}"
+	ProjectSection(SolutionItems) = preProject
+		config-repo\application-Development.yml = config-repo\application-Development.yml
+		config-repo\application.yml = config-repo\application.yml
+		config-repo\fortuneService.yml = config-repo\fortuneService.yml
+		config-repo\fortuneui.yml = config-repo\fortuneui.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{64A63130-7B13-4DE9-AB54-65610DF7C472}"
+	ProjectSection(SolutionItems) = preProject
+		config-server.json = config-server.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
