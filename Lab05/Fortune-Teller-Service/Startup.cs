@@ -28,12 +28,13 @@ namespace Fortune_Teller_Service
             services.AddOptions();
 
             // Lab05 Start
-            services.AddEntityFrameworkInMemoryDatabase().AddDbContext<FortuneContext>(
-                options => options.UseInMemoryDatabase("Fortunes"), ServiceLifetime.Singleton);
+            services.AddEntityFrameworkInMemoryDatabase()
+                .AddDbContext<FortuneContext>(
+                    options => options.UseInMemoryDatabase("Fortunes"));
             // Lab05 End
-      
+
             // Lab05 Start
-            services.AddSingleton<IFortuneRepository, FortuneRepository>();
+            services.AddScoped<IFortuneRepository, FortuneRepository>();
             // Lab05 End
 
             services.AddMvc();

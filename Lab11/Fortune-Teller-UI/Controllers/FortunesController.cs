@@ -13,14 +13,14 @@ namespace Fortune_Teller_UI.Controllers
     {
         ILogger<FortunesController> _logger;
 
-        // Lab10 Start
+        // Lab09 Start
         private FortuneServiceCommand _fortunes;
         public FortunesController(ILogger<FortunesController> logger, FortuneServiceCommand fortunes)
         {
             _logger = logger;
             _fortunes = fortunes;
         }
-        // Lab10 End
+        // Lab09 End
 
         public IActionResult Index()
         {
@@ -29,9 +29,9 @@ namespace Fortune_Teller_UI.Controllers
             return View();
         }
 
-        // Lab09 Start
+        // Lab10 Start
         [Authorize(Policy = "read.fortunes")]
-        // Lab09 End
+        // Lab10 End
 
         public async Task<IActionResult> RandomFortune()
         {
@@ -56,9 +56,9 @@ namespace Fortune_Teller_UI.Controllers
         }
 
         [HttpGet]
-        // Lab09 Start
+        // Lab10 Start
         [Authorize]
-        // Lab09 Start
+        // Lab10 Start
         public IActionResult Login()
         {
             return RedirectToAction(nameof(FortunesController.Index), "Fortunes");

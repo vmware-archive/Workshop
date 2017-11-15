@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fortune_Teller_UI.Services
 {
-    // Lab10 Start
+    // Lab09 Start
     public class FortuneServiceCommand : HystrixCommand<Fortune>
     {
         IFortuneService _fortuneService;
@@ -37,5 +37,5 @@ namespace Fortune_Teller_UI.Services
             return await Task.FromResult<Fortune>(new Fortune() { Id = 9999, Text = "You will have a happy day!" });
         }
     }
-    // Lab10 End
+    // Lab09 End
 }

@@ -1,33 +1,39 @@
 # Lab 2 - Binding to Cloud Foundry Services
 
->In this lab, we'll be binding a MySQL database service to the application we pushed earlier and then view the configuration data Cloud Foundry provides to the application as a result. In a future lab we will see how easy it is to use __Steeltoe Connectors__ to actually make use of the MySql service in your application
+>In this lab, we'll be binding a MySQL database service to the application we pushed earlier and then viewing the configuration data Cloud Foundry provides to the application as a result. In a future lab we will see how easy it is to use __Steeltoe Connectors__ to actually make use of the MySql service in your application.
 
 ## Preparation
 
-If your instance of the sample _env_ is not running after the steps completed in lab 1.  Make sure to follow the instructions in lab01 to deploy the application again.
+If your instance of the sample app _env_ is not running after the steps completed in lab 1, make sure to follow the instructions in Lab01 to deploy the application again.
 
-After you have the application deployed and started, visit the application in your browser by hitting the route that was assigned to it.  Select the `CloudFoundry Config` menu item and notice the application shows there are not any Cloud Foundry Services listed.
+## View Apps Cloud Foundry Configuration
 
-   ---
-
-   ![env-4](../../Common/images/lab-02-cloudfoundry-config.png)
+After you have the application deployed and started, visit the application in your browser by hitting the route that was assigned to it.  Select the `CloudFoundry Config` menu item and notice the application view shows there are NOT any Cloud Foundry Services listed.
 
    ---
 
-In this lab we are going to change that.
+   ![env-4](../Common/images/lab-02-cloudfoundry-config.png)
+
+   ---
+
+In this lab we are going to change that by binding a MySQL service to the app and then viewing the configuration data provided to it by Cloud Foundry.
 
 ## Managing Services
 
-Cloud Foundry services are managed through two primary types of CLI operations.
+Cloud Foundry services are managed through two types of CLI operations.
 
-* Create/Delete - These operations create or delete instances of a service. For a database this could mean creating/deleting a schema in an existing multitenant cluster or creating/deleting a dedicated database cluster.
+* Create/Delete - These operations create or delete instances of a service (e.g. MySQL). For a database this could mean creating/deleting a schema in an existing multi-tenant cluster or creating/deleting a dedicated database cluster. 
+
+  These are the CLI commands you use to create and delete service instances:
 
   ```bash
   > cf create-service SERVICE_PLAN SERVICE_INSTANCE [-c PARAMETERS_AS_JSON] [-t TAGS]
   > cf delete-service SERVICE_INSTANCE [-f]
   ```
 
-* Bind/Unbind - These operations create or delete unique credential sets for an existing service instance that can then be injected into the environment of an application instance.
+* Bind/Unbind - These operations are used to provide or remove a service instance credential set to an application. A credential set is created using the commands above and then by binding a service instance to the application, the credentials become injected into the environment variable settings of the application instance.
+
+   These are the CLI commands you use to bind and unbind service instances to applications:
 
   ```bash
   > cf bind-service APP_NAME SERVICE_INSTANCE [-c PARAMETERS_AS_JSON]
@@ -36,7 +42,7 @@ Cloud Foundry services are managed through two primary types of CLI operations.
 
 ## The Services Marketplace
 
-There are two ways to discover what services are available on Cloudfoundry.
+There are two ways to discover what services are available on the Cloudfoundry installation you are working on.
 
 The first is to simply use the CLI and just enter:
 
@@ -63,25 +69,25 @@ The second way is to use the Pivotal Apps Manager. If you haven't already done s
 
 ---
 
-  ![env-5](../../Common/images/lab-mkt-link.png)
+  ![env-5](../Common/images/lab-mkt-link.png)
 
 ---
 
-You should see something like the following, depending on what services have been installed on your Cloud Foundry.
+You should see something like the following, depending on what services have been installed on your Cloud Foundry installation.
 
 ---
 
-  ![env-5](../../Common/images/lab-marketplace.png)
+  ![env-5](../Common/images/lab-marketplace.png)
 
 ---
 
 ## Creating and Binding Services
 
-1. Let's begin by creating a MySQL service instance. From the Apps Manager UI service marketplace, select _MySQL_ service.
+1. Let's begin by creating a MySQL service instance. From the Apps Manager service marketplace, select the  _MySQL_ service.
 
    ---
 
-     ![env-6](../../Common/images/lab-mysql.png)
+     ![env-6](../Common/images/lab-mysql.png)
 
    ---
 
@@ -89,35 +95,43 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-     ![env-7](../../Common/images/lab-mysql2.png)
+     ![env-7](../Common/images/lab-mysql2.png)
 
    ---
 
-1. Next, provide an instance name for the instance you are about to create. In the drop-down list next to _Bind to App_ select your workshop application, and then click the add button.
+1. Next, provide an instance name for the instance you are about to create. In the drop-down list next to _Bind to App_ select your workshop application (i.e. `env`). Then click the `Add` button.
 
    ---
 
-    ![env-7](../../Common/images/lab-mysql3.png)
+    ![env-7](../Common/images/lab-mysql3.png)
 
    ---
 
-1. Notice the admonition to `Use 'cf restage' to ensure your env variable changes take effect`. In order for the service bindings to be seen by the application, it will need to be restaged/restarted. All service bindings for an application are provided to it as configuration data via the `VCAP_SERVICES` environment variable.  We'll have a look at its format shortly.
+1. Notice the admonition to `Use 'cf restage' to ensure your env variable changes take effect`. In order for the service bindings to be seen by the application, the application will need to be restaged/restarted. This is needed since all service bindings for an application are provided to it as configuration data via the `VCAP_SERVICES` environment variable.  We'll have a look at its format shortly.
 
-1. Now let's _restage_ the application, which cycles our application back through the staging process before redeploying the application. A _restage_ is generally recommended because Cloud Foundry buildpack processing also has access to injected environment variables and can install or configure things differently based on their values.
+1. Now let's _restage_ the application. Restaging cycles our application back through the staging process before redeploying the application. A _restage_ is generally recommended because the Cloud Foundry build-pack process also has access to injected environment variables (e.g. `VCAP_SERVICES`) and can install or configure things differently based on their values.
 
    ```bash
    > cf restage env
    ```
 
-1. You can verify that your service was provisioned by using the Apps Manager and by going to the list of applications in the space and then selecting your application.  Once there, you can then select the _Services_ tab and see what services are bound to the application. You should see something like the following:
+1. You can verify that your service was provisioned by using the Apps Manager and by going to the list of applications in the space and then selecting your application.
 
    ---
 
-    ![env-7](../../Common/images/lab-mysql4.png)
+    ![env-9](../Common/images/lab-mysql5.png)
 
    ---
 
-1. If you want to observe the actual JSON that is contained in the `VCAP_SERVICES` environment variable, you can do that by selecting the _Settings_ tab, and then click on the `Reveal Env Vars` button on the screen. You should see something like below:
+1. Once there, you can then select the _Services_ tab and see what services are bound to the application. You should see something like the following:
+
+   ---
+
+    ![env-7](../Common/images/lab-mysql4.png)
+
+   ---
+
+1. If you want to see the actual JSON that is contained in the `VCAP_SERVICES` environment variable, you can do that by going back to the application view and then select the _Settings_ tab. Once there you then click on the `Reveal Env Vars` button on the screen. You should see something like below:
 
    ```text
    {
@@ -154,12 +168,12 @@ You should see something like the following, depending on what services have bee
    > cf services
    ```
 
-1. Lastly, take a look at your app again. Click on the ``CloudFoundry Configuration`` menu item and you can see how the Steeltoe CloudFoundry configuration provider has parsed the ``VCAP_SERVICES`` and made the details available as configuration data.
+1. Lastly, take a look at your app again. Click on the ``CloudFoundry Configuration`` menu item and you can see how the Steeltoe CloudFoundry configuration provider has parsed the ``VCAP_SERVICES`` environment variable and made the details available as configuration data.
 
    ---
 
-    ![env-7](../../Common/images/lab-app-db.png)
+    ![env-7](../Common/images/lab-app-db.png)
 
    ---
 
-   Again take some time and see if you can find in the code how this is accomplished. Start with the ``CloudFoundryConfig()`` action in the ``HomeController``.
+   Take some time and see if you can find in the code how this is accomplished. Start with the ``CloudFoundryConfig()`` action in the ``HomeController``.

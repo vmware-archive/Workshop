@@ -20,7 +20,7 @@ using Steeltoe.Security.DataProtection;
 // Lab08 End
 
 // Lab09 Start
-using Steeltoe.Security.Authentication.CloudFoundry;
+using Steeltoe.CircuitBreaker.Hystrix;
 // Lab09 End
 
 namespace Fortune_Teller_UI
@@ -57,7 +57,7 @@ namespace Fortune_Teller_UI
             // Lab05 End
 
             // Lab05 Start
-            services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
+            services.Configure<FortuneServiceOptions>(Configuration.GetSection("fortuneService"));
             // Lab05 End
 
             // Lab07 Start
@@ -76,26 +76,10 @@ namespace Fortune_Teller_UI
             }
             // Lab08 End
 
+
             // Lab09 Start
-            services.AddAuthentication((options) =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CloudFoundryDefaults.AuthenticationScheme;
-
-            })
-            .AddCookie((options) =>
-            {
-                options.AccessDeniedPath = new PathString("/Fortunes/AccessDenied");
-
-            })
-            .AddCloudFoundryOAuth(Configuration);
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("read.fortunes", policy => policy.RequireClaim("scope", "read.fortunes"));
-
-            });
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHystrixCommand<FortuneServiceCommand>("FortuneService", Configuration);
+            services.AddHystrixMetricsStream(Configuration);
             // Lab09 End
 
             services.AddSession();
@@ -117,11 +101,12 @@ namespace Fortune_Teller_UI
 
             app.UseStaticFiles();
 
+            // Lab09 Start
+            app.UseHystrixRequestContext();
+            // Lab09 End
+
             app.UseSession();
 
-            // Lab09 Start
-            app.UseAuthentication();
-            // Lab09 End
 
             app.UseMvc(routes =>
             {
@@ -133,6 +118,13 @@ namespace Fortune_Teller_UI
             // Lab07 Start
             app.UseDiscoveryClient();
             // Lab07 End
+
+            // Lab09 Start
+            if (!Environment.IsDevelopment())
+            {
+                app.UseHystrixMetricsStream();
+            }
+            // Lab09 End
         }
     }
 }

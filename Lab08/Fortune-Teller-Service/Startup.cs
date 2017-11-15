@@ -38,18 +38,20 @@ namespace Fortune_Teller_Service
             if (Environment.IsDevelopment())
             {
                 // Lab05 Start
-                services.AddEntityFrameworkInMemoryDatabase().AddDbContext<FortuneContext>(
-                options => options.UseInMemoryDatabase("Fortunes"), ServiceLifetime.Singleton);
+                services.AddEntityFrameworkInMemoryDatabase()
+                    .AddDbContext<FortuneContext>(
+                        options => options.UseInMemoryDatabase("Fortunes"));
                 // Lab05 End
             }
             else
             {
                 // Lab08 add
-                services.AddDbContext<FortuneContext>(options => options.UseMySql(Configuration));
+                services.AddDbContext<FortuneContext>(
+                    options => options.UseMySql(Configuration));
             }
 
             // Lab05 Start
-            services.AddSingleton<IFortuneRepository, FortuneRepository>();
+            services.AddScoped<IFortuneRepository, FortuneRepository>();
             // Lab05 End
 
             // Lab07 Start

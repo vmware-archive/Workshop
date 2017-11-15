@@ -25,9 +25,9 @@ namespace Fortune_Teller_Service.Controllers
 
         // GET: api/fortunes/all
         [HttpGet("all")]
-        // Lab09 Start
+        // Lab10 Start
         [Authorize(Policy = "read.fortunes")]
-        // Lab09 End
+        // Lab10 End
         public async Task<List<Fortune>> AllFortunesAsync()
         {
             _logger?.LogDebug("AllFortunesAsync");
@@ -45,9 +45,9 @@ namespace Fortune_Teller_Service.Controllers
 
         // GET api/fortunes/random
         [HttpGet("random")]
-        // Lab09 Start
+        // Lab10 Start
         [Authorize(Policy = "read.fortunes")]
-        // Lab09 End
+        // Lab10 End
         public async Task<Fortune> RandomFortuneAsync()
         {
             _logger?.LogDebug("RandomFortuneAsync");

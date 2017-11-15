@@ -2,7 +2,7 @@
 
 namespace Fortune_Teller_UI.Services
 {
-    public class FortuneServiceConfig
+    public class FortuneServiceOptions
     {
         public string Scheme { get; set; } = "http";
         public string Address { get; set; }

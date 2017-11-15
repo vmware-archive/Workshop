@@ -49,9 +49,9 @@ namespace Fortune_Teller_Service
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     logging.AddDebug();
 
-                    // Lab11
-                    logging.AddDynamicLoggerProvider(hostingContext.Configuration);
-                    // Lab11
+                    // Lab11 Start
+                    logging.AddDynamicConsole(hostingContext.Configuration);
+                    // Lab11 End
                 })
                 .UseIISIntegration()
                 .UseDefaultServiceProvider((context, options) =>

@@ -1,266 +1,179 @@
-= Lab 6 - Programming ASP.NET Core Micro-services
+# Lab 6 - Configuration and Steeltoe Config Server Client
 
-[abstract]
---
-Starting with this lab we will begin the process of creating a fully functional Fortune Teller application which uses several of the Steeltoe components.
-You have two paths you can follow when doing the rest of the labs for the workshop:
+>In this lab we will continue to add functionality to the Fortune Teller application. We will explore how to use the ASP.NET Core Configuration services and how to add the Config Server as a source of configuration data using the Steeltoe Config Server provider.
 
-. For each lab, open up and work with finished code. With this path you won't be writing any new code, instead, you will just be reviewing and running already completed lab code.
-. Open the _FortuneTeller.sln_ solution as your starting point. You will then stick with this solution throughout the workshop, and you will be writing new code and debugging what you write.
+>After completing Lab05, the app in its current state is as follows:
 
-If you start with #2 above, you will find the app in its current state is not very useful:
+* The `Fortune Teller Service` uses a back-end in-memory database to hold Fortunes.
+* The `Fortune Teller Service` serves up random fortunes from the database.
+* The `Fortune Teller UI` uses a `FortuneServiceClient` and if configured correctly using `appsettings.json` is able to communicate with the `Fortune Teller Service`.
 
-. The ``Fortune Teller Service`` only serves up a single Fortune.
-. The ``Fortune Teller UI`` doesn't know how to communicate with the ``Fortune Teller Service`` so it always returns the same ``Hello world`` Fortune.
+>The goals for Lab 6 are:
 
-The goals for Lab 6 are to understand ASP.NET Core programming and to use our skills to hook up two areas of the code:
+* Use Environments to have separate configurations for `Development` and `Production`.
+* Use Config Server to centralize configuration
 
-. In ``Fortune Teller Service``:
-.. Hook up the ``IFortuneRepository`` to the ``FortuneController``
-.. Add the ``IFortuneRepository`` and the ``FortuneContext`` to the ASP.NET Core service container.
-.. Initialize the ``FortuneContext`` with some Fortunes.
-. In ``Fortune Teller UI``:
-.. Hook up the ``IFortuneService`` to the ``FortuneController``
-.. Add the ``IFortuneService`` to the ASP.NET Core service container.
+>For some background information on ASP.NET Core Configuration, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration).
 
-For some background information on ASP.NET Core programming, have a look at this https://docs.microsoft.com/en-us/aspnet/core/[documentation].
+>For some background information on ASP.NET Core Environments, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments).
 
---
+## Development and Production Configurations
 
-== Open Visual Studio Solution
-. Start Visual Studio and open the solution/folder you wish to start from:
-.. _Workshop/Session-02/Lab06.sln_ if you want to start with finished code.
-.. _Workshop/FortuneTeller/FortuneTeller.sln_ if you want to be writing code from scratch.
+In this exercise we will be modifying the `appsettings-Development.json` file to hold the configuration data for when we are running in `Development` mode.
 
-=== Understand Fortune-Teller-Service project
+### Step 01 - Modify appsettings-Development.json
 
-. Expand the ``Fortune-Teller-Service`` project
-. Open and examine ``Program.cs``, as everything starts in here.
-.. Examine the usage of ``WebHostBuilder``, ``UseKestrel``, ``UseUrls``, ``UseStartup<Startup>``.
-. Open and examine ``Startup.cs`` as this is where the app is configured.
-.. Examine the ``Startup`` constructor, where the apps configuration is read and created.
-.. Examine the ``ConfigureService()`` method, where the services are added to the  ASP.NET Core service container.
-.. Examine the ``Configure()`` method, where  ASP.NET Core middleware is added to the request processing pipeline.
-. Open the ``Models`` folder which holds the code for the ``IFortuneRepository``
-.. Examine ``IFortuneRepository``
-.. Examine ``FortuneRepository``, the implementation class and notice it uses a ``FortuneContext``
-.. Examine ``FortuneContext``, notice it is a ``DbContext`` based on ``EntityFrameworkCore``
-... Notice it has a ``DbSet`` of ``FortuneEntity``
-.. Examine ``SampleData`` and notice ``InitializeFortunesAsync`` method which adds sample data to the ``FortuneContext``
-. Open the ``Controllers`` folder which holds the MVC Controller code
-.. Open the ``FortunesController``, the implementation class for the REST API exposed by this microservice
-.. Notice it implments the ``IFortuneService`` which provides the two REST endpoints
-... AllFortunesAsync() ->  GET: api/fortunes/all
-... RandomFortuneAsync() -> GET api/fortunes/random
-.. Notice the controller methods return ``Fortunes``, not ``FortuneEntitys``.
+In this step we want to modify the JSON configuration file in each project with configuration parameters that will be used we are running in `Development` mode.
 
-=== Understand Fortune-Teller-UI project
-. Expand the ``Fortune-Teller-UI`` project
-. Open and examine ``Program.cs``, as everything starts in here.
-.. Examine the usage of ``WebHostBuilder``, ``UseKestrel``, ``UseUrls``, ``UseStartup<Startup>``.
-. Open and examine ``Startup.cs`` as this is where the app is configured.
-.. Examine the ``Startup`` constructor, where the apps configuration is read and created.
-.. Examine the ``ConfigureService()`` method, where the services are added to the ASP.NET Core service container.
-.. Examine the ``Configure()`` method, where  ASP.NET Core middleware is added to the request processing pipeline.
-. Open the ``Common/Services`` folder which holds the code for the ``IFortuneService``
-.. Examine ``IFortuneService``
-.. Examine ``FortuneServiceClient``, the implementation and notice it returns ``Fortunes``
-. Open the ``Controllers`` folder which holds the MVC Controller code
-.. Open the ``FortunesController``, the implementation for the UI
-.. Notice the ``RandomFortune`` action, it returns a ``Fortune`` to the View
-.. Notice that ``RandomFortune`` puts tht last Fortune it received in Session.
-.. Notice that ``Index`` pulls the last retrieved Fortune from Session and returns it to the View.
-. Open the ``Views/Fortunes`` folder which holds the Views for the FortuneController
-.. Open ``RandomFortune``, the View used by the ``RandomFortune`` action
-... Notice how it uses the ``Fortune`` returned from the action
-.. Open ``Index``, the View used by the ``Index`` action
-... Notice how it uses the ``Fortune`` returned from the action
+1. Make the changes so that any classes under the following namespaces will log at `Debug` level:
 
-=== Modify Fortune Teller Service
+* `Fortune_Teller_Service`
+* `Fortune_Teller_UI`
+* `Pivotal`
+* `Steeltoe`
 
-We will be using ASP.NET Core ``Dependency Injection`` for much of the next set of exercises. For some background information on it, have a look at this https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection[documentation]
+### Step 02 - Run Locally
 
-Also, later on we make use of ``Entity Framework Core``. For some background information on it, have a look at this https://docs.microsoft.com/en-us/ef/core/[documentation].
+1. Change the `ASPNETCORE_ENVIRONMENT` environment variable to `Development`.
+1. Run and verify debug logging happens in each component. Run the application either in a command window or within VS2017.
 
-==== Step 01 - Modify FortuneController to use the IFortuneRepository
+### Step 03 - Push to Cloud Foundry
 
-. To get the ``IFortuneRepository`` into the controller we need to modify the constructor of the ``FortuneController``:
-+
-----
-private IFortuneRepository _fortunes;
-public FortunesController(ILogger<FortunesController> logger, IFortuneRepository fortunes)
-{
-   _logger = logger;
-   _fortunes = fortunes;
-}
-----
-. Then to get ``FortuneController`` to use the ``IFortuneRepository`` we have to modify both contoller actions.
-Something like below should work, but feel free to write your own code:
-+
-----
-// GET: api/fortunes/all
-[HttpGet("all")]
-public async Task<List<Fortune>> AllFortunesAsync()
-{
-     _logger?.LogDebug("AllFortunesAsync");
+1. Change the `ASPNETCORE_ENVIRONMENT` environment variable to `Development` in the `manifest.yml` file.
+1. Publish, push and verify debug logging happens in each component.
 
-    var entities = await _fortunes.GetAllAsync();
-    var result = new List<Fortune>();
-    foreach(var entity in entities)
-    {
-        result.Add(new Fortune() { Id = entity.Id, Text = entity.Text });
-    }
-    return result;
-}
-// GET api/fortunes/random
-[HttpGet("random")]
-public async Task<Fortune> RandomFortuneAsync()
-{
-    _logger?.LogDebug("RandomFortuneAsync");
+## Use Config Server Locally
 
-    var entity = await _fortunes.RandomFortuneAsync();
-    return new Fortune() { Id = entity.Id, Text = entity.Text };
-}
-----
+In this exercise we will startup a Config Server locally and move our configuration data to the locally running Config Server. We will also make the changes necessary to pull the configuration data from the Config Server into our application. Specifically, we will use the `Steeltoe Config Server client` to pull config data from the Config Server.
 
-==== Step 02 - Add IFortuneRepository and FortuneContext to Service Container
-. To get the ``IFortuneRepository`` into the service container we need to modify the ``Startup`` class method ``ConfigureServices`` and add ``IFortuneRepository`` to the service container collection.
- We will add it as a Singleton and when its created, it will come from its implementation class ``FortuneRepository``.
-+
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    .....
+For some background information on Cloud Config Server, have a look at this [documentation](https://projects.spring.io/spring-cloud/).
 
-    services.AddSingleton<IFortuneRepository, FortuneRepository>();
+### Step 01 - Run Config Server Locally
 
-    // Add framework services.
-    services.AddMvc();
-}
-----
-{sp}+
-Notice that the ``FortuneRepository`` takes a ``FortuneContext`` as a argument to its constructor.
-So we also need to add a ``FortuneContext`` to the container.
-But ``FortuneContext`` is built on the EntityFrameworkCore library, so we also need to add that to the container as well.
-We do that with the ``AddEntityFramework()`` method below.
-Once both are added to the container (i.e. ``AddEntityFramework()`` & ``AddDbContext<FortuneContext>()``), then we also need to configure the ``FortuneContext`` to use some backend database for its storage.
-At this point in the workshop, we will just configure it to use an in-memory database.
-Clearly, if this context was being updated, this in-memory database would be a bad choice as it would prohibit us from scaling this micro-service horizontally.
-So in an upcoming Lab on scaling, we will show you how to use Steeltoe connectors to connect the ``DbContext`` to a real backend database.
-+
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    .....
-    services.AddEntityFramework()
-            .AddDbContext<FortuneContext>(options => options.UseInMemoryDatabase());
+Here we do the steps to setup and run a Config Server locally so its easier to develop and test with.
 
-    services.AddSingleton<IFortuneRepository, FortuneRepository>();
+1. Open a command window and change directory to _Workshop/ConfigServer_
 
-    // Add framework services.
-    services.AddMvc();
-}
-----
+   ```bash
+   > cd Workshop/ConfigServer
+   ```
 
-==== Step 03 - Initialize FortuneContext with some Fortunes
-. To add some Fortunes to the ``FortuneContext`` we have already written the code to do that for you. You can make use of the static method ``SampleData.InitializeFortunesAsync()`` to do this.
-The question is, where do you add this? Have a look at the method and notice that the code asks the container for an instance of the ``FortuneContext`` in order to initialize it with samples.
-As a result, the container needs to be built before we call this method and also before we start handling any requests.
-So the best place to add this call is in the ``Configure`` method in the ``Startup`` class.
-+
-----
-public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-{
-    loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+1. Startup the Config Server
 
-    app.UseMvc();
+   ```bash
+   > mvnw spring-boot:run
+   ```
 
-    SampleData.InitializeFortunesAsync(app.ApplicationServices).Wait();
-}
-----
+   It will start up on port 8888 and serve configuration data from `Workshop/ConfigServer/steeltoe/config-repo`.
 
-==== Step 04 - Run Locally
-. Using the skills you picked up from Lab05, run the app from VS2017 and/or from the command line.
-.. CTRL-F5 or F5 in Visual Studio 2017
-.. ``dotnet run --server.urls http://*:5000``
+### Step 02 - Add Steeltoe Config Server Client Nuget
 
-==== Step 05 - Push to Cloud Foundry
-. Using the skills you picked up from Lab05, publish and push the app to a Linux cell on Cloud Foundry.
+For each project make changes to your `.csproj` files to include the Steeltoe Config Server provider NuGet.
 
-If you are using the finished lab code on Windows:
+When using a Config Server on PCF, we use the Nuget:
 
-.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-Service``
-.. ``dotnet restore``
-.. ``dotnet build ``
-.. ``dotnet publish -o %CD%\publish -f netcoreapp1.1 -r ubuntu.14.04-x64``
-.. ``cf push -f manifest.yml -p .\publish``
+* `Pivotal.Extensions.Configuration.ConfigServerCore`
 
-If you are using the finished lab code on Mac/Linux:
+When using Config Server from Open Source, we can use Nuget:
 
-.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-Service``
-.. ``dotnet restore``
-.. ``dotnet build ``
-.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish``
-.. ``cf push -f manifest.yml -p publish``
+* `Steeltoe.Extensions.Configuration.ConfigServerCore`
 
-=== Modify Fortune Teller UI
+### Step 03 - Add Steeltoe Config Server provider to ConfigurationBuilder
 
-==== Step 01 - Modify FortuneController to use the IFortuneService
-. To get the ``IFortuneService`` into the controller we need to modify a constructor in the ``FortuneController``:
-+
-----
-private IFortuneService _fortunes;
-public FortunesController(ILogger<FortunesController>  logger, IFortuneService fortunes)
-{
-    _logger = logger;
-    _fortunes = fortunes;
-}
-----
-. Then to get ``FortuneController`` to use the ``IFortuneService`` we have to modify the contoller action:
-+
-----
-public async Task<IActionResult> RandomFortune()
-{
-    _logger?.LogDebug("RandomFortune");
+For each project make changes to `Program.cs` to add the Steeltoe Config Server provider to the `ConfigurationBuilder`.
 
-    var fortune = await _fortunes.RandomFortuneAsync();
-    return View(fortune);
-}
-----
+### Step 04 - Configure the Config Server Client
 
-==== Step 02 - Add IFortuneService to Service Container
-. To get the ``IFortuneService`` into the service container we need to modify the ``Startup`` class method ``ConfigureServices`` and add ``IFortuneService`` to the service container collection.
-We will add it as a Singleton and when its created it will be created using its implementation class ``FortuneServiceClient``.
-+
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    .....
-    services.AddSingleton<IFortuneService, FortuneServiceClient>();
-    ....
-}
-----
+For each project make changes to `appsettings.json` to configure the Steeltoe Config Server client.
+At a minimum we need to tell the client what URL to use to make request of the Config Server and what configuration data to request.
 
-==== Step 03 - Run Locally
-. Using the skills you learned from Lab05, run the app from VS2017 and/or from the command line.
-.. CTRL-F5 or F5 in Visual Studio 2017
-.. ``dotnet run --server.urls http://*:5555``
+Use `spring:application:name` to configure the name of the application for each project. Use the following names:
 
-==== Step 04 Push to Cloud Foundry
-. Using the skills you learned from Lab05, publish and push the app to a Linux cell on Cloud Foundry.
+* Fortune_Teller_Service - use `fortuneservice`
+* Fortune_Teller_UI - use `fortuneui`
 
-If you are using the finished lab code on Windows:
+### Step 05 - Centralize configuration data
 
-.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-UI``
-.. ``dotnet restore``
-.. ``dotnet build ``
-.. ``dotnet publish -o %CD%\publish -f netcoreapp1.1 -r ubuntu.14.04-x64``
-.. ``cf push -f manifest.yml -p .\publish``
+In this step we move some of the configuration data from both of the `appsettings` files to files in the _Workshop/ConfigServer/steeltoe/config-repo_.  This is the directory the Config Server that we started above uses to serve configuration data.
 
-If you are using the finished lab code on Mac/Linux:
+You will want to establish four files in the _Workshop/ConfigServer/steeltoe/config-repo_ directory.  At this point some of these files maybe empty, but in future labs we will be adding additional configuration data.
 
-.. ``cd Workshop/Session-02/Lab06/Fortune-Teller-UI``
-.. ``dotnet restore``
-.. ``dotnet build ``
-.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish``
-.. ``cf push -f manifest.yml -p publish``
+* application-Development.yml
+* application.yml
+* fortuneService.yml
+* fortuneui.yml
+
+### Step 06 - Run Locally
+
+Run and verify both Fortune-Teller continue to run as they did before centralizing the configuration. Run the application either in a command window or within VS2017.
+
+## Use Config Server on Cloud Foundry
+
+### Step 01 - Create Config Server Service Instance
+
+To create an instance of the Config Server service in your org/space and to populate it with configuration data, follow these instructions:
+
+1. Create your own GitHub repo to hold your Config Server data.
+1. Open a command window and change directory to your starting lab point.
+
+   ```bash
+   > cd Workshop/Start
+   ```
+1. In Visual Studio, open the `config-server.json` file in the solution folder.
+1. Modify its contents to point to the GitHub repo you just created above.
+1. Using the command window, create an instance of the config server on Cloud Foundry. When we create it we will set its configuration using the config-server.json file we modified above:
+
+   ```bash
+   > cf create-service p-config-server standard myConfigServer -c config-server.json
+   ```
+1. Add the contents of _Workshop/ConfigServer/steeltoe/config-repo_ to the GitHub repo you just created.
+1. Wait for the service to become available on Cloud Foundry before proceeding to the next step.
+
+   ```bash
+   > cf services
+   ```
+
+### Step 02 - Configure Service Binding
+
+You need to configure your applications to bind to the Config Server service instance you created above.
+
+Open the `manifest.yml` files for both projects and add a `services` section and include the Config Server instance you created above.
+
+### Step 03 - Using Self-Signed Certificates
+
+In some cases you may find that your Cloud Foundry setup has been installed using self-signed certificates.  If that is the case, you will likely run into certificate verification errors when communicating with the Config Server.  If that is the case you can disable certificate validation by adding
+`spring:cloud:config:validate_certificates=false` to your configuration file.
+
+Check with your instructor to see if you need to do this. If you do, you will need to do this for each project.
+
+### Step 04 - Push to Cloud Foundry
+
+Publish, push and verify the application runs on Cloud Foundry. Make any adjustments to the configuration in GitHub to get the application to work properly.
+
+### Step 05 - Explore Config Server Service in AppsManager
+
+1. Open and Login to Pivotal AppsManager in a browser.
+
+1. Select your Org and Space and view the two Fortune Teller applications.
+
+    ---
+
+    ![env-7](../Common/images/lab-06-appmanager-1.png)
+
+   ---
+
+1. Select the services tab and select Config Server instance.
+
+    ---
+
+    ![env-7](../Common/images/lab-06-appmanager-2.png)
+
+   ---
+
+1. Select the Manage link to view the detail configuration of the Config Server.
+
+    ---
+
+    ![env-7](../Common/images/lab-06-appmanager-3.png)
+
+   ---

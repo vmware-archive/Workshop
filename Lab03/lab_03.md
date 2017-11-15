@@ -1,10 +1,16 @@
 # Lab 3 - Scaling and Operating Applications
 
->Pivotal Cloudfoundry makes the work of performing actions, such as scaling, doing a zero-downtime deploy, and managing application health very easy. In the next two labs we'll explore Pivotal Cloud Foundry operations.
+>Pivotal Cloudfoundry makes the work of performing actions, such as scaling, doing a zero-downtime deployments, and managing application health very easy.  In this lab we'll explore some of these capabilities.
 
-## Scale the Application Instances Up
+## Preparation
 
-1. Its very easy to increase the number of instances of an application. To increase running application instances to 3, use `cf scale` as follows. When the CLI reports `OK`, it is letting you know that the additional requested instances have been started, but they are not yet necessarily running.
+If your instance of the sample app _env_ is not running after the steps completed in lab 2, make sure to follow the instructions in Lab01 to deploy the application again.
+
+## Scale Up the Application Instances
+
+1. Its very easy to increase the number of instances of an application. To increase running application instances to 3, use the `cf scale` command as follows. 
+
+   Note: When the CLI reports `OK`, it is letting you know that the additional requested instances have been started, but they are not yet necessarily all running.
 
    ```bash
    > cf scale env -i 3
@@ -31,8 +37,8 @@
    #2   starting   2016-10-16 08:53:26 PM   0.2%   111.6M of 512M   3.8M of 1G
 
    ```
-* #0 application instance has completed the startup process and is actually able to accept requests.
-* #1 & #2 application instances are still starting and will not have any requests routed to it.
+   * The `#0` application instance has completed the startup process and is actually able to accept requests.
+   * Application instances `#1` & `#2`  are still starting and will not have any requests routed to it.
 
 1. Eventually all instances will converge to a running state and you will see something like this
 
@@ -56,19 +62,19 @@
 
    ```
 
-1. Revisit the application route in the browser and select the CloudFoundry Config menu item. Refresh several times. You should observe the instance index changing as you do so:
+1. Revisit the application route in the browser and select the `CloudFoundry Config` menu item. Refresh several times. You should observe the instance index (i.e. `vcap:application:instance_index`) changing as you refresh:
 
    ---
 
-    ![env-7](../../Common/images/lab-scale-up.png)
+    ![env-7](../Common/images/lab-scale-up.png)
 
    ---
 
-   The Cloud Foundry [(Go)Router](https://docs.pivotal.io/pivotalcf/1-7/concepts/architecture/router.html) is applying a random routing algorithm to all of the application instances assigned to its route. As an instance reaches the `running` state, the [Diego Cell](https://docs.pivotal.io/pivotalcf/1-8/concepts/diego/diego-architecture.html#architecture) that the instance is running on registers the instance in the routing table of the (Go)Router by sending a message to Cloud Foundry's message bus. All (Go)Router instances are subscribed to this channel and register the routes independently. This makes for very dynamic and rapid reconfiguration!
+   The Cloud Foundry [(Go)Router](https://docs.pivotal.io/pivotalcf/1-7/concepts/architecture/router.html) is applying a random routing algorithm to all of the application instances assigned to its route. As an instance reaches the `running` state, the [Diego Cell](https://docs.pivotal.io/pivotalcf/1-8/concepts/diego/diego-architecture.html#architecture) that the instance is running on registers the instance in the routing table of the (Go)Router by sending a message to Cloud Foundry's message bus. All (Go)Router instances are subscribed to this bus and register the routes independently. This makes for very dynamic and rapid reconfiguration!
 
-## Scale the Application Instances Down
+## Scale Down the Application Instances
 
-1. We can scale the application instances back down as easily as we scaled them up, using the same command:
+1. We can scale the application instances back down as easily as we scaled them up. Use the same command:
 
    ```bash
    > cf scale env -i 1
@@ -94,13 +100,13 @@
 
    ```
 
-   As you can see, we're back down to only one instance running, and it is in fact the original index 0 that we started with.
+   As you can see we're back down to only one instance running, and it is in fact the original index 0 that we started with.
 
-1. Confirm that by again revisiting the route in the browser and checking the instance index:
+1. Confirm by again revisiting the application in the browser and checking the instance index:
 
    ---
 
-    ![env-7](../../Common/images/lab-scale-down.png)
+    ![env-7](../Common/images/lab-scale-down.png)
 
    ---
 
@@ -126,11 +132,19 @@
 
    ```
 
-1. The second way is via the Apps Manager.  Click on the _env_ application to view application details.  Select the _Routes_ tab to view a list of mapped routes:
+1. The second way is via the Apps Manager.  Click on the _env_ application to view application details like shown below:
 
    ---
 
-    ![env-7](../../Common/images/lab-routes.png)
+    ![env-7](../Common/images/lab-01-appsmanager-env.png)
+
+   ---
+
+1. Select the _Routes_ tab to view a list of mapped routes:
+
+   ---
+
+    ![env-7](../Common/images/lab-routes.png)
 
    ---
 
@@ -138,7 +152,7 @@
 
    ---
 
-    ![env-7](../../Common/images/lab-add-route.png)
+    ![env-7](../Common/images/lab-add-route.png)
 
    ---
 
@@ -146,7 +160,7 @@
 
    ---
 
-    ![env-7](../../Common/images/lab-net.png)
+    ![env-7](../Common/images/lab-net.png)
 
    ---
 
@@ -154,7 +168,7 @@
 
    ---
 
-    ![env-7](../../Common/images/lab-unmap-route.png)
+    ![env-7](../Common/images/lab-unmap-route.png)
 
    ---
 
@@ -162,7 +176,7 @@
 
    ---
 
-    ![env-7](../../Common/images/lab-no-route.png)
+    ![env-7](../Common/images/lab-no-route.png)
 
    ---
 
@@ -170,6 +184,6 @@
 
    ---
 
-    ![env-7](../../Common/images/blue-green.png)
+    ![env-7](../Common/images/blue-green.png)
 
    ---

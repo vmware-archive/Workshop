@@ -22,11 +22,21 @@
     <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" version="2.0.0-dev-00081" />
     <!-- Lab08 End-->
     
-    <!-- Lab09 Start-->
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version="2.0.0-dev-00081" />
-    <!-- Lab09 End-->
     
   </ItemGroup>
+  
+  <!-- Lab09 Start-->
+  <ItemGroup Condition="'$(BUILD)' == ''">
+    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00081" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version="2.0.0-dev-00081" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(BUILD)' == 'LOCAL'">
+    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00081" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version="2.0.0-dev-00081" />
+  </ItemGroup>
+  <!-- Lab09 End-->
   
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />

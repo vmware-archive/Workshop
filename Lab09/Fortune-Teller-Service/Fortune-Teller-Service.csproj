@@ -26,10 +26,6 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0" />
     <!-- Lab08 End-->
     
-    <!-- Lab09 Start-->
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version="2.0.0-dev-00081" />
-    <!-- Lab09 End-->
-    
   </ItemGroup>
   
   <ItemGroup>

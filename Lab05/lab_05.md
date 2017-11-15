@@ -1,206 +1,249 @@
-# Lab 5 - Running, Publishing and Pushing ASP.NET Core
+# Lab 5 - Programming ASP.NET Core Micro-services
 
->In this lab we will become comfortable with running ASP.NET Core Web applications locally on our PC and publishing and deploying them to Cloud Foundry.
+>Starting with this lab we will begin the process of creating a fully functional application which uses several of the Steeltoe components. We will be using a `Fortune Teller` micro-services based application as our staring point.
 
->We will be using a ``Fortune Teller`` micro-services based application as our sample. The app consists of a ``Fortune Teller Service`` which provides a REST API to serve up Fortunes and a ``Fortune Teller UI`` that can be used to display the Fortunes. In its current state, this app is not fully functional. The ``Fortune Teller Service`` only serves up a single Fortune and the ``Fortune Teller UI`` doesn't know how to communicate with the ``Fortune Teller Service`` so it always returns a single ``Hello world`` Fortune.
+>The app consists of a `Fortune Teller Service` which provides a REST API to serve up Fortunes and a `Fortune Teller UI` that can be used to display the retrieved Fortunes. In its current state, the app is not fully functional. The `Fortune Teller Service` only serves up a single `Fortune` and the `Fortune Teller UI` doesn't know how to communicate with the `Fortune Teller Service` and as such it always returns the same `Hello from FortuneController UI!` Fortune.
 
->In this lab we will work with both of them, running them locally and pushing them to Cloud Foundry in their current state. In future labs we will systematically make the changes necessary to make them a working application.
+>The goals for this lab:
 
-Note: If you are doing this Lab on a Mac you will need to install Mono. The simple way to do that is to use ``brew``. At a command prompt enter ``brew install mono``. Once complete you will need to export an environment variable in the command window you will be working within in order to work around a problem with the ``dotnet`` tooling.  To do this, you will first need to locate where ``brew`` installed Mono. Then, once you have that determined then you will need to use that information to export the path to the Mono core libraries. Something like this:  ``export FrameworkPathOverride=/usr/local/Cellar/mono/4.8.0.495/lib/mono/4.5/`` will need to be entered.
---
+* Familiarize yourself with the Fortune-Teller lab code.
+* Understand and apply the fundamentals of ASP.NET Core programming (e.g. Dependency injection, Configuration, Optioons, etc.)
+* Become comfortable with running the lab application locally on your PC and publishing and deploying it to Cloud Foundry.
+* Modify the `Fortune Teller Service`:
+  * Hook up the `IFortuneRepository` to the `FortunesController`
+  * Configure and use an in-memory EF Core database to store Fortunes.
+  * Add the `IFortuneRepository` and the `FortuneContext` to the ASP.NET Core service container.
+  * Initialize the Fortunes database with some Fortunes.
+* Modify the `Fortune Teller UI`:
+  * Hook up the `IFortuneService` to the `FortunesController`
+  * Add the `IFortuneService` to the ASP.NET Core service container.
+  * Use the `Options` framework to configure the `FortuneServiceClient` so that it can communicate with the `Fortune Service`
 
-== Open Visual Studio Solution
-. Start Visual Studio and open the solution/folder  _Workshop/Session-02/Lab05.sln_
-.. Open _Fortune-Teller-Service/Fortune-Teller-Service.csproj_ or  _Fortune-Teller-UI/Fortune-Teller-UI.csproj_.
-... Notice the ``TargetFrameworks`` specifies ``netcoreapp1.1`` and ``net462``. This ASP.NET Core app is intended to run on ``.NET Core 1.1`` and ``.NET Framework 4.6.2``.
-... Notice the ``PackageReference`` items as they specify all the NuGets the application depends on.
-... Notice the ``RuntimeIdentifiers`` specifies what runtimes you can publish this application for.  When targeting .NET Core, this causes the app to be fully self-contained when published. Otherwise without it we get a `portable` app.
-.. If your using Visual Studio 2017 you can open the Debug Launch dropdown.
-... Notice ``Framework`` selection allows either ``netcoreapp1.1`` or ``net462`` to be selected.
-... Notice hosting environment can be ``IIS Express`` or ``Fortune-Teller-Service`` and either can be selected.
+>When your done with this lab the Fortune Teller UI should be able to retrieve random fortunes from the Fortune Service.
 
-== Run Fortune Teller Service in VS2017, on .NET 4.x (Windows only)
+> For some background information on ASP.NET Core programming, have a look at the ASP.NET Core [documentation](https://docs.microsoft.com/en-us/aspnet/core).
 
-. Start Visual Studio 2017 and open the solution _Workshop/Session-02/Lab05.sln_
-.. Set ``Fortune-Teller-Service`` as active project (i.e. Select Project->Right Click->Set As Startup project)
-.. Select  ``Framework`` to be ``.NET 4.6.2``
-.. Select a ``Hosting environment`` to be ``Fortune_Teller_Service``
-.. Start application (e.g. CTRL-F5 or F5)
-.. Notice command window opens with app running
-.. Open browser and hit REST endpoint ``http://localhost:5000/api/fortunes/all``.
-.. Try setting breakpoints in the FortunesController if you're running in the debugger.
-.. How does port 5000 get selected to be used on startup? Look at ``launchSettings.json``.
-.. Stop the app, and change it to run under IIS Express.
-.. Notice no command window opens with app running.
-.. Use browser to hit the REST endpoint.
+## Review Fortune Teller Code
 
-== Run Fortune Teller Service in VS2017, on .NET Core (Windows only)
+1. Start Visual Studio and/or Visual Studio Code and open the solution in the dirctory `Workshop/Start`.
+1. Familiarize yourself with the `Fortune-Teller-Service` project and its code.
+1. Familiarize yourself with the `Fortune-Teller-UI` project and its code.
 
-. Start Visual Studio 2017 and open the solution _Workshop/Session-02/Lab05.sln_
-.. Set ``Fortune-Teller-Service`` as active project (i.e. Select Project->Right Click->Set As Startup project)
-.. Select  ``Framework`` to be ``.NET Core App, 1.1``
-.. Select a ``Hosting environment`` to be ``Fortune_Teller_Service``
-.. Start application (e.g. CTRL-F5 or F5)
-.. Try setting breakpoints in the FortunesController if you're running in the debugger.
-.. Notice command window opens with app running
-.. Open browser and hit REST endpoint ``http://localhost:5000/api/fortunes/all``.
-.. Stop the app, and change it to run under IIS Express.
-.. Notice no command window opens with app running.
-.. Use browser to hit the REST endpoint.
+## Run Fortune Teller Service in Command Window
 
-== Run Fortune Teller UI in VS2017, both on .NET 4.x and .NET Core (Windows only)
+1. Start a command window.
+1. Change directory to the `Fortune-Teller-Service` project directory.
 
-Hint: Shutdown Fortune Service before proceeding
+   ```bash
+   > cd Workshop/Start/Fortune-Teller-Service
+   ```
+1. Restore the NuGet dependencies for the application.
 
-. Use the instructions above, but apply them to the Fortune Teller UI.
+   ```bash
+   > dotnet restore --configfile nuget.config
+   ```
 
-== Run Fortune Teller Service in Command Window on .NET 4.x (Windows only)
+1. Run the application.
 
-. On Windows make sure the path variable points to bower executable directory. If you have Visual Studio 2017 installed, this should work.
+   ```bash
+   > dotnet run
+   ```
 
- C:\Program Files (x86)\Microsoft Visual Studio 14.0\Web\External
+1. Hit the REST endpoint `http://localhost:5000/api/fortunes/all`. You should see the following JSON returned:
 
-. Start a command window.
-. Change directory to the ``Fortune Teller Service``
-+
-----
-> cd Workshop/Session-02/Lab05/Fortune-Teller-Service
-----
-. Restore the nuget dependencies for the application
-+
-----
-> dotnet restore
-----
-. Run the application on .NET 4.x
-+
-----
-> dotnet run -f net462
-----
-. Hit the REST endpoint ``http://localhost:5000/api/fortunes/all``.
-. Examine help for ``dotnet run``
-+
-----
-> dotnet run -h
-----
+   ```text
+   [{"id":1,"text":"Hello from FortuneController Web API!"}]
+   ```
 
-== Run Fortune Teller Service in Command Window on .NET Core
-. Start a command window.
-. Change directory to the ``Fortune Teller Service``
-+
-----
-> cd Workshop/Session-02/Lab05/Fortune-Teller-Service
-----
-. Restore the nuget dependencies for the application
-+
-----
-> dotnet restore
-----
-. Run the application on .NET Core
-+
-----
-> dotnet run -f netcoreapp1.1
-----
-. Hit the REST endpoint ``http://localhost:5000/api/fortunes/all``.
+## Run Fortune Teller UI in Command Window
 
-== Run Fortune Teller UI in Command Window, both on .NET 4.x and .NET Core
-. Use the instructions above, but apply them to the Fortune Teller UI.
-. Hint: You can specify what port the server listens on as follows:
-.. dotnet run -f netcoreapp1.1 --server.urls http://*:5555
-.. dotnet run -f net462 --server.urls http://*:5555
+1. Start a command window.
+1. Change directory to the `Fortune-Teller-UI` project directory.
 
-== Publish and Push Fortune Teller Service to Cloud Foundry Linux Cell
-. Start a command window.
-. Change directory to the ``Fortune Teller Service``
-+
-----
-> cd Workshop/Session-02/Lab05/Fortune-Teller-Service
-----
+   ```bash
+   > cd Workshop/Start/Fortune-Teller-UI
+   ```
+1. Restore the NuGet dependencies for the application.
 
-. Restore the nuget dependencies for the application
-+
-----
-> dotnet restore
-----
-. Remove any previously published artifacts if they exist
-+
+   ```bash
+   > dotnet restore --configfile nuget.config
+   ```
 
-----
-> Windows: rmdir /s /q .\publish
+1. Run the application.
 
-> Mac/Linux: rm -rf publish
-----
-. Publish for Ubuntu and .NET Core,
-+
-----
-> Windows: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o %CD%\publish
+   ```bash
+   > dotnet run
+   ```
 
-> Mac/Linux: dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish
-----
+1. Hit the endpoint `http://localhost:5555/`. You should see the following:
 
-. In Visual Studio, examine the `manifest.yml` and `manifest-windows.yml` files.
-.. ``manifest.yml`` -> for pushing to Linux cell
-.. ``manifest-windows.yml`` -> for pushing to Windows cell
-. Push the published app to a Linux cell using ``manifest.yml``.
-+
-----
-> Windows: cf push -f manifest.yml -p .\publish
+    ---
 
-> Mac/Linux: cf push -f manifest.yml -p publish
-----
+    ![env-7](../Common/images/lab-05-ui.png)
 
-. Hit the REST endpoint using the route that was generated by the CLI and adding ``/api/fortunes/all`` to it:
-+
-image::../../Common/images/lab-05-fortuneservice-all.png[]
-{sp}+
-. Examine help for ``dotnet publish``
-+
-----
-> dotnet publish -h
-----
+   ---
 
-== Publish and Push Fortune Teller UI to Cloud Foundry Linux Cell
-. Use the instructions above, but apply them to the Fortune Teller UI.
+1. Click on `Your Fortune` menu item. You should see the following.  The `Your Fortune` action saves whatever fortune it obtains in the applications session.
 
-== Publish for .NET 4 and Push Fortune Teller Service to Cloud Foundry Windows Cell
-. Start a command window.
-. Change directory to the ``Fortune Teller Service``
-+
-----
-> cd Workshop/Session-02/Lab05/Fortune-Teller-Service
-----
-. Restore the nuget dependencies for the application
-+
-----
-> dotnet restore
-----
-. Remove any previously published artifacts if they exist
-+
-----
-> Windows: rmdir /s /q .\publish
+    ---
 
-> Mac/Linux: rm -rf publish
-----
-. Publish for Windows and .NET 4.6.2
-+
-----
-> dotnet publish -f net462 -r win10-x64 -o %CD%\publish
-----
-. In Visual Studio, examine the `manifest.yml` and `manifest-windows.yml` files.
-.. ``manifest.yml`` -> for pushing to Linux cell
-.. ``manifest-windows.yml`` -> for pushing to Windows cell
-. Push the published app to a Windows cell using ``manifest-windows.yml``.
-+
-----
-> cf push -f manifest-windows.yml -p .\publish
-----
+    ![env-7](../Common/images/lab-05-ui2.png)
 
-. Hit the REST endpoint using the route that was generated by the CLI and adding ``/api/fortunes/all`` to it:
-+
-image::../../Common/images/lab-05-fortuneservice-all.png[]
+   ---
 
-== Publish for .NET Core and Push Fortune Teller Service to Cloud Foundry Windows Cell
-. Use instructions above, but instead cause the app to run on .NET Core on a Windows cell.
+1. Click on `Home` menu item. You should see the following.  Notice the `Your fortune: Hello from FortuneController UI!`.  This is the fortune retrieved from the applications session state.
 
-== Publish .NET Core and .NET 4 and Push Fortune Teller UI to Cloud Foundry Windows Cell
-. Use the instructions above, but apply them to the Fortune Teller UI.
+    ---
 
+    ![env-7](../Common/images/lab-05-ui3.png)
+
+   ---
+
+## Run/Debug Fortune Teller in VS2017
+
+1. Terminate command window running `Fortune-Teller-Service` if still running.
+1. Open `Workshop/Start/Fortune-Teller.sln`
+1. Set `Fortune-Teller-Service` project to be `Startup project`.
+1. Hit F5 or CTRL-F5 to startup the application.
+1. Verify application is running correctly.
+1. Terminate the running application.
+1. Repeat steps 3-4 for the `Fortune-Teller-UI` project.
+1. Verify application is running correctly.
+1. Stop all applications.
+
+## Push Fortune Teller Service to Cloud Foundry
+
+1. Start a command window.
+1. Change directory to the `Fortune-Teller-Service` project directory.
+
+   ```bash
+   > cd Workshop/Start/Fortune-Teller-Service
+   ```
+1. Restore the NuGet dependencies for the application.
+
+   ```bash
+   > dotnet restore --configfile nuget.config
+   ```
+
+1. Publish the application to run on a Linux cell.
+
+   ```bash
+   > dotnet publish -r ubuntu.14.04-x64
+   ```
+
+1. Push the published app using `manifest.yml`.
+
+   ```bash
+   > cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+   ```
+
+1. Hit the REST endpoint and verify its running properly. Use `cf app fortuneservice` to see what route was assigned.
+
+   ```bash
+   > cf app fortuneservice
+   ```
+
+## Push Fortune Teller UI to Cloud Foundry
+
+1. Start a command window.
+1. Change directory to the `Fortune-Teller-UI` project directory.
+
+   ```bash
+   > cd Workshop/Start/Fortune-Teller-UI
+   ```
+1. Restore the NuGet dependencies for the application.
+
+   ```bash
+   > dotnet restore --configfile nuget.config
+   ```
+
+1. Publish the application to run on a Linux cell.
+
+   ```bash
+   > dotnet publish -r ubuntu.14.04-x64
+   ```
+
+1. Push the published app using `manifest.yml`.
+
+   ```bash
+   > cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+   ```
+
+1. Hit the application endpoint and verify that it is running properly. Use `cf app fortuneui` to see what route was assigned.
+
+   ```bash
+   > cf app fortuneui
+   ```
+
+## Modify Fortune Teller Service
+
+You will be using ASP.NET Core `Dependency Injection` features for much of the next set of exercises. For some background information on how it works, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)
+
+Also, in this step you will make use of the `Entity Framework Core` features. For some background information on it, have a look at this [documentation](https://docs.microsoft.com/en-us/ef/#pivot=efcore).
+
+As you work through this section and the next, if you get stuck or are not sure how to proceed, you can always take a look at the finished code for this lab in the `Workshop/Lab05` directory.
+
+### Step 01 - Modify FortunesController to use the IFortuneRepository
+
+1. Modify the `FortunesController` to accept an injected `IFortuneRepository`. You can find the already existing code for `FortuneRepository` in the `Models` folder.
+1. Modify each of the `FortunesController` actions to use the injected `IFortuneRepository` to obtain Fortunes.
+
+### Step 02 - Add IFortuneRepository and FortuneContext to Service Container
+
+1. Make the changes needed to the `Startup` class to get the `IFortuneRepository` into the service container so it can be injected into the `FortunesController`.
+
+   Notice that the `FortuneRepository` takes a `FortuneContext` as a argument to its constructor. So you will also need to add a `FortuneContext` to the container. But a `FortuneContext` is built on the `EntityFrameworkCore` library, so you will also need to add that to the container as well.
+
+   At this point in the workshop, we will simply use an in-memory EFCore database. Clearly, if this DbContext was being updated, this in-memory database would be a bad choice as it would prohibit us from scaling this micro-service horizontally. In an upcoming Lab on scaling, we will show you how to use Steeltoe connectors to connect the `DbContext` to a real back-end database.
+
+1. Make the changes needed to the `Startup` class to get Entity Framework Core components added into the service container.
+
+### Step 03 - Initialize FortuneContext with some Fortunes
+
+1. Add some Fortunes to the `FortuneContext`.
+
+   We have already written the code to do that for you. You can make use of the static method `SampleData.InitializeFortunesAsync()`. The question you have to answer is where do you add this? Have a look at the method and notice that the code asks the container for an instance of the `FortuneContext` in order to initialize it with samples. As a result, the container needs to be built before we call this method and also before we start handling any requests. So the best place to add this call is in the `Configure` method in the `Startup` class.
+
+### Step 04 - Run Locally
+
+Run and verify the `Fortune-Teller-Service` returns the Fortunes from the in-memory database. Run the application either in a command window or within VS2017.
+
+### Step 05 - Push to Cloud Foundry
+
+1. Publish, push and verify the application runs on Cloud Foundry.
+
+## Modify Fortune Teller UI
+
+You will be using ASP.NET Core `Dependency Injection` features for much of the next set of exercises. For some background information on how it works, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)
+
+Also, in this step you will make use of the Configuration and Options features of the ASP.NET Core framework. For some background information on it, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration?tabs=basicconfiguration).
+
+### Step 01 - Modify FortunesController to use the IFortuneService
+
+1. Modify the `FortunesController` to accept an injected `IFortuneService`. You can find the already existing code for `FortuneServiceClient` in the `Services` folder.
+1. Modify each of the `FortunesController` actions to use the injected `IFortuneService` to obtain Fortunes.
+
+### Step 02 - Add IFortuneService to Service Container
+
+1. Make the changes needed in the `Startup` class to get the `IFortuneService` into the service container so it can be injected into the `FortunesController`.
+
+### Step 03 - Configure IFortuneService
+
+1. Modify the `appsettings.json` file with the configuration information needed to configure the `FortuneServiceClient`.  The settings you provide will be used by the client so that it can communicate with the Fortune Service.
+
+   Notice the FortuneServiceClient expects to receive an injected `IOptionsSnapshot<FortuneServiceOptions>` which contains the configuration used by the client. Look at the already existing `FortuneServiceOptions` class and the client code to see what properties need to be filled in.
+
+1. Modify the `Startup` class to make use of the `Options` framework to configure the `FortuneServiceOptions` from the values in `appsettings.json` and to add it to the service container so that it will be injected.
+
+### Step 04 - Run both Locally
+
+1. Run the `Fortune-Teller-Service`. Run the application either in a command window or within VS2017.
+1. Run the `Fortune-Teller-UI`.  Run the application either in a command window or within VS2017.
+1. Verify that the UI can communicate with the Fortune service.
+
+### Step 05 - Push both to Cloud Foundry
+
+1. Publish and push the `Fortune-Teller-Service` to Cloud Foundry.
+1. Modify the UI's `appsettings.json` file to configure it to run properly on Cloud Foundry.
+1. Publish and push the `Fortune-Teller-UI` to Cloud Foundry.
+1. Verify that the UI can communicate with the Fortune service.

@@ -10,3 +10,7 @@ eureka:
   client:
     serviceUrl: http://localhost:8761/eureka/
     validate_certificates: false
+security:
+  oauth2:
+    client:
+      validate_certificates: false    

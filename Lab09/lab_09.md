@@ -1,564 +1,169 @@
-= Lab 9 - Scaling and Steeltoe
+# Lab 9 - Fault Tolerance & Monitoring
 
-[abstract]
---
-In this lab we will continue to add functionality to the Fortune Teller application.
-We will explore some of the existing horizontal scaling issues with the app and how Steeltoe connectors and data protection providers can help solve those issues.
+>In this lab we will continue to add functionality to the Fortune Teller application. We will learn how to add some level of fault tolerance to the UI portion of our application, along with the ability to see when these faults begin to happen.
 
-If you started with the _FortuneTeller.sln_, and completed Lab 8, you have an app that is still not where we would like it to be:
+>After completing Lab 8, the app in its current state is as follows:
 
-. The ``Fortune Teller Service`` can not scale horizontally, as it uses a backend in-memory datastore to hold Fortunes.
-. The ``Fortune Teller UI`` can not scale horizontally, as its session state (i.e. Users Fortune) gets lost since the Session is not shared between instances.
+* The application can now scale horizontally.
+* Unfortunately, if the Fortune Service becomes unavailable, the UI returns meaningless information to our users and we are unaware of the fact.
 
-The goals for Lab 9 are to:
+>The goals for Lab 9 are to:
 
-. Understand ASP.NET Core Session services.
-. Understand ASP.NET Core Data Protection services
-. Use Steeltoe MySql Connector to bind the ``FortuneContext`` with a  MySql database.
-. Use Steeltoe Redis Connector to cause the ASP.NET Core Session to use Redis for its Session storage.
-. Use Steeltoe Redis DataProtection Key Storage provider to cause the ASP.NET Core Data Protection service to use Redis to store its key ring.
+* Change `Fortune Teller UI` to use a `Netflix Hystrix Command` to wrap `Fortune Teller Service` REST requests. We will implement a fallback function that handles request failures.
+* Change `Fortune Teller UI` to report command metrics/status to the Hystrix dashboard so we can "see" what is happening with all of the requests.
 
-For some background information on ASP.NET Core Sessions, have a look at this https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state[documentation].
+>For some background information on `Netflix Hystrix`, have a look at this [documentation](https://github.com/Netflix/Hystrix/wiki)
 
-For some background information on ASP.NET Core Data Protection, have a look at this https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/introduction[documentation].
+## Preparation
 
-For some background information on Steeltoe Connectors, explore the Readmes in this https://github.com/SteeltoeOSS/Connectors[repository].
+### Step 01 - Run Config Server Locally
 
-For some background information on Steeltoe Security providers, including the Redis DataProtection Key Storage provider, explore the Readmes in this https://github.com/SteeltoeOSS/Security[repository].
+We are still using the Config Server, so we make sure it is running locally so its easier to develop and test with.
 
-Also, for Steeltoe Sample apps illustrating the use of Connectors, explore the code in this https://github.com/SteeltoeOSS/Samples/tree/master/Connectors[repository].
+1. Open a command window and change directory to _Workshop/ConfigServer_
 
-And for Steeltoe Sample apps illustrating the use of various Security providers, explore the code in this https://github.com/SteeltoeOSS/Samples/tree/master/Security[repository].
---
+   ```bash
+   > cd Workshop/ConfigServer
+   ```
 
-== Open Visual Studio Solution
-. Start Visual Studio and open the solution/folder you wish to use:
-.. _Workshop/Session-03/Lab09.sln_ if you want to start with finished code.
-.. _Workshop/FortuneTeller/FortuneTeller.sln_ if you are writing code from scratch.
+1. Startup the Config Server
 
-== Understanding ASP.NET Core Sessions and Data Protection
-. Expand the ``Fortune-Teller-UI`` project
-. Open and examine ``Startup``, as this is where the ASP.NET Core Session services and middleware is setup
-.. Examine ``ConfigureServices()``
-... Explain ``AddSession()``
-... Explain ``AddDistributedMemoryCache()``
-.. Examine ``Configure()``
-... Explain ``UseSession()``
-... Explain implied ``UseCookies()``
-. Understand how ``DataProtection`` is used for encryption.
-.. How its used to encrypt data stored in session
-.. How its use to encrypt session ids.
-.. Understand key ring
+   ```bash
+   > mvnw spring-boot:run
+   ```
 
+   It will start up on port 8888 and serve configuration data from `Workshop/ConfigServer/steeltoe/config-repo`.
 
-== Use Steeltoe MySQL Connector
-In this section we will be adding code to the ``Fortune Teller Service`` to make use of the Steeltoe MySQL connector.
+### Step 02 - Run Eureka Server Locally
 
-For some background information on the Steeltoe MySql Connector, explore the Readme in this https://github.com/SteeltoeOSS/Connectors/tree/master/src/Steeltoe.CloudFoundry.Connector.MySql[repository].
+Here we do the steps to setup and run a Eureka Server locally so its easier to develop and test with.
 
-=== Step 01 - Run Spring Cloud Eureka Server Locally
-We are still using the Eureka Server, so we need to make sure it is still running locally so its easier to development and test with.
+1. Open a command window and change directory to _Workshop/EurekaServer_
 
-. To run Eureka Server you will need Java JDK installed on your machine and the JAVA_HOME environment variable set to the JDK's installed location:
-+
-----
-e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112 or equivalent on Linux/Mac
-----
+   ```bash
+   > cd Workshop/EurekaServer
+   ```
 
-. Open a command window.
-. Change directory to _Workshop/EurekaServer_
-+
-----
-> cd Workshop\EurekaServer
-----
+1. Startup the Eureka Server
 
-. Startup the eureka server
-+
-----
-> mvnw spring-boot:run
-----
-{sp}+
+   ```bash
+   > mvnw spring-boot:run
+   ```
+
 It will start up on port 8761 and serve the Eureka API from "/eureka".
 
-=== Step 02 - Run Spring Cloud Config Server Locally
-We are still using the Config Server, so we need to make sure it is still running locally so its easier to development and test with.
-
-. To run Config Server you will need Java JDK installed on your machine and the JAVA_HOME environment variable set to the JDK's installed location:
-+
-----
-e.g. JAVA_HOME=C:\Program Files\Java\jdk1.8.0_112 or equivalent on Linux/Mac
-----
-
-. Open a command window.
-
-. Change directory to _Workshop/ConfigServer_
-+
-----
-> cd Workshop\ConfigServer
-----
-
-. Startup the config server
-+
-----
-> mvnw spring-boot:run
-----
-{sp}+
-It will start up on port 8888 and serve configuration data from "file:./steeltoe/config-repo". This will be the directory _Workshop/ConfigServer/steeltoe/config-repo_.
-
-
-=== Step 03 - Add Steeltoe MySql Connector Nuget
-Here we add the appropriate Steeltoe MySql Connector Nuget to the ``Fortune Teller Service``.
-You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.MySql``.
-
-. Expand the ``Fortune-Teller-Service`` project.
-. Open ``.csproj`` and add the``PackageReference``:
-..  Include="Steeltoe.CloudFoundry.Connector.MySql" Version="1.0.0"
-
-+
-----
-  <ItemGroup>
-   .......
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0" />
-    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0" />
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.MySql" version="1.0.0" />
-  </ItemGroup>
-----
-. Save the ``csproj`` and make sure that a ``dotnet restore`` is done.
-
-=== Step 04 - Add Steeltoe MySql Connector
-Next we need to configure the ``DbContext`` to use MySql.
-Remember we did that in the ``Startup`` class; in the ``ConfigureServices`` method where the service container is setup.
-
-. Expand the ``Fortune-Teller-Service`` project
-. Open ``Startup`` and locate the ``ConfigureServices()`` method. You should see something like the following:
-
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddEntityFramework()
-            .AddDbContext<FortuneContext>(options => options.UseInMemoryDatabase());
-
-    services.AddSingleton<IFortuneRepository, FortuneRepository>();
-
-    // Add framework services.
-    services.AddMvc();
-}
-----
-
-Ideally, if we were running an instance of MySQL locally on our desktop, we would just like to use it when we launch the app locally, in ``development`` mode.
-If that were the case then we could simply change the ``.AddDbContext<FortuneContext>()`` call above to use MySql instead of the InMemory database and then configure the Steeltoe Connector in ``appsettings`` to use it.
-The code and configuration would look something like below.
-With this code, the Steeltoe Connector would use the configuration (i.e. ``appsettings``) when launched locally, but then would override its configuration with the MySql service binding when pushed to Cloud Foundry.
-
-----
-public void ConfigureServices(IServiceCollection services)
-{
-   services.AddEntityFramework()
-         .AddDbContext<FortuneContext>(options => options.UseMySql(Configuration));
-    services.AddSingleton<IFortuneRepository, FortuneRepository>();
-
-    // Add framework services.
-    services.AddMvc();
-}
-----
-
-----
-{
-  "spring": {
-    "application": {
-      "name": "fortuneService"
-    },
-    "cloud": {
-      "config": {
-        "uri": "http://localhost:8888"
-      }
-    }
-  },
-  "mysql": {
-    "client": {
-      "database": "mydatabase",
-      "username": "username",
-      "password": "password"
-    }
-  }
-}
-----
-But since we are not running MySQL locally, we will instead configure things to use an In-Memory database when in ``Development`` mode, but then use a MySql database when in any other.
-To do that we will modify the ``ConfigureServices()`` method as follows:
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    if (Environment.IsDevelopment())
-    {
-        services.AddEntityFramework()
-                .AddDbContext<FortuneContext>(options => options.UseInMemoryDatabase());
-    } else
-    {
-        services.AddEntityFramework()
-             .AddDbContext<FortuneContext>(options => options.UseMySql(Configuration));
-    }
-
-    services.AddSingleton<IFortuneRepository, FortuneRepository>();
-
-    // Add framework services.
-    services.AddMvc();
-}
-----
-=== Step 05 - Run Locally
-At this point you should be ready to run both Fortune-Tellers locally and test.
-Every thing should work as it did before, as you will still be using the In-Memory database when running locally.
-In an upcoming exercise, we will push the Fortune-Tellers to Cloud Foundry and test the MySql connection.
-
-. Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
-.. CTRL-F5 or F5 on VS2017
-.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
-.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
-
-== Use Redis for Session Storage
-In this section we will be adding code to the ``Fortune Teller UI`` to make use of the Steeltoe Redis connector.
-We will use it to hook up the ASP.NET Core DistributedCache to a Redis service instance. Remember, Session uses the DistributedCache to store session state.
-
-For some background information on the Steeltoe Redis Connector, explore the Readme in this https://github.com/SteeltoeOSS/Connectors/tree/master/src/Steeltoe.CloudFoundry.Connector.Redis[repository].
-
-=== Step 01 - Run Spring Cloud Eureka Server Locally
-We are still using the Eureka Server, so make sure it is still running locally.
-See above if its not!
-
-=== Step 02 - Run Spring Cloud Config Server Locally
-We are still using the Config Server, so make sure it is still running locally.
-See above if its not!
-
-=== Step 03 - Add Steeltoe Redis Connector Nuget
-Here we add the appropriate Steeltoe Redis Connector Nuget to the ``Fortune Teller UI``.
-You will make use of the Nuget: ``Steeltoe.CloudFoundry.Connector.Redis``.
-
-. Expand the ``Fortune-Teller-UI`` project.
-. Open ``.csproj`` and add the``PackageReference``:
-..  Include="Steeltoe.CloudFoundry.Connector.Redis" Version="1.0.0"
-
-+
-----
-  <ItemGroup>
-   .......
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0" />
-    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0" />
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0" />
-  </ItemGroup>
-----
-
-. Save ``csproj`` and ensure that a ``dotnet restore`` is done.
-
-=== Step 04 - Add Steeltoe Redis Connector
-Currently the ``Fortune-Teller-UI`` is using an In-memory cache for its session storage.
-To see how this is currently setup to work:
-
-. Expand the ``Fortune-Teller-UI`` project
-. Open ``Startup`` and locate the ``ConfigureServices()`` method. You should see something like the whats shown below.
-
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddSingleton<IFortuneService, FortuneServiceClient>();
-    services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
-    services.AddDiscoveryClient(Configuration);
-
-    // Add framework services.
-    services.AddDistributedMemoryCache();
-
-    services.AddSession();
-
-    services.AddMvc();
-}
-----
-
-Like the case above with MySql, if we were running an instance of Redis locally on our desktop, we would just like to use it when we launch the app locally, in ``development`` mode.
-If that were the case then we could simply change the ``. services.AddDistributedMemoryCache()`` call above to use a DistributedRedisCache instead of the InMemory cache and then configure the Steeltoe Connector in ``appsettings`` to use it.
-The code and configuration would look something like that shown below.
-With this code, the Steeltoe Connector would use the configuration (i.e. ``appsettings``) when launched locally, but then would override its configuration with the Redis service binding when pushed to Cloud Foundry.
-
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddSingleton<IFortuneService, FortuneServiceClient>();
-    services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
-    services.AddDiscoveryClient(Configuration);
-
-    // Add framework services.
-    services.AddDistributedMemoryCache();
-
-    services.AddSession();
-
-    services.AddMvc();
-}
-----
-
-----
-{
-  "spring": {
-    "application": {
-      "name": "fortuneui"
-    },
-    "cloud": {
-      "config": {
-        "uri": "http://localhost:8888",
-      }
-    }
-  },
-  "redis": {
-    "client": {
-      "host": "http://foo.bar",
-      "port": 1111
-    }
-  }
-}
-----
-But, just like the case with MySQL, we are not running Redis locally, so we will instead have to configure things similar to MySql.
-That is to use an In-Memory database when in ``Development`` mode, but then use a Redis cache when in any other.
-To do that we will modify the ``ConfigureServices()`` method as follows:
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddSingleton<IFortuneService, FortuneServiceClient>();
-    services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
-    services.AddDiscoveryClient(Configuration);
-
-    // Add framework services.
-
-    if (Environment.IsDevelopment())
-    {
-        services.AddDistributedMemoryCache();
-    }
-    else
-    {
-        // Use Redis cache to store session data
-        services.AddDistributedRedisCache(Configuration);
-    }
-
-    services.AddSession();
-
-    services.AddMvc();
-}
-----
-
-=== Step 05 - Run Locally
-At this point you should be ready to run both Fortune-Tellers locally and test.
-Every thing should work as it did before, as you will still be using the In-Memory cache when running locally.
-In an upcoming exercise, we will push the Fortune-Tellers to Cloud Foundry and test the cache connection.
-
-. Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
-.. CTRL-F5 or F5 on VS2017
-.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
-.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
-
-== Use Redis for Data Protection Key Storage
-In this exercise we will be adding code to the ``Fortune Teller UI`` to make use of the Steeltoe Redis DataProtection Key Storage provider.
-We will use it to configure the ASP.NET Core DataProtection service to persist its keys to a Redis service instance.
-
-For some background information on the Steeltoe Redis DataProtection Key Storage provider, explore the Readme in this https://github.com/SteeltoeOSS/Security/tree/master/src/Steeltoe.Security.DataProtection.Redis[repository].
-
-For some background information on Configuring ASP.NET Core Data Protection, explore this https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview[documentation].
-
-=== Step 01 - Run Spring Cloud Eureka Server Locally
-We are still using the Eureka Server, so make sure it is still running locally.
-See above if its not!
-
-=== Step 02 - Run Spring Cloud Config Server Locally
-We are still using the Config Server, so make sure it is still running locally.
-See above if its not!
-
-=== Step 03 - Add Steeltoe Redis Connector Nuget
-Here we add the appropriate Steeltoe Redis Connector Nuget to the ``Fortune Teller UI`` as the Steeltoe Redis DataProtection Key Storage provider requires it in order to configure DataProtection.
-Since we already did this in the previous exercise, we will not have to do it again.
-
-=== Step 04 - Add Steeltoe Redis DataProtection Key Storage provider Nuget
-Here we add the appropriate Steeltoe Redis DataProtection Key Storage provider Nuget to the ``Fortune Teller UI``.
-You will make use of the Nuget: ``"Steeltoe.Security.DataProtection.Redis"``.
-
-. Expand the ``Fortune-Teller-UI`` project.
-. Open ``.csproj`` and add the``PackageReference``:
-..  Include="Steeltoe.Security.DataProtection.Redis" Version="1.0.0"
-
-+
-----
-  <ItemGroup>
-   .......
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.0.3" />
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" version="1.0.0" />
-    <PackageReference Include="Pivotal.Discovery.Client" version="1.0.0" />
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" version="1.0.0" />
-    <PackageReference Include="Steeltoe.Security.DataProtection.Redis" version="1.0.0" />
-  </ItemGroup>
-----
-
-. Save ``csproj`` and ensure that a ``dotnet restore`` is done.
-
-
-=== Step 05 - Add Steeltoe Redis DataProtection Key Storage provider
-The default for ASP.NET Core DataProtection services is to store its key ring in a file, local to the running machine.
-Of course, this will not work well when we want to scale horizontally. (i.e. Running multiple instances of the ``Fortune-Teller-UI``).
-To change this we are going to configure DataProtection to use a Redis cache to store its key ring and in addition, automatically configure what redis cache it uses.
-
-. Expand the ``Fortune-Teller-UI`` project
-. Open ``Startup`` and locate the ``ConfigureServices()`` method. You should see something like the whats shown below.
-
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddSingleton<IFortuneService, FortuneServiceClient>();
-    services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
-    services.AddDiscoveryClient(Configuration);
-
-    // Add framework services.
-    if (Environment.IsDevelopment())
-    {
-        services.AddDistributedMemoryCache();
-    }
-    else
-    {
-        // Use Redis cache on CloudFoundry to store session data
-        services.AddDistributedRedisCache(Configuration);
-    }
-
-    services.AddSession();
-
-    services.AddMvc();
-}
-----
-
-. Modify the ``ConfigureServices`` method to look as folows:
-
-----
-public void ConfigureServices(IServiceCollection services)
-{
-    if (!Environment.IsDevelopment())
-    {
-        // Use Redis cache on CloudFoundry for DataProtection Keys
-        services.AddRedisConnectionMultiplexer(Configuration);
-        services.AddDataProtection()
-            .PersistKeysToRedis()
-            .SetApplicationName("fortuneui");
-    }
-    services.AddSingleton<IFortuneService, FortuneServiceClient>();
-    services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
-    services.AddDiscoveryClient(Configuration);
-
-    // Add framework services.
-    if (Environment.IsDevelopment())
-    {
-        services.AddDistributedMemoryCache();
-    }
-    else
-    {
-        // Use Redis cache on CloudFoundry to store session data
-        services.AddDistributedRedisCache(Configuration);
-    }
-
-    services.AddSession();
-
-    services.AddMvc();
-}
-----
-Notice that the above code first adds DataProtection to the service container using the ``AddDataProtection()`` method call.
-Then, to further configure the service, it instructs DataProtection to persist its keys to Redis using the Steeltoe DataProtection key provider. It does this by calling the extension method ``PersistKeysToRedis()``.
-But the Steeltoe DataProtection key provider expects that when it is constructed a Redis ``ConnectionMultiplexer`` will exist in the container and it will be configured to access a Redis cache.
-We make that happen by using the Steeltoe Redis connector extension method ``AddRedisConnectionMultiplexer(Configuration);``
-Now, since we are going to use Redis for the backing store, and we are not running Redis locally, we will wrap the configuration in an if statement so we don't any of this when in ``development`` mode.
-
-=== Step 06 - Run Locally
-At this point you should be ready to run both Fortune-Tellers locally and test.
-Every thing should work as it did before, as you will still be using the default DataProtection provider which stores keys to local file system.
-In the next exercise, we will push the Fortune-Tellers to Cloud Foundry and test using Redis to store the key ring.
-
-. Using the skills you picked up in Lab05, run the apps from VS2017 and/or from the command line.
-.. CTRL-F5 or F5 on VS2017
-.. ``dotnet run --server.urls http://*:5000`` - Fortune-Teller-Service
-.. ``dotnet run --server.urls http://*:5555`` - Fortune-Teller-UI
-
-== Deploy to Cloud Foundry
-
-=== Step 01 - Setup MySql Server Instance
-You must first create an instance of the MySql Server service in your org/space.
-
-. Open a command window.
-. Using the command window, create an instance of the MySql service:
-+
-----
-> cf create-service p-mysql 100mb myMySqlService
-----
-
-=== Step 02 - Setup Redis Server Instance
-You must first create an instance of the Redis service in your org/space.
-
-. Open a command window.
-. Using the command window, create an instance of the Redis service:
-+
-----
-> cf create-service p-redis shared-vm myRedisService
-----
-
-=== Step 03 - Push to Cloud Foundry
-. Examine the ``manfest.yml`` files for both projects and notice ``services`` additions shown below.
-You need to make these changes in your ``manifest.yml`` before you push to Cloud Foundry.
-Also, notice the ``ASPNETCORE_ENVIRONMENT`` setting.
-Feel free to change that to ``Development`` if you want to turn on debug logging.
-+
-----
----
-applications:
-- name: fortuneService
-  random-route: true
-  env:
-    ASPNETCORE_ENVIRONMENT: Production
-  services:
-   - myConfigServer
-   - myMySqlService
-   - myDiscoveryService
----
-applications:
-- name: fortuneui
-  random-route: true
-  env:
-    ASPNETCORE_ENVIRONMENT: Production
-  services:
-   - myConfigServer
-   - myDiscoveryService
-   - myRedisService
-----
-. Using the skills you picked from Lab05, publish and push the components to a Linux cell on Cloud Foundry.
-.. Pushing Fortune Teller Service - If you are using the finished lab code on Windows:
-... ``cd Workshop/Session-03/Lab09/Fortune-Teller-Service``
-... ``dotnet restore``
-... ``dotnet build ``
-... ``dotnet publish -o %CD%\publish -f netcoreapp1.1 -r ubuntu.14.04-x64``
-... ``cf push -f manifest.yml -p .\publish``
-.. Pushing Fortune Teller Service - If you are using the finished lab code on Mac/Linux:
-... ``cd Workshop/Session-03/Lab09/Fortune-Teller-Service``
-... ``dotnet restore``
-... ``dotnet build ``
-... ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish``
-... ``cf push -f manifest.yml -p publish``
-.. Pushing Fortune Teller UI - If you are using the finished lab code on Windows:
-... ``cd Workshop/Session-03/Lab09/Fortune-Teller-UI``
-... ``dotnet restore``
-... ``dotnet build ``
-... ``dotnet publish -o %CD%\publish -f netcoreapp1.1 -r ubuntu.14.04-x64``
-... ``cf push -f manifest.yml -p .\publish``
-.. Pushing Fortune Teller UI - If you are using the finished lab code on Mac/Linux:
-.. ``cd Workshop/Session-03/Lab09/Fortune-Teller-UI``
-.. ``dotnet restore``
-.. ``dotnet build ``
-.. ``dotnet publish -f netcoreapp1.1 -r ubuntu.14.04-x64 -o $PWD/publish``
-.. ``cf push -f manifest.yml -p publish``
-
-Try hitting the ``Fortune Teller UI`` and if it fails to communicate with the ``Fortune Teller Service``.
-make sure fortuneui.yml file us updated as follows "address: fortuneService".
-
-
-=== Step 04 - Verify you can scale the Fortune-Teller-UI
-. Using the skills you picked up from Lab 3
-.. Scale both of the apps to 2 instances and see if the fortune cached in session remains accessable.
+## Add Netflix Hystrix Command 
+
+In this section we will be adding code to the `Fortune Teller UI` to use a `FortuneServiceCommand` Hystrix command when making requests of the `Fortune Teller Service`.
+
+### Step 01 - Add Steeltoe Hystrix Nuget
+
+Make changes to your `Fortune Teller UI` project file to include the Steeltoe Hystrix NuGet.
+
+### Step 02 - Create Hystrix Command - `FortuneServiceCommand`
+
+Add an implementation of a `FortuneServiceCommand` that can be used to make requests of the Fortune Service REST endpoint to retrieve a random Fortune. Place this new class in the `Services` folder.
+
+The `FortuneServiceCommand` should make use of the `IFortuneService` to make requests of the REST endpoint that returns random Fortunes.
+
+The command should override and implement the two Hystrix Command methods `RunAsync()` and `RunFallbackAsync()`.
+
+* `RunAsync()` should use the `IFortuneService` to request random Fortunes.
+* `RunFallbackAsync()` should implement whatever fallback logic you'd like to execute. (e.g. Return a fixed Fortune)
+
+### Step 03 - Use Hystrix Command in Controller
+
+Make changes to the `FortunesController.cs` to make use a injected `FortuneServiceCommand` instead of the injected `IFortuneService`.
+
+### Step 04 - Add Hystrix Command to Container
+
+Make changes to your `Startup.cs` class to add the `FortuneServiceCommand` to the service container. When you add the command, make sure the command will belong to the Hystrix command group `FortuneService`.
+
+### Step 05 - Run Locally
+
+Run and verify both Fortune-Tellers continue to run as they did before. Run the application either in a command window or within VS2017.
+Every thing should work as it did before, but if you don't start the `Fortune Teller Service` you should see that your fallback logic is now executed in the UI.
+
+## Add Hystrix Dashboard
+
+### Step 01 - Add Steeltoe Hystrix Metrics Stream Nuget
+
+Make changes to your `Fortune Teller UI` project file to include the Steeltoe Hystrix Metrics Stream NuGet.
+
+Note that in addition to the Steeltoe Hystrix Metrics Stream NuGet, you will also need to include the RabbitMQ Client NuGet for communicating with the Hystrix dashboard on Cloud Foundry.
+
+### Step 02 - Add Hystrix Metrics Stream to Container
+
+Make changes to your `Startup.cs` class to add the Hystrix Metric Stream to the service container.  Make the changes such that the metrics stream is only activated/started when running in `Production` mode (i.e. on CloudFoundry).
+
+Remember that you will need to make changes to both the `Configure()` and `ConfigureServices()` methods, and don't forget that a Hystrix Request context must be established for each request flowing through the pipeline.
+
+### Step 03 - Run Locally
+
+Run and verify both Fortune-Tellers continue to run as they did before. Run the application either in a command window or within VS2017.
+Every thing should work as it did before as you have not activated Hystrix metrics when running in `Development` mode.
+
+### Step 04 - Create Hystrix Dashboard Service Instance
+
+To create an instance of a Hystrix dashboard service in your org/space follow these instructions:
+
+1. Open a command window.
+
+1. Using the command window, create an instance of the Hystrix dashboard on Cloud Foundry.
+
+   ```bash
+   > cf create-service p-circuit-breaker-dashboard standard myHystrixService
+   ```
+
+1. Wait for the service to become available on Cloud Foundry.
+
+   ```bash
+   > cf services
+   ```
+
+### Step 05 - Configure Service Binding
+
+You need to configure your `Fortune Teller UI` to bind to the Hystrix service instance you created above.
+
+Open the `manifest.yml` file for the `Fortune Teller UI` and add to the services section the dashboard instance you created above.
+
+### Step 06 - Using Self-Signed Certificates
+
+In some cases you may find that your Cloud Foundry setup has been installed using self-signed certificates. If that is the case, you will likely run into certificate verification errors when communicating with the Hystrix dashboard. If that is the case you can disable certificate validation by adding `hystrix:stream:validate_certificates=false` to your configuration file.
+
+Check with your instructor to see if you need to do this.
+
+### Step 07 - Push to Cloud Foundry
+
+Publish, push and verify the Fortune Teller application still runs on Cloud Foundry.
+
+### Step 08 - Explore Hystrix Dashboard Service in AppsManager
+
+Note that you will have to use the UI in order to see activity in the dashboard.
+
+1. Open and Login to Pivotal AppsManager in a browser.
+
+1. Select your Org and Space and view the two Fortune Teller applications.
+
+    ---
+
+    ![env-7](../Common/images/lab-06-appmanager-1.png)
+
+   ---
+
+1. Select the services tab and select Circuit Breaker service instance.
+
+    ---
+
+    ![env-7](../Common/images/lab-09-hystrix-1.png)
+
+   ---
+
+1. Select the Manage link to view the Hystrix dashboard.
+
+    ---
+
+    ![env-7](../Common/images/lab-09-hystrix-2.png)
+
+   ---
+

@@ -12,4 +12,3 @@ applications:
    - myConfigServer
    - myDiscoveryService
    - myMySqlService
-   - myOAuthService

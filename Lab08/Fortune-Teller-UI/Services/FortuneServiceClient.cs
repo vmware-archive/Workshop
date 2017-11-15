@@ -22,9 +22,9 @@ namespace Fortune_Teller_UI.Services
     {
 
         ILogger<FortuneServiceClient> _logger;
-        IOptionsSnapshot<FortuneServiceConfig> _config;
+        IOptionsSnapshot<FortuneServiceOptions> _config;
 
-        private FortuneServiceConfig Config
+        private FortuneServiceOptions Config
         {
             get
             {
@@ -37,7 +37,7 @@ namespace Fortune_Teller_UI.Services
         // Lab07End
 
         public FortuneServiceClient(
-            IOptionsSnapshot<FortuneServiceConfig> config, 
+            IOptionsSnapshot<FortuneServiceOptions> config, 
             ILogger<FortuneServiceClient> logger,
             // Lab07 Start
             IDiscoveryClient client)

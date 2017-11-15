@@ -22,9 +22,9 @@ namespace Fortune_Teller_UI.Services
     {
 
         ILogger<FortuneServiceClient> _logger;
-        IOptionsSnapshot<FortuneServiceConfig> _config;
+        IOptionsSnapshot<FortuneServiceOptions> _config;
 
-        private FortuneServiceConfig Config
+        private FortuneServiceOptions Config
         {
             get
             {
@@ -36,28 +36,28 @@ namespace Fortune_Teller_UI.Services
         DiscoveryHttpClientHandler _handler;
         // Lab07End
 
-        // Lab09 Start
+        // Lab10 Start
         IHttpContextAccessor _reqContext;
-        // Lab09 End
+        // Lab10 End
 
         public FortuneServiceClient(
-            IOptionsSnapshot<FortuneServiceConfig> config, 
+            IOptionsSnapshot<FortuneServiceOptions> config, 
             ILogger<FortuneServiceClient> logger,
             // Lab07 Start
             IDiscoveryClient client,
             // Lab07 End
 
-            // Lab09 Start
+            // Lab10 Start
             IHttpContextAccessor context = null)
-            // Lab09 End
+            // Lab10 End
         {
             // Lab07 Start
             _handler = new DiscoveryHttpClientHandler(client);
             // Lab07 End
 
-            // Lab09 Start
+            // Lab10 Start
             _reqContext = context;
-            // Lab09 End
+            // Lab10 End
 
             _logger = logger;
             _config = config;
@@ -124,7 +124,7 @@ namespace Fortune_Teller_UI.Services
             var client = new HttpClient(_handler, false);
             // Lab07 End
 
-            // Lab09 Start
+            // Lab10 Start
             if (_reqContext != null)
             {
                 var token = await _reqContext.HttpContext.GetTokenAsync("access_token");
@@ -136,7 +136,7 @@ namespace Fortune_Teller_UI.Services
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 }
             }
-            // Lab09 End
+            // Lab10 End
 
             return client;
         }

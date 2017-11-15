@@ -34,7 +34,7 @@ namespace Fortune_Teller_UI
             // Lab05 End
 
             // Lab05 Start
-            services.Configure<FortuneServiceConfig>(Configuration.GetSection("fortuneService"));
+            services.Configure<FortuneServiceOptions>(Configuration.GetSection("fortuneService"));
             // Lab05 End
 
      

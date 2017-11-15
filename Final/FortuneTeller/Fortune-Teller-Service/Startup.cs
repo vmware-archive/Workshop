@@ -17,9 +17,9 @@ using Pivotal.Discovery.Client;
 using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
 // Lab08 End
 
-// Lab09 Start
+// Lab10 Start
 using Steeltoe.Security.Authentication.CloudFoundry;
-// Lab09 End
+// Lab10 End
 
 // Lab11 Start
 using Steeltoe.Management.Endpoint.Health;
@@ -48,25 +48,27 @@ namespace Fortune_Teller_Service
             if (Environment.IsDevelopment())
             {
                 // Lab05 Start
-                services.AddEntityFrameworkInMemoryDatabase().AddDbContext<FortuneContext>(
-                    options => options.UseInMemoryDatabase("Fortunes"), ServiceLifetime.Singleton);
+                services.AddEntityFrameworkInMemoryDatabase()
+                    .AddDbContext<FortuneContext>(
+                        options => options.UseInMemoryDatabase("Fortunes"));
                 // Lab05 End
             }
             else
             {
                 // Lab08 add
-                services.AddDbContext<FortuneContext>(options => options.UseMySql(Configuration));
+                services.AddDbContext<FortuneContext>(
+                    options => options.UseMySql(Configuration));
             }
 
             // Lab05 Start
-            services.AddSingleton<IFortuneRepository, FortuneRepository>();
+            services.AddScoped<IFortuneRepository, FortuneRepository>();
             // Lab05 End
 
             // Lab07 Start
             services.AddDiscoveryClient(Configuration);
             // Lab07 End
 
-            // Lab09 Start
+            // Lab10 Start
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddCloudFoundryJwtBearer(Configuration);
 
@@ -74,7 +76,7 @@ namespace Fortune_Teller_Service
             {
                 options.AddPolicy("read.fortunes", policy => policy.RequireClaim("scope", "read.fortunes"));
             });
-            // Lab09 End
+            // Lab10 End
 
             // Lab11 Start
             services.AddSingleton<IHealthContributor, MySqlHealthContributor>();
@@ -96,9 +98,9 @@ namespace Fortune_Teller_Service
             app.UseCloudFoundryActuators();
             // Lab11
 
-            // Lab09 Start
+            // Lab10 Start
             app.UseAuthentication();
-            // Lab09 End
+            // Lab10 End
 
             app.UseMvc();
 

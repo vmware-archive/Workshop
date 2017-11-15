@@ -1,14 +1,18 @@
 # Lab 4 - Monitoring Applications
 
->Pivotal Cloud Foundry makes the work of performing actions, such as managing logs, doing a zero-downtime deploy, and managing application health very easy. In this lab we'll explore some of these capabilities.
+>Pivotal Cloud Foundry makes the work of performing actions, such as managing logs or monitoring the performance of an application very easy. In this lab we'll explore some of these capabilities.
+
+## Preparation
+
+If your instance of the sample app _env_ is not running after the steps completed in lab 3, make sure to follow the instructions in Lab01 to deploy the application again.
 
 ## Cloud Foundry Application Logs
 
-One of the most important enablers of visibility into application behavior is logging. Effective management of logs has historically been difficult or required wiring into third party tools. Cloud Foundry's [log aggregation](https://docs.pivotal.io/pivotalcf/1-7/loggregator/architecture.html) components simplify log management by assuming responsibility for it. Application developers need only log all messages to `STDOUT` or `STDERR`, and the platform will capture these messages.
+One of the most important enablers of visibility into application behavior is logging. Effective management of logs has historically been difficult or required wiring into third party tools. Cloud Foundry's [log aggregation](https://docs.pivotal.io/pivotalcf/1-7/loggregator/architecture.html) components simplify log management by assuming complete responsibility for it. Application developers need only log all messages to `STDOUT` or `STDERR`, and the platform will capture these messages.
 
 ## Dumping Logs
 
-Application developers can view application logs using the CF CLI.
+Application developers can dump recent application logs using the CF CLI.
 
 1. To view recent log messages for the `env` application, simply enter:
 
@@ -38,11 +42,13 @@ Application developers can view application logs using the CF CLI.
    2016-10-16T22:58:29.70-0400 [APP/0]      OUT Kaboom.
    2016-10-16T22:58:29.72-0400 [APP/0]      OUT Exit status -1
    ```
-   As you can see, Cloud Foundry's log aggregation components capture both application logs and CF component logs relevant to your application. These log events are properly interleaved based on time, giving you an accurate picture of events as they transpired across the system.
-   * An `Apache-style` access log event from the (Go)Router `RTR`
-   * An `API` log event that corresponds to an event as shown in `cf events`
-   * A `CELL` log event indicating the start of an application instance on that CELL
-   * A `APP` log output showing `Kaboom` when the `Kill App` menu item is pressed in the .NET `env` app
+
+As you can see, Cloud Foundry's log aggregation components capture both application logs and CF component logs relevant to your application. These log events are properly interleaved based on time, giving you an accurate picture of events as they transpired across the system.
+
+* An `Apache-style` access log event from the (Go)Router `RTR`
+* An `API` log event that corresponds to an event as shown in `cf events`
+* A `CELL` log event indicating the start of an application instance on that `CELL`
+* A `APP` log output showing `Kaboom` when the `Kill App` menu item is pressed in the .NET `env` app
 
 ## Tailing Logs
 
@@ -64,11 +70,11 @@ Various Cloud Foundry components actively monitor the health of the application 
    > cf logs env
    ```
 
-1. If you do not have more than one application instance running, execute the scale command to scale `env` to 2 or more instances.  Visit the application in the browser, and click on the ``Kill App`` menu item. This menu item will trigger an `Environment.Exit(-1)` causing the instance to crash and the Cloud Foundry Health Manager to observe an application instance crash.
+1. If you do not have more than one application instance running, execute the scale command to scale `env` to 2 or more instances.  Visit the application in the browser, and click on the ``Kill App`` menu item. This menu item triggers an `Environment.Exit(-1)` causing the instance to crash and the Cloud Foundry Health Manager to observe an application instance crash.
 
    ---
 
-    ![env-7](../../Common/images/lab-kill-button.png)
+    ![env-7](../Common/images/lab-kill-button.png)
 
    ---
 
@@ -76,7 +82,7 @@ Various Cloud Foundry components actively monitor the health of the application 
 
    ---
 
-    ![env-7](../../Common/images/lab-kill-failed.png)
+    ![env-7](../Common/images/lab-kill-failed.png)
 
    ---
 
@@ -84,15 +90,14 @@ Various Cloud Foundry components actively monitor the health of the application 
 
     ```bash
     2016-10-16T22:56:22.22-0400 [API/0]      OUT App instance exited with guid e59bfcea-1a35-4b5f-ae84-2d7c78e13976 payload: {"instance"=>"8fb02068-684d-48c5-42b1-c0b800c57b4d", "index"=>0, "reason"=>"CRASHED", "exit_description"=>"2 error(s) occurred:\n\n* 2 error(s) occurred:\n\n* Exited with status -1\n* cancelled\n* 1 error(s) occurred:\n\n* cancelled", "crash_count"=>1, "crash_timestamp"=>1476672982202265440, "version"=>"796dc91d-af0a-4784-8fb4-2c88448c4ad3"}
-    2016-10-16T22:56:22.75-0400 [API/0]      OUT Updated app with guid e59bfcea-1a35-4b5f-ae84-2d7c78e13976 
+    2016-10-16T22:56:22.75-0400 [API/0]      OUT Updated app with guid e59bfcea-1a35-4b5f-ae84-2d7c78e13976
     2016-10-16T22:58:29.70-0400 [APP/0]      OUT Kaboom.
     2016-10-16T22:58:29.72-0400 [APP/0]      OUT Exit status -1
     2016-10-16T22:58:29.84-0400 [CELL/0]     OUT Exit status -26
     ```
 
-    * Just before issuing the `Environment.Exit(-1)` call, the application logs that the kill switch was clicked.
-    * The (Go)Router logs the 502 error.
-    * The API logs that an application instance exited due to a crash.
+    * Just before issuing the `Environment.Exit(-1)` call, the application logs that the kill switch was clicked (i.e `Kaboom.`).
+    * The `API` logs that an application instance exited due to a crash.
 
 1. Wait a few seconds, and then after a bit you should have noticed some additional interesting events in the logs:
 
@@ -108,20 +113,12 @@ Various Cloud Foundry components actively monitor the health of the application 
     2016-10-16T22:58:30.98-0400 [APP/0]      OUT Server Started.... press CTRL + C to stop
     2016-10-16T22:58:33.95-0400 [CELL/0]     OUT Container became healthy
     ```
-   * The CELL indicates that it is starting another instance of the application as a result of the Health Manager observing a difference between the desired and actual state (i.e. running instances = 1 vs. running instances = 0).
+   * The `CELL` indicates that it is starting another instance of the application as a result of the Health Manager observing a difference between the desired and actual state (i.e. running instances = 1 vs. running instances = 0).
    * The new application instance starts logging events as it starts up.
-
-1. Revisiting the *HOME PAGE* of the application and you should see a fresh instance started
-
-   ---
-
-    ![env-7](../../Common/images/lab-kill-ok.png)
-
-   ---
 
 ## Viewing Application Events
 
-Cloud Foundry only allows application configuration to be modified via its API. This gives application operators confidence that all changes to application configuration are known and audited. It also reduces the number of causes that must be considered when problems arise. 
+Cloud Foundry only allows application configuration to be modified via its API. This gives application operators confidence that all changes to application configuration are known and audited. It also reduces the number of causes that must be considered when problems arise.
 
 All application configuration changes are recorded as _events_. These events can be viewed via the Cloud Foundry API, and viewing is facilitated via the CLI.
 
@@ -233,11 +230,11 @@ All application configuration changes are recorded as _events_. These events can
 
 ## Viewing Application Metrics with PCF Metrics
 
-1. To access PCF Metrics go to this URL in your browser (e.g. https://metrics.run.haas-76.pez.pivotal.io). Select the application you want to see metrics from in the selection box
+1. To access PCF Metrics go to this URL in your browser (e.g. <https://metrics.run.haas-76.pez.pivotal.io>). Select the application you want to see metrics from in the selection box
 
     ---
 
-    ![env-7](../../Common/images/lab-metrics-sel.png)
+    ![env-7](../Common/images/lab-metrics-sel.png)
 
    ---
 
@@ -245,7 +242,7 @@ All application configuration changes are recorded as _events_. These events can
 
     ---
 
-    ![env-7](../../Common/images/lab-metrics.png)
+    ![env-7](../Common/images/lab-metrics.png)
 
    ---
 

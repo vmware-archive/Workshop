@@ -50,9 +50,9 @@ namespace Fortune_Teller_UI
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     logging.AddDebug();
 
-                    // Lab11
+                    // Lab11 Start
                     logging.AddDynamicLoggerProvider(hostingContext.Configuration);
-                    // Lab11
+                    // Lab11 End
 
                 })
                 .UseIISIntegration()
