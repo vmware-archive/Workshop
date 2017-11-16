@@ -1,4 +1,4 @@
-# Lab 7 - Service Discovery and Steeltoe Eureka Client
+# Lab 7 - Service Discovery
 
 >In this lab we will continue to add functionality to the Fortune Teller application. We will learn how to use Netflix Eureka for service registration and discovery using the Steeltoe Discovery client.
 

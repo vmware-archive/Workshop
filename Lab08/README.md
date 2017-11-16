@@ -1,4 +1,4 @@
-# Lab 8 - Scaling the Application
+# Lab 8 - Scaling Horizontally
 
 >In this lab we will continue to add functionality to the Fortune Teller application. We will explore some of the existing horizontal scaling issues with the app and how Steeltoe connectors and data protection providers can help solve those issues.
 

@@ -1,4 +1,4 @@
-# Lab 10 - Security
+# Lab 10 - Securing Service Endpoints
 
 >In this lab we will continue to add functionality to the Fortune Teller application. In this lab we will learn how to add security to our application. We will secure our `Fortune Teller Service` REST endpoints so that you must be authenticated and have `read.fortunes` permissions to access it.  We will also implement a OAuth2 `Log In` functionality in our `Fortune Teller UI` which uses the Cloud Foundry identity store for authentication and permissions.
 

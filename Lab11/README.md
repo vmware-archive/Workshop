@@ -1,4 +1,4 @@
-# Lab 10 - Management
+# Lab 11 - Production Monitoring & Management
 
 >In this lab we will continue to add functionality to the Fortune Teller application. In this lab we will learn how to add management endpoints to our application which integrate with and can be accessed from the Pivotal AppsManager.
 
@@ -7,7 +7,7 @@
 * The application is now secure; only authenticated users with the right permissions can obtain a Fortune.
 * But, we are missing a key piece of functionality. Tools to help manage and monitor the app while in production.
 
->The goals for Lab 10 are to:
+>The goals for Lab 11 are to:
 
 * Add several management endpoints to both apps to give us visibility into its operation while live in production:
   * Git build information

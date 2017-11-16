@@ -1,4 +1,4 @@
-# Lab 6 - Configuration and Steeltoe Config Server Client
+# Lab 6 - Centralized Application Configuration 
 
 >In this lab we will continue to add functionality to the Fortune Teller application. We will explore how to use the ASP.NET Core Configuration services and how to add the Config Server as a source of configuration data using the Steeltoe Config Server provider.
 
