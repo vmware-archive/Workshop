@@ -4,7 +4,7 @@
 
 >The application makes use of the __Steeltoe CloudFoundry Configuration Provider__ to parse the JSON configuration data provided to the application by Cloud Foundry as environment variables.
 
->Note: We will be using this same application for the next 4 labs (i.e. Lab1-Lab04) of the workshop.
+>Note: We will be using this same application for the next 4 labs (i.e. Lab1-Lab4) of the workshop.
 
 ## The Application
 

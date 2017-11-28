@@ -37,7 +37,7 @@
 
    ---
 
-1. Verify you can run the Config Server locally on your machine.
+1. Once you have installed Java, verify you can run the Config Server locally on your machine.
 
    Open a command window and run:
 

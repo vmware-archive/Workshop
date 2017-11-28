@@ -79,7 +79,7 @@ namespace Fortune_Teller_Service
             // Lab10 End
 
             // Lab11 Start
-            services.AddSingleton<IHealthContributor, MySqlHealthContributor>();
+            services.AddScoped<IHealthContributor, MySqlHealthContributor>();
             services.AddCloudFoundryActuators(Configuration);
             // Lab11 End
 
