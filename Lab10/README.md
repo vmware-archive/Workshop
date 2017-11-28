@@ -1,6 +1,6 @@
 # Lab 10 - Securing Service Endpoints
 
->In this lab we will continue to add functionality to the Fortune Teller application. In this lab we will learn how to add security to our application. We will secure our `Fortune Teller Service` REST endpoints so that you must be authenticated and have `read.fortunes` permissions to access it.  We will also implement a OAuth2 `Log In` functionality in our `Fortune Teller UI` which uses the Cloud Foundry identity store for authentication and permissions.
+>In this lab we will continue to add functionality to the Fortune Teller application. In this lab we will learn how to add security to our application. We will secure our `Fortune Teller Service` REST endpoints so that you must be authenticated and have `read.fortunes` permission to access it.  We will also implement a OAuth2 `Log In` functionality in our `Fortune Teller UI` which uses the Cloud Foundry identity store for authentication and permissions.
 
 >After completing Lab 9, the app in its current state is as follows:
 
@@ -9,8 +9,8 @@
 
 >The goals for Lab 10 are to:
 
-* Change `Fortune Teller Service` to secure the REST endpoints by requiring valid OAuth Bearer tokens with `read.fortunes` permissions to access Fortunes.
-* Change `Fortune Teller UI` to require users to authenticate using the Cloud Foundry UAA before fetching a Fortune and to have `read.fortunes` permissions to access Fortunes.
+* Change `Fortune Teller Service` to secure the REST endpoints by requiring valid OAuth Bearer tokens with `read.fortunes` permission to access Fortunes.
+* Change `Fortune Teller UI` to require users to authenticate using the Cloud Foundry UAA before fetching a Fortune and to have `read.fortunes` permission to access Fortunes.
 
 >For some background information on ASP.NET Core Security, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/security/)
 

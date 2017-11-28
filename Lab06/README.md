@@ -4,43 +4,17 @@
 
 >After completing Lab05, the app in its current state is as follows:
 
-* The `Fortune Teller Service` uses a back-end in-memory database to hold Fortunes.
+* The `Fortune Teller Service` uses a in-memory database to hold Fortunes.
 * The `Fortune Teller Service` serves up random fortunes from the database.
 * The `Fortune Teller UI` uses a `FortuneServiceClient` and if configured correctly using `appsettings.json` is able to communicate with the `Fortune Teller Service`.
 
 >The goals for Lab 6 are:
 
-* Use Environments to have separate configurations for `Development` and `Production`.
-* Use Config Server to centralize configuration
+* Use Config Server to centralize configuration for both applications.
 
 >For some background information on ASP.NET Core Configuration, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration).
 
 >For some background information on ASP.NET Core Environments, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments).
-
-## Development and Production Configurations
-
-In this exercise we will be modifying the `appsettings-Development.json` file to hold the configuration data for when we are running in `Development` mode.
-
-### Step 01 - Modify appsettings-Development.json
-
-In this step we want to modify the JSON configuration file in each project with configuration parameters that will be used we are running in `Development` mode.
-
-1. Make the changes so that any classes under the following namespaces will log at `Debug` level:
-
-* `Fortune_Teller_Service`
-* `Fortune_Teller_UI`
-* `Pivotal`
-* `Steeltoe`
-
-### Step 02 - Run Locally
-
-1. Change the `ASPNETCORE_ENVIRONMENT` environment variable to `Development`.
-1. Run and verify debug logging happens in each component. Run the application either in a command window or within VS2017.
-
-### Step 03 - Push to Cloud Foundry
-
-1. Change the `ASPNETCORE_ENVIRONMENT` environment variable to `Development` in the `manifest.yml` file.
-1. Publish, push and verify debug logging happens in each component.
 
 ## Use Config Server Locally
 
@@ -70,14 +44,6 @@ Here we do the steps to setup and run a Config Server locally so its easier to d
 
 For each project make changes to your `.csproj` files to include the Steeltoe Config Server provider NuGet.
 
-When using a Config Server on PCF, we use the Nuget:
-
-* `Pivotal.Extensions.Configuration.ConfigServerCore`
-
-When using Config Server from Open Source, we can use Nuget:
-
-* `Steeltoe.Extensions.Configuration.ConfigServerCore`
-
 ### Step 03 - Add Steeltoe Config Server provider to ConfigurationBuilder
 
 For each project make changes to `Program.cs` to add the Steeltoe Config Server provider to the `ConfigurationBuilder`.
@@ -102,6 +68,10 @@ You will want to establish four files in the _Workshop/ConfigServer/steeltoe/con
 * application.yml
 * fortuneService.yml
 * fortuneui.yml
+
+Go through your `appsettings.json` and `appsettings-Development.json` files and move configuration data into the most appropriate files above. For example, the common logging configuration for both FortuneUI and Fortune Service could combined and moved into application.yml and application-Development.yml. Configuration information that is specific for FortuneUI, could be added to fortuneui.yml.
+
+WHen you're done, the only thing left in `appsettings.json` is configuration data needed by the Config Server client.
 
 ### Step 06 - Run Locally
 

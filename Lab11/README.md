@@ -1,11 +1,11 @@
 # Lab 11 - Production Monitoring & Management
 
->In this lab we will continue to add functionality to the Fortune Teller application. In this lab we will learn how to add management endpoints to our application which integrate with and can be accessed from the Pivotal AppsManager.
+>In this lab we will continue to add functionality to the Fortune Teller application. We will learn how to add management endpoints to our application which integrate with and can be accessed from the Pivotal AppsManager.
 
 >After completing Lab 10, the app in its current state is as follows:
 
 * The application is now secure; only authenticated users with the right permissions can obtain a Fortune.
-* But, we are missing a key piece of functionality. Tools to help manage and monitor the app while in production.
+* But, we are missing a key piece of functionality; the tools to help manage and monitor the app while in production.
 
 >The goals for Lab 11 are to:
 
@@ -25,7 +25,7 @@ Make changes to your `Fortune Teller Service` project file to include the Steelt
 
 ### Step 02 - Add Management Endpoints to Fortune Service
 
-Make changes to `Startup.cs` to add the Cloud Foundry management endpoints to the service container.
+Make changes to `Startup.cs` to add all of the management endpoints to the service container.
 
 ### Step 03 - Use Management Endpoints in Fortune Service
 
@@ -39,9 +39,9 @@ Notice that we are asking you to add this to `application.yml`, since this will 
 
 ### Step 05 - Create a MySqlHealthContributor
 
-Add an implementation of a `IHealthContributor` which when called, will check the health of the MySql connection to the MySql database. Call this contributor, `MySqlHealthContributor` and place this new class in the projects folder.
+Add an implementation of a `IHealthContributor` which when called, will check the health of the connection to the MySql database. Call this contributor, `MySqlHealthContributor` and place this new class in the projects folder.
 
-This contributor should make use of an injected `FortuneContext` to test that it can connect to the back-end database service by executing a `SELECT 1;` against it.  Have it return the status of the command along with its status computed status.
+This contributor should make use of an injected `FortuneContext` to test that it can connect to the back-end database by executing a `SELECT 1;` against it.  Have it return the status of the command along with its status computed status.
 
 ### Step 06 - Add MySqlHealthContributor to Container
 
@@ -69,7 +69,7 @@ Make changes to your `Fortune Teller UI` project file to include the Steeltoe Ma
 
 ### Step 02 - Add Management Endpoints to Fortune UI
 
-Make changes to `Startup.cs` to add the Cloud Foundry management endpoints to the service container.
+Make changes to `Startup.cs` to add all of the management endpoints to the service container.
 
 ### Step 03 - Use Management Endpoints in Fortune UI
 

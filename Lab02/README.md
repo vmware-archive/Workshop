@@ -1,14 +1,18 @@
-# Lab 2 - Binding to Cloud Foundry Services
+# Lab 2 - Creating & Binding to Cloud Foundry Services
 
->In this lab, we'll be binding a MySQL database service to the application we pushed earlier and then viewing the configuration data Cloud Foundry provides to the application as a result. In a future lab we will see how easy it is to use __Steeltoe Connectors__ to actually make use of the MySql service in your application.
+>In this lab, we'll be binding a MySQL database service to the application we pushed earlier and then viewing the configuration data Cloud Foundry provides to the application as a result. 
+
+>In a future lab we will see how easy it is to use __Steeltoe Connectors__ to actually make use of the MySql service in your application.
 
 ## Preparation
 
-If your instance of the sample app _env_ is not running after the steps completed in lab 1, make sure to follow the instructions in Lab01 to deploy the application again.
+If your instance of the sample app `env` is not running after the steps completed in Lab 1, make sure to follow the [instructions](../Lab01/README.md) again to deploy the application.
 
-## View Apps Cloud Foundry Configuration
+## View Samples Cloud Foundry Configuration
 
-After you have the application deployed and started, visit the application in your browser by hitting the route that was assigned to it.  Select the `CloudFoundry Config` menu item and notice the application view shows there are NOT any Cloud Foundry Services listed.
+After you have the application deployed and started, visit the application in your browser by hitting the route that was assigned to it.  
+
+Select the `CloudFoundry Config` menu item and notice the view shows there are NOT any Cloud Foundry Services listed.
 
    ---
 

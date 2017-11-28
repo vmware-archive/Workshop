@@ -6,7 +6,8 @@
 
 * The `Fortune Teller Service` uses a back-end in-memory database to hold Fortunes.
 * The `Fortune Teller Service` serves up random fortunes from the database.
-* The `Fortune Teller UI` uses a `FortuneServiceClient` and if configured correctly using `appsettings.json` is able to communicate with the `Fortune Teller Service`.
+* Both components have their configuration centrally maintainable.
+* The `Fortune Teller UI` uses a `FortuneServiceClient` and if configured correctly is able to communicate with the `Fortune Teller Service`.
 * Unfortunately we have to reconfigure the `Fortune Teller UI` every time we change the address of the `Fortune Teller Service`
 
 >The goals for Lab 7 are to:
@@ -60,11 +61,11 @@ It will start up on port 8761 and serve the Eureka API from "/eureka".
 
 For each project make changes to your `.csproj` files to include the Steeltoe Discovery Client NuGet.
 
-When using a Eureka Server on PCF, we use the Nuget:
+When using a Eureka Server on PCF or the Eureka Server from Open Source, we use the Nuget:
 
 * `Pivotal.Discovery.ClientCore`
 
-When using Eureka Server from Open Source, we can use Nuget:
+When just planning on using Eureka Server from Open Source, we can use Nuget:
 
 * `Steeltoe.Discovery.ClientCore`
 

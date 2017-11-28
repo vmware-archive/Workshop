@@ -16,3 +16,11 @@ spring:
       server:
         native:
           searchLocations: file:./steeltoe/config-repo
+#
+# Replace spring: configuration above with what is below for github repo usage
+#
+# spring:
+#   cloud:
+#     config:
+#       server:
+#         git: https://github.com/SteeltoeOSS/workshop-config-repo.git

@@ -139,7 +139,7 @@ Publish, push and verify the Fortune Teller application still runs on Cloud Foun
 
 ### Step 08 - Explore Hystrix Dashboard Service in AppsManager
 
-Note that you will have to use the UI in order to see activity in the dashboard.
+Note that you will have to access and use the Fortune Teller UI in order to see activity in the dashboard.
 
 1. Open and Login to Pivotal AppsManager in a browser.
 

@@ -1,20 +1,26 @@
-# Lab 1 - Pushing Your First ASP.NET Core Application
+# Lab 1 - Pushing ASP.NET Core Application
 
->In this lab we will publish and push a pre-coded ASP.NET Core MVC application to Cloud Foundry. The application makes use of the __Steeltoe CloudFoundry Configuration provider__ to parse the JSON based configuration data provided by Cloud Foundry as environment variables making it accessible to the application at runtime.
+>In this lab we will publish and push a pre-coded ASP.NET Core MVC application to Cloud Foundry.
 
->Note: We will be using this same application for the next several labs (i.e. Lab01-Lab04) of the workshop.
+>The application makes use of the __Steeltoe CloudFoundry Configuration Provider__ to parse the JSON configuration data provided to the application by Cloud Foundry as environment variables.
+
+>Note: We will be using this same application for the next 4 labs (i.e. Lab1-Lab04) of the workshop.
 
 ## The Application
 
 This is the first application we will look at that is leveraging Steeltoe.
 
-This application was created using the out of the box ASP.NET Core MVC template found in the `dotnet` CLI. The code generated was then modified to make use of the [Steeltoe CloudFoundry Configuration provider](https://github.com/SteeltoeOSS/Configuration/tree/master/src/Steeltoe.Extensions.Configuration.CloudFoundry). This Steeltoe component is used in the application to access the configuration data provided to it by CloudFoundry environment variables, `VCAP_APPLICATION`, `VCAP_SERVICES` and `CF_*`.
+This application was created using the out of the box ASP.NET Core MVC template used by the `dotnet` CLI.
+
+The code generated was then modified to make use of the [Steeltoe CloudFoundry Configuration Provider](https://github.com/SteeltoeOSS/Configuration/tree/master/src/Steeltoe.Extensions.Configuration.CloudFoundry). The Steeltoe component is used to parse and access the JSON configuration data provided to it by CloudFoundry environment variables, `VCAP_APPLICATION`, `VCAP_SERVICES` and `CF_*`.
 
 ## Some Background
 
-When Microsoft developed ASP.NET Core, the next generation of ASP.NET, they created a number of new `Extension` frameworks which provide services(e.g. Configuration, Logging, Dependency Injection, etc) commonly used or needed when building applications. While these `Extensions` can certainly be used in ASP.NET Core applications, they can also be leveraged in many other application types as well; including ASP.NET 4.x, Console, UWP Apps, etc.
+When Microsoft developed ASP.NET Core, the next generation of ASP.NET, they created a number of new `Extension` frameworks which provide services (e.g. Configuration, Logging, Dependency Injection, etc) commonly used or needed when building applications. While these `Extensions` are certainly used in ASP.NET Core applications, they can also be leveraged in many other application types as well; including ASP.NET 4.x, Console, UWP Apps, etc.
 
-As you will see during this workshop, the Steeltoe project has added a couple of additional configuration providers to the list of those offered from Microsoft. These include:
+As you will see during this workshop, the Steeltoe project has added some additional configuration providers to the list of those offered from Microsoft.
+
+These include:
 
 * [CloudFoundry Configuration](https://github.com/SteeltoeOSS/Configuration/tree/master/src/Steeltoe.Extensions.Configuration.CloudFoundry)
 
@@ -24,11 +30,13 @@ To get a better understanding of the `Microsoft Configuration Extensions` have a
 
 As you might expect, virtually all of Steeltoe components make use of the CloudFoundry configuration provider in one way or another.
 
-Later on in the workshop we will take a much closer look at the `Configuration Extensions` and the `Steeltoe CloudFoundry Configuration provider`.
+Later on in the workshop we will take a much closer look at the `Microsoft Configuration Extensions` as well as the `Steeltoe CloudFoundry Configuration Provider`.
 
 ## Download Workshop Code
 
-If you haven't already done so, download or clone the Workshop git repository using the command below. If you don't have git installed, you can click 'Download ZIP' on the right side of the [GitHub page](https://github.com/SteeltoeOSS/Workshop).
+If you haven't already done so, download or clone the workshop GitHub repository using the command below.
+
+If you don't have git installed, you can click 'Download ZIP' on the right side of the [GitHub page](https://github.com/SteeltoeOSS/Workshop).
 
 ```bash
 > git clone https://github.com/SteeltoeOSS/Workshop
@@ -52,34 +60,46 @@ Follow the prompts using the credentials that you were provided by your instruct
 > cf login
 ```
 
-## Publish and Push the Application
+## Open Lab Sample Application
 
-In order to get the application running on Cloud Foundry we will first publish the application into a directory using the `dotnet` CLI and then push the published bits up to Cloud Foundry using the `cf` CLI.
+Take a minute an open up and explore the sample application that we will be working with for the next 4 labs.  In the upcoming steps you will be directed to explore specific files and it will be easier to do so using Visual Studio.
 
-1. Open a command prompt and cd _Workshop/Lab01/CloudFoundry_.  Note in this lab we are not going to write any code. Instead we will be using this pre-coded application.
+You can find lab code `Workshop/Lab01/CloudFoundry` and a solution file `Workshop/Lab01/Lab01.sln`.
+
+## Publish and Push the Application to Cloud Foundry
+
+In order to get the application running on Cloud Foundry we will first publish the application into a directory using the `dotnet` CLI. Once thats complete, then we will push the published bits up to Cloud Foundry using the `cf` CLI.
+
+1. Open a command prompt and change directory to the Lab code.
+
+   Note in this lab we are not going to write any code. Instead we will be using the pre-coded lab in this directory.
 
    ```bash
    > cd Workshop/Lab01/CloudFoundry
    ```
 
-1. Use the dotnet CLI to restore the NuGet references used by the application.
+1. Use the `dotnet` CLI to restore the NuGet references used by the application.
 
    ```bash
    > dotnet restore --configfile nuget.config
    ```
 
-1. Publish the application getting it ready to push to Cloud Foundry. Pay attention to where the `dotnet` CLI creates the published application as you will have to reference that directory in the next step.  Notice that we are specifying a specific runtime by using `-r ubuntu.14.04-x64` during our publish command as we will be pushing this application to a Linux cell on Cloud Foundry.
+1. Publish the application getting it ready to push to Cloud Foundry. Pay attention to where the `dotnet` CLI creates the published application as you will have to reference that directory in the next step.
+
+   Notice that we are specifying a specific runtime by using `-r ubuntu.14.04-x64` during our `publish` command as we will be pushing this application to a Linux cell on Cloud Foundry.
 
    ```bash
    > dotnet publish -r ubuntu.14.04-x64
    ```
 
-1. Push the application to Cloud Foundry.  You will need to specifying the manifest to use to configure the application (`-f manifest.yml`) and the directory (`-p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish`) containing the published application.
+1. Push the application to Cloud Foundry.  You will need to specifying the manifest to use to configure the application (`-f manifest.yml`) and the directory (`-p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish`) containing the published bits for the application.
 
    ```bash
    cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
    ```
-1. Observe the output in the command window created by the `cf push`.  You should see something similar to the following:
+1. Observe the output in the command window created by the `cf push`.  
+
+   You should see something similar to the following:
 
    ```bash
    ----
@@ -182,9 +202,9 @@ When you push your application to Cloud Foundry there are a number of things to 
 
 * The CLI uses the manifest to provide the necessary configuration details to Cloud Foundry for the application. Things such as the application name, the memory to be allocated, the operating system to be used (in this case Linux), the number of instances to start, the environment variables to set, and the routes to use when accessing the application. Take a minute and open up `manifest.yml` to see how this is done.  There are two manifests for the application, one to be used when targeting Linux and the other for Windows. You can find them in  `Workshop/Lab01/CloudFoundry`.
 
-* In most cases, the CLI indicates each Cloud Foundry API call as it happens. In reviewing the output above you can see the CLI has created an application named _env_ and has started it in your assigned Cloud Foundry org and space.
+* In most cases, the CLI indicates each Cloud Foundry API call as it happens. In reviewing the output above you can see the CLI has created an application named `env` and has started it in your assigned Cloud Foundry org and space.
 
-* All HTTP/HTTPS requests to application flow through Cloud Foundry's front-end router called [(Go)Router](https://docs.pivotal.io/pivotalcf/1-7/concepts/architecture/router.html). Here the CLI is creating a route with random word tokens inserted to prevent route collisions across the default domain. Take a minute and look at the `manifest.yml` to see how this is done.
+* All HTTP/HTTPS requests to applications flow through Cloud Foundry's front-end router named the [(Go)Router](https://docs.pivotal.io/pivotalcf/1-7/concepts/architecture/router.html). Here the CLI is creating a route with random word tokens inserted to prevent route collisions across the default domain. Take a minute and look at the `manifest.yml` to see how this is done.
 
 * The CLI is also _binding_ the created route to the application. Routes can actually be bound to multiple applications to support techniques such as [blue-green deployments](https://docs.pivotal.io/pivotalcf/1-7/devguide/deploy-apps/blue-green.html).
 
@@ -228,7 +248,9 @@ Take some time to explore the application using the Pivotal AppsManager.
 
 1. Click the `Reveal Env Vars` button to see the environment variables for the application.
 
-   Notice the environment variables `VCAP_APPLICATION` and `VCAP_SERVICES`. These are assigned by CloudFoundry and are intended to provide configuration data for the application. You should see something similar to what you see below:
+   Notice the environment variables `VCAP_APPLICATION` and `VCAP_SERVICES`. These are assigned by CloudFoundry and are intended to provide configuration data for the application. This is the configuration information the `Steeltoe CloudFoundry Configuration Provider` is parsing and making available to the application.
+
+   Here is an example of the kind of information you should see:
 
 ```text
 {
@@ -267,7 +289,9 @@ Take some time to explore the application using the Pivotal AppsManager.
 
 ## Interact with the Application
 
-1. Visit the `env` application in your browser by hitting the route that was generated by the CLI.  Do a `cf a` to see what URL to use if your unsure of what the route is for the application. You should see something like shown below when you hit the app.
+1. Visit the `env` application in your browser by hitting the route that was generated by the CLI.  Do a `cf a` to see what URL to use if your unsure of what the route is for the application. 
+
+   You should see something like shown below when you hit the app.
 
    ---
 
@@ -309,19 +333,21 @@ Take some time to explore the application using the Pivotal AppsManager.
 
 ## Understanding the Application Code
 
-1. To see how the Cloud Foundry configuration data is integrated into the overall configuration for the app start with the code in `Program.cs`.  Have a look at the `CreateDefaultBuilder(args)` call. Notice the usage of the Steeltoe provided `AddCloudFoundry()` method call. This is what causes the Cloud Foundry configuration data (i.e. `VCAP_APPLICATION`, etc.) to be added to the apps configuration.
+1. To see how the Cloud Foundry configuration data is integrated into the overall configuration for the app start with the code in `Program.cs`.  Have a look at the `CreateDefaultBuilder(args)` call. Notice the usage of the Steeltoe `AddCloudFoundry()` method call. This is what causes the Cloud Foundry configuration data (i.e. `VCAP_APPLICATION`, etc.) to be added to the apps configuration.
 
-    For more detail on how ASP.NET Core Host building is done,  read over the documentation - [Setting up a Host](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/hosting?tabs=aspnetcore2x). For information on how an applications configuration is established, read over the [Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration?tabs=basicconfiguration) section.
+    For more detail on how ASP.NET Core Host building is done,  read over the Microsoft documentation - [Setting up a Host](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/hosting?tabs=aspnetcore2x).
+
+    For information on how an applications configuration is established, read over the Microsoft documenation on [Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration?tabs=basicconfiguration).
 
     In upcoming labs we will spend much more time on how this all works!
 
-1. Above when you clicked on `CloudFoundry Config` menu item what you were seeing is the configuration information from `VCAP_APPLICATION` and `VCAP_SERVICES`. To see in the code how this view is created start with the `CloudFoundryConfig()` action in the `HomeController`.
+1. Above when you clicked on `CloudFoundry Config` menu item what you were observing is the configuration information from `VCAP_APPLICATION` and `VCAP_SERVICES`. To see in the code how this view is created start with the `CloudFoundryConfig()` action in the `HomeController`.
 
-1. Above when you clicked on `Application Config` menu item what you were seeing is the configuration information from `appsettings.json` and `appsettings-Development.json`, both configuration files found in the applications solution. To see in the code how this view is created start with the `AppConfig()` action in the `HomeController`.
+1. When you clicked on `Application Config` menu item what you were observing is the configuration information from `appsettings.json` and `appsettings-Development.json`, both configuration files found in the applications solution. To see in the code how this view is created start with the `AppConfig()` action in the `HomeController`.
 
-1. Above when you clicked on `Subsection Config` menu item what you were seeing is a subsection of the configuration data from `appsettings.json` and `appsettings-Development.json`. Take some time and see if you can find in the code how this is accomplished. To see in the code how this view is created start with the `SubSectionConfig()` action in the `HomeController`.
+1. When you clicked on `Subsection Config` menu item what you were observing is a subsection of the configuration data from `appsettings.json` and `appsettings-Development.json`. Take some time and see if you can find in the code how this is accomplished. To see in the code how this view is created start with the `SubSectionConfig()` action in the `HomeController`.
 
-1. Above when you clicked on the `Raw Config` menu item what you were seeing is the raw listing of all the configuration information available to the application. To see in the code how this view is created start with the `RawConfig()` action in the `HomeController`.
+1. When you clicked on the `Raw Config` menu item what you were observing is a raw listing of all the configuration information available to the application. To see in the code how this view is created start with the `RawConfig()` action in the `HomeController`.
 
 ## Interact with Application from CF CLI
 

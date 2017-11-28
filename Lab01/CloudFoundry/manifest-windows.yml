@@ -5,7 +5,7 @@ applications:
   stack: windows2012R2
   memory: 512M
   instances: 1
-  random-route: true
+  buildpack: binary_buildpack
   command: cmd /c .\CloudFoundry --server.urls http://0.0.0.0:%PORT%
   env:
     ASPNETCORE_ENVIRONMENT: production

@@ -1,10 +1,10 @@
 # Lab 3 - Scaling and Operating Applications
 
->Pivotal Cloudfoundry makes the work of performing actions, such as scaling, doing a zero-downtime deployments, and managing application health very easy.  In this lab we'll explore some of these capabilities.
+>Pivotal Cloudfoundry makes the work of performing actions, such as scaling, doing zero-downtime deployments, and managing application health very easy.  In this lab we'll explore some of these capabilities.
 
 ## Preparation
 
-If your instance of the sample app _env_ is not running after the steps completed in lab 2, make sure to follow the instructions in Lab01 to deploy the application again.
+If your instance of the sample app `env` is not running after the steps completed in Lab 1, make sure to follow the [instructions](../Lab01/README.md) again to deploy the application.
 
 ## Scale Up the Application Instances
 
@@ -132,7 +132,7 @@ If your instance of the sample app _env_ is not running after the steps complete
 
    ```
 
-1. The second way is via the Apps Manager.  Click on the _env_ application to view application details like shown below:
+1. The second way is via the Apps Manager.  Click on the `env` application to view application details like shown below:
 
    ---
 

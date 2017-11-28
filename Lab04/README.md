@@ -1,10 +1,10 @@
 # Lab 4 - Monitoring Applications
 
->Pivotal Cloud Foundry makes the work of performing actions, such as managing logs or monitoring the performance of an application very easy. In this lab we'll explore some of these capabilities.
+>Pivotal Cloud Foundry makes the work of performing actions such as managing logs or monitoring the performance of an application very easy. In this lab we'll explore some of these capabilities.
 
 ## Preparation
 
-If your instance of the sample app _env_ is not running after the steps completed in lab 3, make sure to follow the instructions in Lab01 to deploy the application again.
+If your instance of the sample app `env` is not running after the steps completed in Lab 1, make sure to follow the [instructions](../Lab01/README.md) again to deploy the application.
 
 ## Cloud Foundry Application Logs
 
