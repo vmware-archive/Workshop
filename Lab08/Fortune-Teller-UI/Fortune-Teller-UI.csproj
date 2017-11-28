@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>Fortune_Teller_UI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    
+    <!-- Lab06 Start-->
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServerCore" Version="2.0.0-dev-00118" />
+    <!-- Lab06 End-->
+    
+    <!-- Lab07 Start-->
+    <PackageReference Include="Pivotal.Discovery.ClientCore" Version="2.0.0-dev-00114" />
+    <!-- Lab07 End-->
+
+    <!-- Lab08 Start-->
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" version="2.0.0-dev-00193" />
+    <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" version="2.0.0-dev-00081" />
+    <!-- Lab08 End-->
+    
+  </ItemGroup>
+  
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+  
+</Project>

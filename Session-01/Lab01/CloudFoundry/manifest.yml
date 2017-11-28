@@ -1,6 +1,0 @@
----
-applications:
-- name: env
-  random-route: true
-  env:
-    ASPNETCORE_ENVIRONMENT: production

@@ -1,0 +1,10 @@
+---
+applications:
+- name: env
+  memory: 512M
+  stack: cflinuxfs2
+  buildpack: dotnet_core_buildpack  
+  instances: 1
+  random-route: true
+  env:
+    ASPNETCORE_ENVIRONMENT: production
