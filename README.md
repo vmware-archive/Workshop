@@ -34,10 +34,9 @@ Start by checking out this repository.  This can be accomplished either through 
 * [Git Client](https://git-scm.com/downloads)
 * [.NET Core SDK 2.0](https://www.microsoft.com/net/download)
 * [Visual Studio Code](https://code.visualstudio.com/) or [Visual Studio 2017](https://www.visualstudio.com/downloads/ )
-* [Visual Studio 2017 .NET Core Workload](https://www.microsoft.com/net/core#windowsvs2017)
 * [Java 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) - Optional, needed to run Eureka and Config servers locally
 
-Follow [these steps](Install/README.md) to install and verify your setup.
+Follow the steps in Lab 0 to get everything installed and verified.
 
 ### Understand Format
 
@@ -54,11 +53,11 @@ Follow [these steps](Install/README.md) to install and verify your setup.
 1. The outline for the workshop:
 
    _Intro to Pivotal Cloud Foundry_
-   * [Lab 0 - Pivotal Cloud Foundry Fundamentals](Lab00/README.md)
+   * [Lab 0 - Install Prerequisites & Log into Cloud Foundry](Lab00/README.md)
    * [Lab 1 - Running .NET Application on Cloud Foundry](Lab01/README.md)
-   * [Lab 2 - Binding Cloud Foundry Services to Applications](Lab02/README.md)
-   * [Lab 3 - Scaling and Operating Applications on Cloud Foundry](Lab03/README.md)
-   * [Lab 4 - Monitoring Applications on Cloud Foundry](Lab04/README.md)
+   * [Lab 2 - Creating and Binding to Cloud Foundry Services](Lab02/README.md)
+   * [Lab 3 - Scaling and Operating Applications](Lab03/README.md)
+   * [Lab 4 - Monitoring Applications](Lab04/README.md)
 
    _Building Fortune Teller Application_
    * [Lab 5 - ASP.NET Core Programming Fundamentals](Lab05/README.md)

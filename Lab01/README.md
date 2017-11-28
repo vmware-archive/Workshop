@@ -1,4 +1,4 @@
-# Lab 1 - Pushing ASP.NET Core Application
+# Lab 1 - Running .NET Application on Cloud Foundry
 
 >In this lab we will publish and push a pre-coded ASP.NET Core MVC application to Cloud Foundry.
 
