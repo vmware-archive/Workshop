@@ -30,14 +30,14 @@
   
   <!-- Lab09 Start-->
   <ItemGroup Condition="'$(BUILD)' == ''">
-    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00081" />
-    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version="2.0.0-dev-00081" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00084" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version="2.0.0-dev-00084" />
     <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(BUILD)' == 'LOCAL'">
-    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00081" />
-    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version="2.0.0-dev-00081" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.0.0-dev-00084" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version="2.0.0-dev-00084" />
   </ItemGroup>
   <!-- Lab09 End-->
   
