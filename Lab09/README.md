@@ -145,7 +145,7 @@ Note that you will have to access and use the Fortune Teller UI in order to see 
 
     ---
 
-    ![env-7](../Common/images/lab-06-appmanager-1.png)
+    ![env-7](../Common/images/Lab-06-appmanager-1.png)
 
    ---
 

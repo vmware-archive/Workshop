@@ -182,4 +182,4 @@ You should see something like the following, depending on what services have bee
 
    Take some time and see if you can find in the code how this is accomplished. Start with the ``CloudFoundryConfig()`` action in the ``HomeController``.
 ---
-Continue the workshop with [Lab 3 - Scaling and Operating Applications](Lab03/README.md)
+Continue the workshop with [Lab 3 - Scaling and Operating Applications](../Lab03/README.md)
