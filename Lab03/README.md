@@ -186,4 +186,5 @@ If your instance of the sample app `env` is not running after the steps complete
 
     ![env-7](../Common/images/blue-green.png)
 
-   ---
+---
+Continue the workshop with [Lab 4 - Monitoring Applications](../Lab04/README.md)

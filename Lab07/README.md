@@ -2,12 +2,12 @@
 
 >In this lab we will continue to add functionality to the Fortune Teller application. We will learn how to use Netflix Eureka for service registration and discovery using the Steeltoe Discovery client.
 
->After completing Lab06, the app in its current state is as follows:
+>After completing Lab06, the app state should be as follows:
 
 * The `Fortune Teller Service` uses a back-end in-memory database to hold Fortunes.
 * The `Fortune Teller Service` serves up random fortunes from the database.
 * Both components have their configuration centrally maintainable.
-* The `Fortune Teller UI` uses a `FortuneServiceClient` and if configured correctly is able to communicate with the `Fortune Teller Service`.
+* The `Fortune Teller UI` uses a `FortuneServiceClient` to communicate with the `Fortune Teller Service`.
 * Unfortunately we have to reconfigure the `Fortune Teller UI` every time we change the address of the `Fortune Teller Service`
 
 >The goals for Lab 7 are to:
@@ -19,7 +19,7 @@
 
 ### Step 01 - Run Config Server Locally
 
-We are still using the Config Server, so we make sure it is running locally so its easier to develop and test with.
+We are still using the Config Server, so make sure it is running locally for easier development and testing.
 
 1. Open a command window and change directory to _Workshop/ConfigServer_
 
@@ -30,7 +30,7 @@ We are still using the Config Server, so we make sure it is running locally so i
 1. Startup the Config Server
 
    ```bash
-   > mvnw spring-boot:run
+   > ./mvnw spring-boot:run
    ```
 
    It will start up on port 8888 and serve configuration data from `Workshop/ConfigServer/steeltoe/config-repo`.
@@ -41,7 +41,7 @@ In this exercise we will startup a Eureka Server locally and update our Fortune 
 
 ### Step 01 - Run Eureka Server Locally
 
-Here we do the steps to setup and run a Eureka Server locally so its easier to develop and test with.
+For an easier development and testing experience, setup and run a Eureka Server locally:
 
 1. Open a command window and change directory to _Workshop/EurekaServer_
 
@@ -77,9 +77,9 @@ For each project make changes to `Startup.cs` to add the Steeltoe Discovery clie
 
 Once we have the Discovery client added to the service container we next need to configure the client. We have two sets of Discovery client configuration data to provide, one for the `Fortune Teller Service` and the other for `Fortune Teller UI`.
 
-For the `Fortune Teller Service` we want it to register itself with the Eureka Server with the name `fortuneservice` and when we are running it locally, it will be listening on port `5000`. Also, we don't need it to fetch any services as it doesn't make any external service requests, so we should disable fetching the registry.
+The `Fortune Teller Service` should register itself with the Eureka Server with the name `fortuneservice` and when we are running it locally, it will be listening on port `5000`. Also, we don't need it to fetch any services as it doesn't make any external service requests, so we should disable fetching the registry.
 
-For the `Fortune Teller UI` we want it to fetch registered services, but we don't need to register, as it has no external REST endpoints it needs to expose.
+The `Fortune Teller UI` should fetch registered services, but we don't need to register, as it has no external REST endpoints it needs to expose.
 
 And finally, for both, we need to configure the URL endpoint of the Eureka Server, so that both know how to contact the server.
 
@@ -87,15 +87,15 @@ For each project make the changes in `Workshop/ConfigServer/steeltoe/config-repo
 
 * application.yml
 * fortuneui.yml
-* fortuneservice.yml
+* fortuneService.yml
 
 ### Step 05 - Discover Services - DiscoveryHttpClientHandler
 
-Last code changes we have to make to get the Discovery service fully implemented and used is to change the `FortuneServiceClient` to use the `IDiscoveryClient`. The `AddDiscoveryClient(Configuration)` that we added to `Startup.cs` adds `IDiscoveryClient` to the service container. To gain access to this in the `FortuneServiceClient`,  we will need to add `IDiscoveryClient` to its constructor.
+The last code change we have to make to get the Discovery service fully implemented is to change the `FortuneServiceClient` to use the `IDiscoveryClient`. The `AddDiscoveryClient(Configuration)` that we added to `Startup.cs` adds `IDiscoveryClient` to the service container. To gain access to this in the `FortuneServiceClient`,  we will need to add `IDiscoveryClient` to its constructor.
 
-Once this is done, we could go ahead and use `IDiscoveryClient` directly to lookup services, but instead what we want to do instead is to use another Steeltoe component `DiscoveryHttpClientHandler` to make our life easier. The `DiscoveryHttpClientHandler` is an `HttpClientHandler` that can be used with an `HttpClient` to intercept any client requests and evaluate the request URL to see if the address portion of the URL can be resolved from the service registry. In this case we will use it to resolve the `fortuneService` name into an actual `host:port` before allowing the request to continue. If the name can't be resolved the handler will still allow the request to continue, but of course the request will fail.
+Once this is done, we could go ahead and use `IDiscoveryClient` directly to lookup services, but instead what we want to do instead is to use another Steeltoe component `DiscoveryHttpClientHandler` to make our life easier. The `DiscoveryHttpClientHandler` is an `HttpClientHandler` that can be used with `HttpClient` to intercept any client requests and evaluate the request URL to see if the address portion of the URL can be resolved from the service registry. In this case we will use it to resolve the `fortuneService` name into an actual `host:port` before allowing the request to continue. If the name can't be resolved, the handler will still allow the request to continue, but of course the request will fail.
 
-Make the changes necessary in `FortuneServiceClient` to accomplish the above.
+Make the necessary changes in `FortuneServiceClient` to accomplish the above.
 
 ### Step 06 - Configure FortuneServiceClient
 
@@ -103,7 +103,7 @@ Now that we are using the Discovery service, you will need to alter the configur
 
 ### Step 07 - Run Locally
 
-Run and verify both Fortune-Tellers continue to run as they did before. Run the application either in a command window or within VS2017.
+Run and verify both Fortune-Tellers continue to run as they did before. Run the application in either a command window or VS2017.
 
 ## Use Eureka Server on Cloud Foundry
 
@@ -166,5 +166,5 @@ Publish, push and verify the application runs on Cloud Foundry. Make any adjustm
     ---
 
     ![env-7](../Common/images/lab-07-appmanager-3.png)
-
-   ---
+---
+Continue the workshop with [Lab 8 - Scaling Horizontally - Redis and Mysql Services](../Lab08/README.md)

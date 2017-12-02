@@ -2,21 +2,21 @@
 
 >In this lab we will continue to add functionality to the Fortune Teller application. In this lab we will learn how to add security to our application. We will secure our `Fortune Teller Service` REST endpoints so that you must be authenticated and have `read.fortunes` permission to access it.  We will also implement a OAuth2 `Log In` functionality in our `Fortune Teller UI` which uses the Cloud Foundry identity store for authentication and permissions.
 
->After completing Lab 9, the app in its current state is as follows:
+>After completing Lab 9, the app state should be as follows:
 
-* The application can now scale horizontally, and has fault tolerance built in.
-* But, unfortunately every one has access to the Fortune service. ;-)
+* The application can now scale horizontally and has fault tolerance built in.
+* Unfortunately, every one has access to the Fortune service. ;-)
 
 >The goals for Lab 10 are to:
 
 * Change `Fortune Teller Service` to secure the REST endpoints by requiring valid OAuth Bearer tokens with `read.fortunes` permission to access Fortunes.
 * Change `Fortune Teller UI` to require users to authenticate using the Cloud Foundry UAA before fetching a Fortune and to have `read.fortunes` permission to access Fortunes.
 
->For some background information on ASP.NET Core Security, have a look at this [documentation](https://docs.microsoft.com/en-us/aspnet/core/security/)
+>For background information, see: [ASP.NET Core Security documentation](https://docs.microsoft.com/en-us/aspnet/core/security/)
 
 ## Add Security to Fortune Teller Service
 
-In this section we will be adding code to the `Fortune Teller Service` to use JWT Bearer token based authentication and authorization.
+In this section we will add code to the `Fortune Teller Service` to use JWT Bearer token based authentication and authorization.
 
 ### Step 01 - Add Steeltoe Security Nuget to Fortune Service
 
@@ -40,7 +40,7 @@ Make changes to `FortunesController.cs` to secure access to all the REST endpoin
 
 ### Step 06 - Run Locally - Fortune Service
 
-Run and verify the Fortune Teller Service and verify you no longer have access to the REST endpoints, and in fact they return a 401. Run the application either in a command window or within VS2017.
+Run and verify the Fortune Teller Service and verify you no longer have access to the REST endpoints, and in fact they return a 401. Run the application in either a command window or VS2017.
 
 ## Add Security to Fortune UI
 
@@ -77,7 +77,7 @@ Make changes to `FortunesController.cs` to secure access to the following action
 
 Make changes to the `FortuneServiceClient.cs` to include the Bearer token (i.e. Access Token) for the authenticated user to the Fortune Service.
 
-Note: In order to accomplish this, the client will need access to `IHttpContextAccessor` in order to access the authenticated user and the Access Token.
+>**Note:** In order to accomplish this, the client will need access to `IHttpContextAccessor` in order to access the authenticated user and the Access Token.
 
 ## Verify on Cloud Foundry
 
@@ -89,7 +89,7 @@ To create an instance of a Hystrix dashboard service in your org/space follow th
 
 1. Using the command window, create an instance of the Hystrix dashboard on Cloud Foundry.
 
-   Note: Before you can issue this command you will need to replace the `xxxxxxx` with the appropriate values for your environment.  Ask your instructor for those values.
+   >**Note:** Before you can issue this command you will need to replace the `xxxxxxx` with the appropriate values for your environment.  Ask your instructor for those values.
 
    ```bash
    > cf cups myOAuthService -p "{\"client_id\": \"xxxxxxxxxx\",\"client_secret\": \"xxxxxxxxxx\",\"uri\": \"uaa://login.xxxxx.xxxxx.com\"}"
@@ -116,3 +116,6 @@ Check with your instructor to see if you need to do this.
 ### Step 04 - Push to Cloud Foundry
 
 Publish, push and verify the Fortune Teller application still runs on Cloud Foundry. At this point, if your application is running properly, you will have to login before obtaining a Fortune.
+
+---
+Continue the workshop with [Lab 11 - Production Monitoring & Management - Pivotal Apps Manager](../Lab11/README.md)

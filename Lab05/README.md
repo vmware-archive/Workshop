@@ -18,15 +18,15 @@
   * Hook up the `IFortuneService` to the `FortunesController`
   * Add the `IFortuneService` to the ASP.NET Core service container.
   * Use the `Options` framework to configure the `FortuneServiceClient` so that it can communicate with the `Fortune Service`
-* Use Environments to have separate configurations for `Development` and `Production`.  
+* Use Environments to have separate configurations for `Development` and `Production`.
 
->When your done with this lab the Fortune Teller UI should be able to retrieve random fortunes from the Fortune Service.
+>When you're done with this lab, the Fortune Teller UI should be able to retrieve random fortunes from the Fortune Service.
 
-> For some background information on ASP.NET Core programming, have a look at the ASP.NET Core [documentation](https://docs.microsoft.com/en-us/aspnet/core).
+> For some background information on ASP.NET Core programming, have a look at the [ASP.NET Core documentation](https://docs.microsoft.com/en-us/aspnet/core).
 
 ## Review Fortune Teller Code
 
-1. Start Visual Studio and/or Visual Studio Code and open the solution in the directory `Workshop/Start`.
+1. Start Visual Studio or Visual Studio Code and open the solution in the directory `Workshop/Start`.
 1. Familiarize yourself with the `Fortune-Teller-Service` project and its code.
 1. Familiarize yourself with the `Fortune-Teller-UI` project and its code.
 
@@ -50,7 +50,7 @@
    > dotnet run
    ```
 
-1. Hit the REST endpoint `http://localhost:5000/api/fortunes/all`. You should see the following JSON returned:
+1. Hit the REST endpoint <http://localhost:5000/api/fortunes/all.> You should see the following JSON returned:
 
    ```text
    [{"id":1,"text":"Hello from FortuneController Web API!"}]
@@ -76,7 +76,7 @@
    > dotnet run
    ```
 
-1. Hit the endpoint `http://localhost:5555/`. You should see the following:
+1. Open <http://localhost:5555/> in your favorite browser. You should see the following:
 
     ---
 
@@ -84,7 +84,7 @@
 
    ---
 
-1. Click on `Your Fortune` menu item. You should see the following.  The `Your Fortune` action saves whatever fortune it obtains in the applications session.
+1. Click on `Your Fortune` in the menu. You should see the following.  The `Your Fortune` action saves whatever fortune it obtains in the application's session.
 
     ---
 
@@ -92,7 +92,7 @@
 
    ---
 
-1. Click on `Home` menu item. You should see the following.  Notice the `Your fortune: Hello from FortuneController UI!`.  This is the fortune retrieved from the applications session state.
+1. Click on `Home` in the menu. You should see the following.  Notice `Your fortune: Hello from FortuneController UI!`.  This is the fortune retrieved from the application's session state.
 
     ---
 
@@ -207,7 +207,7 @@ As you work through this section and the next, if you get stuck or are not sure 
 
 ### Step 04 - Run Locally
 
-Run and verify the `Fortune-Teller-Service` returns the Fortunes from the in-memory database. Run the application either in a command window or within VS2017.
+Run and verify the `Fortune-Teller-Service` returns the Fortunes from the in-memory database. Run the application in either a command window or VS2017.
 
 ### Step 05 - Push to Cloud Foundry
 
@@ -232,14 +232,14 @@ Also, in this step you will make use of the Configuration and Options features o
 
 1. Modify the `appsettings.json` file with the configuration information needed to configure the `FortuneServiceClient`.  The settings you provide will be used by the client so that it can communicate with the Fortune Service.
 
-   Notice the FortuneServiceClient expects to receive an injected `IOptionsSnapshot<FortuneServiceOptions>` which contains the configuration used by the client. Look at the already existing `FortuneServiceOptions` class and the client code to see what properties need to be filled in.
+   >**Note:** the FortuneServiceClient expects to receive an injected `IOptionsSnapshot<FortuneServiceOptions>`. Look at the existing `FortuneServiceOptions` class and the client code to see what properties need to be filled in.
 
 1. Modify the `Startup` class to make use of the `Options` framework to configure the `FortuneServiceOptions` from the values in `appsettings.json` and to add it to the service container so that it will be injected.
 
 ### Step 04 - Run both Locally
 
-1. Run the `Fortune-Teller-Service`. Run the application either in a command window or within VS2017.
-1. Run the `Fortune-Teller-UI`.  Run the application either in a command window or within VS2017.
+1. Run the `Fortune-Teller-Service` in either a command window or VS2017.
+1. Run the `Fortune-Teller-UI` in either a command window or VS2017.
 1. Verify that the UI can communicate with the Fortune service.
 
 ### Step 05 - Push both to Cloud Foundry
@@ -251,9 +251,9 @@ Also, in this step you will make use of the Configuration and Options features o
 
 ## Development and Production Configurations
 
-In this exercise we will be modifying the `appsettings-Development.json` file to hold the configuration data for when we are running in `Development` mode.
+In this exercise we will be modifying the `appsettings.Development.json` file to hold the configuration data for when we are running in `Development` mode.
 
-### Step 01 - Modify appsettings-Development.json
+### Step 01 - Modify appsettings.Development.json
 
 In this step we want to modify the JSON configuration file in each project with configuration parameters that will be used we are running in `Development` mode.
 
@@ -267,9 +267,12 @@ In this step we want to modify the JSON configuration file in each project with 
 ### Step 02 - Run Locally
 
 1. Change the `ASPNETCORE_ENVIRONMENT` environment variable to `Development`.
-1. Run and verify debug logging happens in each component. Run the application either in a command window or within VS2017.
+1. Run and verify debug logging happens in each component. Run the application in either a command window or VS2017.
 
 ### Step 03 - Push to Cloud Foundry
 
 1. Change the `ASPNETCORE_ENVIRONMENT` environment variable to `Development` in the `manifest.yml` file.
 1. Publish, push and verify debug logging happens in each component.
+
+---
+Continue the workshop with [Lab 6 - Centralized Application Configuration - Config Server](../Lab06/README.md)

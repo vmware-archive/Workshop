@@ -2,14 +2,14 @@
 
 >In this lab we will continue to add functionality to the Fortune Teller application. We will learn how to add management endpoints to our application which integrate with and can be accessed from the Pivotal AppsManager.
 
->After completing Lab 10, the app in its current state is as follows:
+>After completing Lab 10, the app state should be as follows:
 
 * The application is now secure; only authenticated users with the right permissions can obtain a Fortune.
 * But, we are missing a key piece of functionality; the tools to help manage and monitor the app while in production.
 
 >The goals for Lab 11 are to:
 
-* Add several management endpoints to both apps to give us visibility into its operation while live in production:
+* Add several management endpoints to both apps to give us visibility into its operation in production:
   * Git build information
   * Adjustable logging levels
   * Application specific health checks
@@ -35,7 +35,7 @@ Make changes to `Startup.cs` to use the above added endpoint services in the pip
 
 Make changes to your `application.yml` file and configure the endpoint path to `/cloudfoundryapplication`. This is the path the Pivotal AppsManager expects the endpoints to be.
 
-Notice that we are asking you to add this to `application.yml`, since this will also be needed by the `Fortune Teller UI`.
+>**Note:** we are asking you to add this to `application.yml`, since this will also be needed by the `Fortune Teller UI`.
 
 ### Step 05 - Create a MySqlHealthContributor
 
@@ -86,3 +86,6 @@ Make changes to your `Program.cs` file to replace usage of the ASP.NET Core Cons
 ### Step 06 - Push to Cloud Foundry
 
 Publish, push and verify the `Fortune Teller UI` exposes the management endpoints.
+
+---
+Congratulations, you've completed the final lab! Join us on [Slack](https://slack.steeltoe.io) to tell us how it went!

@@ -2,7 +2,7 @@
 
 ## Install the Workshop GitHub Repository
 
-1. If you haven't already done so, download and install the [Workshop Repository](https://github.com/SteeltoeOSS/Workshop).
+1. If you haven't already done so, download or use git to clone the [Workshop Repository](https://github.com/SteeltoeOSS/Workshop).
 
    ---
 
@@ -43,7 +43,7 @@
 
    ```bash
    > cd Workshop/ConfigServer
-   > mvnw spring-boot:run
+   > ./mvnw spring-boot:run
     .....
 
    2017-11-13 16:58:13.306  INFO 134064 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Located managed bean 'configurationPropertiesRebinder': registering with JMX server as MBean [org.springframework.cloud.context.properties:name=configurationPropertiesRebinder,context=526a122,type=ConfigurationPropertiesRebinder]
@@ -59,7 +59,7 @@
 
    ```bash
    > cd Workshop/EurekaServer
-   > mvnw spring-boot:run
+   > ./mvnw spring-boot:run
    .....
 
    2017-11-13 17:01:01.956  INFO 54544 --- [      Thread-10] c.n.e.r.PeerAwareInstanceRegistryImpl    : Changing status to UP
@@ -128,4 +128,5 @@
 
    ![logged](../Common/images/lab-student-loggedin.png)
 
-   ---
+---
+Continue the workshop with [Lab 1 - Running .NET Application on Cloud Foundry](../Lab01/README.md)

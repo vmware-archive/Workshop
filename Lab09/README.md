@@ -2,7 +2,7 @@
 
 >In this lab we will continue to add functionality to the Fortune Teller application. We will learn how to add some level of fault tolerance to the UI portion of our application, along with the ability to see when these faults begin to happen.
 
->After completing Lab 8, the app in its current state is as follows:
+>After completing Lab 8, the app state should be as follows:
 
 * The application can now scale horizontally.
 * Unfortunately, if the Fortune Service becomes unavailable, the UI returns meaningless information to our users and we are unaware of the fact.
@@ -12,7 +12,7 @@
 * Change `Fortune Teller UI` to use a `Netflix Hystrix Command` to wrap `Fortune Teller Service` REST requests. We will implement a fallback function that handles request failures.
 * Change `Fortune Teller UI` to report command metrics/status to the Hystrix dashboard so we can "see" what is happening with all of the requests.
 
->For some background information on `Netflix Hystrix`, have a look at this [documentation](https://github.com/Netflix/Hystrix/wiki)
+>For background information, see: [Netflix Hystrix documentation](https://github.com/Netflix/Hystrix/wiki)
 
 ## Preparation
 
@@ -36,7 +36,7 @@ We are still using the Config Server, so we make sure it is running locally so i
 
 ### Step 02 - Run Eureka Server Locally
 
-Here we do the steps to setup and run a Eureka Server locally so its easier to develop and test with.
+Here we setup and run a Eureka Server locally so its easier to develop and test with.
 
 1. Open a command window and change directory to _Workshop/EurekaServer_
 
@@ -52,9 +52,9 @@ Here we do the steps to setup and run a Eureka Server locally so its easier to d
 
 It will start up on port 8761 and serve the Eureka API from "/eureka".
 
-## Add Netflix Hystrix Command 
+## Add Netflix Hystrix Command
 
-In this section we will be adding code to the `Fortune Teller UI` to use a `FortuneServiceCommand` Hystrix command when making requests of the `Fortune Teller Service`.
+In this section we will add code to the `Fortune Teller UI` to use a `FortuneServiceCommand` Hystrix command when making requests of the `Fortune Teller Service`.
 
 ### Step 01 - Add Steeltoe Hystrix Nuget
 
@@ -81,8 +81,7 @@ Make changes to your `Startup.cs` class to add the `FortuneServiceCommand` to th
 
 ### Step 05 - Run Locally
 
-Run and verify both Fortune-Tellers continue to run as they did before. Run the application either in a command window or within VS2017.
-Every thing should work as it did before, but if you don't start the `Fortune Teller Service` you should see that your fallback logic is now executed in the UI.
+Run and verify both Fortune-Tellers continue to run as they did before. Run the application in either a command window or VS2017. Everything should work as before, but if you don't start the `Fortune Teller Service` you should see that your fallback logic is now executed in the UI.
 
 ## Add Hystrix Dashboard
 
@@ -90,7 +89,7 @@ Every thing should work as it did before, but if you don't start the `Fortune Te
 
 Make changes to your `Fortune Teller UI` project file to include the Steeltoe Hystrix Metrics Stream NuGet.
 
-Note that in addition to the Steeltoe Hystrix Metrics Stream NuGet, you will also need to include the RabbitMQ Client NuGet for communicating with the Hystrix dashboard on Cloud Foundry.
+>**Note:** to use the Hystrix dashboard on Cloud Foundry, you must include the `RabbitMQ.Client` NuGet in addition to the Steeltoe Hystrix Metrics Stream NuGet.
 
 ### Step 02 - Add Hystrix Metrics Stream to Container
 
@@ -100,8 +99,7 @@ Remember that you will need to make changes to both the `Configure()` and `Confi
 
 ### Step 03 - Run Locally
 
-Run and verify both Fortune-Tellers continue to run as they did before. Run the application either in a command window or within VS2017.
-Every thing should work as it did before as you have not activated Hystrix metrics when running in `Development` mode.
+Run and verify both Fortune-Tellers continue to run as they did before. Run the application in either a command window or VS2017. Everything should work as it did before as you have not activated Hystrix metrics when running in `Development` mode.
 
 ### Step 04 - Create Hystrix Dashboard Service Instance
 
@@ -165,5 +163,5 @@ Note that you will have to access and use the Fortune Teller UI in order to see 
 
     ![env-7](../Common/images/lab-09-hystrix-2.png)
 
-   ---
-
+---
+Continue the workshop with [Lab 10 - Securing Application Endpoints - OAuth2 and JWT Tokens](../Lab10/README.md)

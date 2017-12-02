@@ -4,7 +4,7 @@
 
 >The application makes use of the __Steeltoe CloudFoundry Configuration Provider__ to parse the JSON configuration data provided to the application by Cloud Foundry as environment variables.
 
->Note: We will be using this same application for the next 4 labs (i.e. Lab1-Lab4) of the workshop.
+>**Note**: We will be using this same application for the next 4 labs (i.e. Lab1-Lab4) of the workshop.
 
 ## The Application
 
@@ -62,9 +62,9 @@ Follow the prompts using the credentials that you were provided by your instruct
 
 ## Open Lab Sample Application
 
-Take a minute an open up and explore the sample application that we will be working with for the next 4 labs.  In the upcoming steps you will be directed to explore specific files and it will be easier to do so using Visual Studio.
+Take a minute to open up and explore the sample application that we will be working with for the next 4 labs.  In the upcoming steps you will be directed to explore specific files and it will be easier to do so using Visual Studio.
 
-You can find lab code `Workshop/Lab01/CloudFoundry` and a solution file `Workshop/Lab01/Lab01.sln`.
+You can find lab code in [Workshop/Lab01/CloudFoundry](/CloudFoundry) and Visual Studio solution file `Workshop/Lab01/Lab01.sln`.
 
 ## Publish and Push the Application to Cloud Foundry
 
@@ -72,7 +72,7 @@ In order to get the application running on Cloud Foundry we will first publish t
 
 1. Open a command prompt and change directory to the Lab code.
 
-   Note in this lab we are not going to write any code. Instead we will be using the pre-coded lab in this directory.
+>**Note**: in this lab we are not going to write any code. Instead we will be using the pre-coded lab in this directory.
 
    ```bash
    > cd Workshop/Lab01/CloudFoundry
@@ -84,9 +84,9 @@ In order to get the application running on Cloud Foundry we will first publish t
    > dotnet restore --configfile nuget.config
    ```
 
-1. Publish the application getting it ready to push to Cloud Foundry. Pay attention to where the `dotnet` CLI creates the published application as you will have to reference that directory in the next step.
+1. Publish the application to get it ready to push to Cloud Foundry. Pay attention to where the `dotnet` CLI creates the published application as you will have to reference that directory in the next step.
 
-   Notice that we are specifying a specific runtime by using `-r ubuntu.14.04-x64` during our `publish` command as we will be pushing this application to a Linux cell on Cloud Foundry.
+>**Note**: we are specifying the runtime by using `-r ubuntu.14.04-x64` during our `publish` command as we will be pushing this application to a Linux cell on Cloud Foundry.
 
    ```bash
    > dotnet publish -r ubuntu.14.04-x64
@@ -200,7 +200,7 @@ In order to get the application running on Cloud Foundry we will first publish t
 
 When you push your application to Cloud Foundry there are a number of things to be aware of. Go through each of the points below and see if you can find in the output above what is being described.
 
-* The CLI uses the manifest to provide the necessary configuration details to Cloud Foundry for the application. Things such as the application name, the memory to be allocated, the operating system to be used (in this case Linux), the number of instances to start, the environment variables to set, and the routes to use when accessing the application. Take a minute and open up `manifest.yml` to see how this is done.  There are two manifests for the application, one to be used when targeting Linux and the other for Windows. You can find them in  `Workshop/Lab01/CloudFoundry`.
+* The CLI uses the manifest to provide the necessary configuration details to Cloud Foundry for the application. Things such as the application name, the memory to be allocated, the operating system to be used (in this case Linux), the number of instances to start, the environment variables to set, and the routes to use when accessing the application. Take a minute and open up `manifest.yml` to see how this is done.  There are two manifests for the application, one to be used when targeting Linux and the other for Windows. You can find them in [Workshop/Lab01/CloudFoundry](CloudFoundry).
 
 * In most cases, the CLI indicates each Cloud Foundry API call as it happens. In reviewing the output above you can see the CLI has created an application named `env` and has started it in your assigned Cloud Foundry org and space.
 
@@ -212,7 +212,7 @@ When you push your application to Cloud Foundry there are a number of things to 
 
 * When Cloud Foundry starts the application it first must run the application through the staging process. The staging process prepares the application to run on Cloud Foundry. Cloud Foundry will create two containers, one to stage the application and then a second to actually run or host the prepared bits.
 
-* The final package of your application which is created as a result of the staging process contains all of the necessary runtime bits needed for the application to run. In Cloud Foundry terminology we refer to this as a _droplet_. You will notice from the output that the droplet is being uploaded to Pivotal Cloud Foundry's internal blob store so that it can be easily copied/replicated to one or more [Diego Cells](https://docs.pivotal.io/pivotalcf/1-7/concepts/diego/diego-architecture.html) for execution.
+* The final package of your application, which is created as a result of the staging process, contains all of the necessary runtime bits needed for the application to run. In Cloud Foundry terminology we refer to this as a _droplet_. You will notice from the output that the droplet is being uploaded to Pivotal Cloud Foundry's internal blob store so that it can be easily copied/replicated to one or more [Diego Cells](https://docs.pivotal.io/pivotalcf/1-7/concepts/diego/diego-architecture.html) for execution.
 
 * Notice that the CLI tells you exactly what command and argument will be used to start your application.
 
@@ -337,17 +337,17 @@ Take some time to explore the application using the Pivotal AppsManager.
 
     For more detail on how ASP.NET Core Host building is done,  read over the Microsoft documentation - [Setting up a Host](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/hosting?tabs=aspnetcore2x).
 
-    For information on how an applications configuration is established, read over the Microsoft documenation on [Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration?tabs=basicconfiguration).
+    For information on how an application's configuration is established, read over the Microsoft documenation on [Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration?tabs=basicconfiguration).
 
     In upcoming labs we will spend much more time on how this all works!
 
-1. Above when you clicked on `CloudFoundry Config` menu item what you were observing is the configuration information from `VCAP_APPLICATION` and `VCAP_SERVICES`. To see in the code how this view is created start with the `CloudFoundryConfig()` action in the `HomeController`.
+1. When you clicked on the `CloudFoundry Config` menu item, what you were observing is the configuration information from `VCAP_APPLICATION` and `VCAP_SERVICES`. To see in the code how this view is created start with the `CloudFoundryConfig()` action in the `HomeController`.
 
-1. When you clicked on `Application Config` menu item what you were observing is the configuration information from `appsettings.json` and `appsettings-Development.json`, both configuration files found in the applications solution. To see in the code how this view is created start with the `AppConfig()` action in the `HomeController`.
+1. When you clicked on the `Application Config` menu item, what you were observing is the configuration information from `appsettings.json` and `appsettings-Development.json`, both configuration files found in the applications solution. To see in the code how this view is created start with the `AppConfig()` action in the `HomeController`.
 
-1. When you clicked on `Subsection Config` menu item what you were observing is a subsection of the configuration data from `appsettings.json` and `appsettings-Development.json`. Take some time and see if you can find in the code how this is accomplished. To see in the code how this view is created start with the `SubSectionConfig()` action in the `HomeController`.
+1. When you clicked on the `Subsection Config` menu item, what you were observing is a subsection of the configuration data from `appsettings.json` and `appsettings-Development.json`. Take some time and see if you can find in the code how this is accomplished. To see in the code how this view is created start with the `SubSectionConfig()` action in the `HomeController`.
 
-1. When you clicked on the `Raw Config` menu item what you were observing is a raw listing of all the configuration information available to the application. To see in the code how this view is created start with the `RawConfig()` action in the `HomeController`.
+1. When you clicked on the `Raw Config` menu item, what you were observing is a raw listing of all the configuration information available to the application. To see in the code how this view is created start with the `RawConfig()` action in the `HomeController`.
 
 ## Interact with Application from CF CLI
 
@@ -382,3 +382,5 @@ Take some time to explore the application using the Pivotal AppsManager.
    ```bash
    > cf delete env
    ```
+---
+Continue the workshop with [Lab 2 - Creating and Binding to Cloud Foundry Services](../Lab02/README.md)

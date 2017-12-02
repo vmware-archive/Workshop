@@ -99,7 +99,7 @@ Various Cloud Foundry components actively monitor the health of the application 
     * Just before issuing the `Environment.Exit(-1)` call, the application logs that the kill switch was clicked (i.e `Kaboom.`).
     * The `API` logs that an application instance exited due to a crash.
 
-1. Wait a few seconds, and then after a bit you should have noticed some additional interesting events in the logs:
+1. Wait a few seconds, you should notice some additional interesting events in the logs:
 
     ```bash
     2016-10-16T22:58:29.87-0400 [CELL/0]     OUT Creating container
@@ -201,7 +201,6 @@ All application configuration changes are recorded as _events_. These events can
 
    Showing health and status for app env in org instructor / space development as admin...
 
-
    name:              env
    requested state:   started
    instances:         1/1
@@ -247,3 +246,6 @@ All application configuration changes are recorded as _events_. These events can
    ---
 
 1. For more information about PCF Metrics checkout the [documentation](https://docs.pivotal.io/pcf-metrics/1-4/index.html).
+
+---
+Continue the workshop with [Lab 5 - ASP.NET Core Programming Fundamentals](../Lab05/README.md)
