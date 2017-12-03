@@ -80,7 +80,7 @@
 
     ---
 
-    ![env-7](../Common/images/lab-05-ui.png)
+![env-7](../Common/images/lab-05-ui.png)
 
    ---
 
@@ -88,7 +88,7 @@
 
     ---
 
-    ![env-7](../Common/images/lab-05-ui2.png)
+![env-7](../Common/images/lab-05-ui2.png)
 
    ---
 
@@ -96,7 +96,7 @@
 
     ---
 
-    ![env-7](../Common/images/lab-05-ui3.png)
+![env-7](../Common/images/lab-05-ui3.png)
 
    ---
 

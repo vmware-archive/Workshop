@@ -149,7 +149,7 @@ Publish, push and verify the application runs on Cloud Foundry. Make any adjustm
 
     ---
 
-    ![env-7](../Common/images/Lab-06-appmanager-1.png)
+![env-7](../Common/images/Lab-06-appmanager-1.png)
 
    ---
 
@@ -157,7 +157,7 @@ Publish, push and verify the application runs on Cloud Foundry. Make any adjustm
 
     ---
 
-    ![env-7](../Common/images/Lab-07-appmanager-2.png)
+![env-7](../Common/images/Lab-07-appmanager-2.png)
 
    ---
 
@@ -165,6 +165,6 @@ Publish, push and verify the application runs on Cloud Foundry. Make any adjustm
 
     ---
 
-    ![env-7](../Common/images/Lab-07-appmanager-3.png)
+![env-7](../Common/images/Lab-07-appmanager-3.png)
 ---
 Continue the workshop with [Lab 8 - Scaling Horizontally - Redis and Mysql Services](../Lab08/README.md)

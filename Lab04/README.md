@@ -74,7 +74,7 @@ Various Cloud Foundry components actively monitor the health of the application 
 
    ---
 
-    ![env-7](../Common/images/lab-kill-button.png)
+![env-7](../Common/images/lab-kill-button.png)
 
    ---
 
@@ -82,7 +82,7 @@ Various Cloud Foundry components actively monitor the health of the application 
 
    ---
 
-    ![env-7](../Common/images/lab-kill-failed.png)
+![env-7](../Common/images/lab-kill-failed.png)
 
    ---
 
@@ -233,7 +233,7 @@ All application configuration changes are recorded as _events_. These events can
 
     ---
 
-    ![env-7](../Common/images/lab-metrics-sel.png)
+![env-7](../Common/images/lab-metrics-sel.png)
 
    ---
 
@@ -241,7 +241,7 @@ All application configuration changes are recorded as _events_. These events can
 
     ---
 
-    ![env-7](../Common/images/lab-metrics.png)
+![env-7](../Common/images/lab-metrics.png)
 
    ---
 

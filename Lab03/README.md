@@ -8,7 +8,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
 ## Scale Up the Application Instances
 
-1. Its very easy to increase the number of instances of an application. To increase running application instances to 3, use the `cf scale` command as follows. 
+1. Its very easy to increase the number of instances of an application. To increase running application instances to 3, use the `cf scale` command as follows.
 
    Note: When the CLI reports `OK`, it is letting you know that the additional requested instances have been started, but they are not yet necessarily all running.
 
@@ -66,7 +66,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-scale-up.png)
+![env-7](../Common/images/lab-scale-up.png)
 
    ---
 
@@ -106,7 +106,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-scale-down.png)
+![env-7](../Common/images/lab-scale-down.png)
 
    ---
 
@@ -136,7 +136,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-01-appsmanager-env.png)
+![env-7](../Common/images/lab-01-appsmanager-env.png)
 
    ---
 
@@ -144,7 +144,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-routes.png)
+![env-7](../Common/images/lab-routes.png)
 
    ---
 
@@ -152,7 +152,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-add-route.png)
+![env-7](../Common/images/lab-add-route.png)
 
    ---
 
@@ -160,7 +160,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-net.png)
+![env-7](../Common/images/lab-net.png)
 
    ---
 
@@ -168,7 +168,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-unmap-route.png)
+![env-7](../Common/images/lab-unmap-route.png)
 
    ---
 
@@ -176,7 +176,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/lab-no-route.png)
+![env-7](../Common/images/lab-no-route.png)
 
    ---
 
@@ -184,7 +184,7 @@ If your instance of the sample app `env` is not running after the steps complete
 
    ---
 
-    ![env-7](../Common/images/blue-green.png)
+![env-7](../Common/images/blue-green.png)
 
 ---
 Continue the workshop with [Lab 4 - Monitoring Applications](../Lab04/README.md)

@@ -126,7 +126,7 @@ Publish, push and verify the applications run on Cloud Foundry. Make any adjustm
 
     ---
 
-    ![env-7](../Common/images/Lab-06-appmanager-1.png)
+![env-7](../Common/images/Lab-06-appmanager-1.png)
 
    ---
 
@@ -134,7 +134,7 @@ Publish, push and verify the applications run on Cloud Foundry. Make any adjustm
 
     ---
 
-    ![env-7](../Common/images/Lab-06-appmanager-2.png)
+![env-7](../Common/images/Lab-06-appmanager-2.png)
 
    ---
 
@@ -142,7 +142,7 @@ Publish, push and verify the applications run on Cloud Foundry. Make any adjustm
 
     ---
 
-    ![env-7](../Common/images/Lab-06-appmanager-3.png)
+![env-7](../Common/images/Lab-06-appmanager-3.png)
 
 ---
 Continue the workshop with [Lab 7 - Service Discovery - Eureka Server](../Lab07/README.md)

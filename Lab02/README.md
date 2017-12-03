@@ -73,7 +73,7 @@ The second way is to use the Pivotal Apps Manager. If you haven't already done s
 
 ---
 
-  ![env-5](../Common/images/lab-mkt-link.png)
+![env-5](../Common/images/lab-mkt-link.png)
 
 ---
 
@@ -81,7 +81,7 @@ You should see something like the following, depending on what services have bee
 
 ---
 
-  ![env-5](../Common/images/lab-marketplace.png)
+![env-5](../Common/images/lab-marketplace.png)
 
 ---
 
@@ -91,7 +91,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-     ![env-6](../Common/images/lab-mysql.png)
+ ![env-6](../Common/images/lab-mysql.png)
 
    ---
 
@@ -99,7 +99,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-     ![env-7](../Common/images/lab-mysql2.png)
+ ![env-7](../Common/images/lab-mysql2.png)
 
    ---
 
@@ -107,7 +107,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-    ![env-7](../Common/images/lab-mysql3.png)
+![env-7](../Common/images/lab-mysql3.png)
 
    ---
 
@@ -123,7 +123,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-    ![env-9](../Common/images/lab-mysql5.png)
+![env-9](../Common/images/lab-mysql5.png)
 
    ---
 
@@ -131,7 +131,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-    ![env-7](../Common/images/lab-mysql4.png)
+![env-7](../Common/images/lab-mysql4.png)
 
    ---
 
@@ -176,7 +176,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-    ![env-7](../Common/images/lab-app-db.png)
+![env-7](../Common/images/lab-app-db.png)
 
    ---
 
