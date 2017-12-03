@@ -50,7 +50,7 @@
    > dotnet run
    ```
 
-1. Hit the REST endpoint <http://localhost:5000/api/fortunes/all.> You should see the following JSON returned:
+1. Hit the REST endpoint <http://localhost:5000/api/fortunes/all>. You should see the following JSON returned:
 
    ```text
    [{"id":1,"text":"Hello from FortuneController Web API!"}]
