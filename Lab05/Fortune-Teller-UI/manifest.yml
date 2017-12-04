@@ -4,4 +4,4 @@ applications:
   random-route: true
   buildpack: dotnet_core_buildpack  
   env:
-    ASPNETCORE_ENVIRONMENT: Production
+    ASPNETCORE_ENVIRONMENT: Development
