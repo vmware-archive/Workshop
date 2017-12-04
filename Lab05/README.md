@@ -236,16 +236,20 @@ Also, in this step you will make use of the Configuration and Options features o
 
 1. Modify the `Startup` class to make use of the `Options` framework to configure the `FortuneServiceOptions` from the values in `appsettings.json` and to add it to the service container so that it will be injected.
 
-### Step 04 - Run both Locally
+### Step 04 - Modify FortuneTellerClient
+
+1. Modify the FortuneTellerClient to make the REST call to the FortuneTeller service.
+
+### Step 05 - Run both Locally
 
 1. Run the `Fortune-Teller-Service` in either a command window or VS2017.
 1. Run the `Fortune-Teller-UI` in either a command window or VS2017.
 1. Verify that the UI can communicate with the Fortune service.
 
-### Step 05 - Push both to Cloud Foundry
+### Step 06 - Push both to Cloud Foundry
 
 1. Publish and push the `Fortune-Teller-Service` to Cloud Foundry.
-1. Modify the UI's `appsettings.json` file to configure it to run properly on Cloud Foundry.
+1. Modify the UI `appsettings.json` file to configure it to run properly on Cloud Foundry.
 1. Publish and push the `Fortune-Teller-UI` to Cloud Foundry.
 1. Verify that the UI can communicate with the Fortune service.
 
