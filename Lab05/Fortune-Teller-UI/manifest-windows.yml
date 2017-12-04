@@ -7,5 +7,5 @@ applications:
   stack: windows2012R2
   command: cmd /c .\Fortune-Teller-UI --server.urls http://*:%PORT%
   env:
-    ASPNETCORE_ENVIRONMENT: Production
+    ASPNETCORE_ENVIRONMENT: Development
 

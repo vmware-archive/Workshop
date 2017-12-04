@@ -53,7 +53,7 @@ At a minimum, we need to tell the client what URL to use to make requests of the
 
 Use `spring:application:name` to configure the name of the application for each project. Use the following names:
 
-* Fortune_Teller_Service - use `fortuneservice`
+* Fortune_Teller_Service - use `fortuneService`
 * Fortune_Teller_UI - use `fortuneui`
 
 ### Step 05 - Centralize configuration data
