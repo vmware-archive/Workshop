@@ -78,27 +78,27 @@
 
 1. Open <http://localhost:5555/> in your favorite browser. You should see the following:
 
-    ---
+---
 
 ![env-7](../Common/images/lab-05-ui.png)
 
-   ---
+---
 
-1. Click on `Your Fortune` in the menu. You should see the following.  The `Your Fortune` action saves whatever fortune it obtains in the application's session.
+6. Click on `Your Fortune` in the menu. You should see the following.  The `Your Fortune` action saves whatever fortune it obtains in the application's session.
 
-    ---
+---
 
 ![env-7](../Common/images/lab-05-ui2.png)
 
-   ---
+---
 
-1. Click on `Home` in the menu. You should see the following.  Notice `Your fortune: Hello from FortuneController UI!`.  This is the fortune retrieved from the application's session state.
+7. Click on `Home` in the menu. You should see the following.  Notice `Your fortune: Hello from FortuneController UI!`.  This is the fortune retrieved from the application's session state.
 
-    ---
+---
 
 ![env-7](../Common/images/lab-05-ui3.png)
 
-   ---
+---
 
 ## Run/Debug Fortune Teller in VS2017
 

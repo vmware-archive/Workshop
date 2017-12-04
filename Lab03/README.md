@@ -134,55 +134,55 @@ If your instance of the sample app `env` is not running after the steps complete
 
 1. The second way is via the Apps Manager.  Click on the `env` application to view application details like shown below:
 
-   ---
+---
 
 ![env-7](../Common/images/lab-01-appsmanager-env.png)
 
-   ---
+---
 
-1. Select the _Routes_ tab to view a list of mapped routes:
+3. Select the _Routes_ tab to view a list of mapped routes:
 
-   ---
+---
 
 ![env-7](../Common/images/lab-routes.png)
 
-   ---
+---
 
-1. We can easily add an additional route by clicking on _Map a Route_ button and supplying the new hostname and clicking on _Map_
+4. We can easily add an additional route by clicking on _Map a Route_ button and supplying the new hostname and clicking on _Map_
 
-   ---
+---
 
 ![env-7](../Common/images/lab-add-route.png)
 
-   ---
+---
 
-1. Navigate to the new URL in your browser window.  You should see that same application displayed!
+5. Navigate to the new URL in your browser window.  You should see that same application displayed!
 
-   ---
+---
 
 ![env-7](../Common/images/lab-net.png)
 
-   ---
+---
 
-1. We can just as easily remove a route by clicking on _X_ on the route you wish to remove.
+6. We can just as easily remove a route by clicking on _X_ on the route you wish to remove.
 
-   ---
+---
 
 ![env-7](../Common/images/lab-unmap-route.png)
 
-   ---
+---
 
-1. If you navigate to that URL you'll receive a HTTP 404 response.
+7. If you navigate to that URL you'll receive a HTTP 404 response.
 
-   ---
+---
 
 ![env-7](../Common/images/lab-no-route.png)
 
-   ---
+---
 
-1. This is how blue-green deployments are accomplished. Check the Pivotal [documentation](https://docs.pivotal.io/pivotalcf/1-7/devguide/deploy-apps/blue-green.html) for detailed instructions.
+8. This is how blue-green deployments are accomplished. Check the Pivotal [documentation](https://docs.pivotal.io/pivotalcf/1-7/devguide/deploy-apps/blue-green.html) for detailed instructions.
 
-   ---
+---
 
 ![env-7](../Common/images/blue-green.png)
 

@@ -72,19 +72,19 @@ Various Cloud Foundry components actively monitor the health of the application 
 
 1. If you do not have more than one application instance running, execute the scale command to scale `env` to 2 or more instances.  Visit the application in the browser, and click on the ``Kill App`` menu item. This menu item triggers an `Environment.Exit(-1)` causing the instance to crash and the Cloud Foundry Health Manager to observe an application instance crash.
 
-   ---
+---
 
 ![env-7](../Common/images/lab-kill-button.png)
 
-   ---
+---
 
-1. After clicking the ``Kill App`` menu item a couple of interesting things should happen. First, you'll see an error code returned in the browser as the request you submitted never returns a response.
+3. After clicking the ``Kill App`` menu item a couple of interesting things should happen. First, you'll see an error code returned in the browser as the request you submitted never returns a response.
 
-   ---
+---
 
 ![env-7](../Common/images/lab-kill-failed.png)
 
-   ---
+---
 
    Also, if you're paying attention to the log tail, you'll see some interesting log messages fly by:
 
@@ -99,7 +99,7 @@ Various Cloud Foundry components actively monitor the health of the application 
     * Just before issuing the `Environment.Exit(-1)` call, the application logs that the kill switch was clicked (i.e `Kaboom.`).
     * The `API` logs that an application instance exited due to a crash.
 
-1. Wait a few seconds, you should notice some additional interesting events in the logs:
+4. Wait a few seconds, you should notice some additional interesting events in the logs:
 
     ```bash
     2016-10-16T22:58:29.87-0400 [CELL/0]     OUT Creating container
@@ -231,21 +231,21 @@ All application configuration changes are recorded as _events_. These events can
 
 1. To access PCF Metrics go to this URL in your browser (e.g. <https://metrics.run.haas-76.pez.pivotal.io>). Select the application you want to see metrics from in the selection box
 
-    ---
+---
 
 ![env-7](../Common/images/lab-metrics-sel.png)
 
-   ---
+---
 
-1. Explore the container and network metrics and correlate them with your logs!
+2. Explore the container and network metrics and correlate them with your logs!
 
-    ---
+---
 
 ![env-7](../Common/images/lab-metrics.png)
 
-   ---
+---
 
-1. For more information about PCF Metrics checkout the [documentation](https://docs.pivotal.io/pcf-metrics/1-4/index.html).
+3. For more information about PCF Metrics checkout the [documentation](https://docs.pivotal.io/pcf-metrics/1-4/index.html).
 
 ---
 Continue the workshop with [Lab 5 - ASP.NET Core Programming Fundamentals](../Lab05/README.md)

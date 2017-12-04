@@ -95,7 +95,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-1. Next, select the `100mb` plan.
+2. Next, select the `100mb` plan.
 
    ---
 
@@ -103,7 +103,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-1. Next, provide an instance name for the instance you are about to create. In the drop-down list next to _Bind to App_ select your workshop application (i.e. `env`). Then click the `Add` button.
+3. Next, provide an instance name for the instance you are about to create. In the drop-down list next to _Bind to App_ select your workshop application (i.e. `env`). Then click the `Add` button.
 
    ---
 
@@ -111,7 +111,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-1. Notice the admonition to `Use 'cf restage' to ensure your env variable changes take effect`. In order for the service bindings to be seen by the application, the application will need to be restaged/restarted. This is needed since all service bindings for an application are provided to it as configuration data via the `VCAP_SERVICES` environment variable.  We'll have a look at its format shortly.
+4. Notice the admonition to `Use 'cf restage' to ensure your env variable changes take effect`. In order for the service bindings to be seen by the application, the application will need to be restaged/restarted. This is needed since all service bindings for an application are provided to it as configuration data via the `VCAP_SERVICES` environment variable.  We'll have a look at its format shortly.
 
 1. Now let's _restage_ the application. Restaging cycles our application back through the staging process before redeploying the application. A _restage_ is generally recommended because the Cloud Foundry build-pack process also has access to injected environment variables (e.g. `VCAP_SERVICES`) and can install or configure things differently based on their values.
 
@@ -135,7 +135,7 @@ You should see something like the following, depending on what services have bee
 
    ---
 
-1. If you want to see the actual JSON that is contained in the `VCAP_SERVICES` environment variable, you can do that by going back to the application view and then select the _Settings_ tab. Once there you then click on the `Reveal Env Vars` button on the screen. You should see something like below:
+7. If you want to see the actual JSON that is contained in the `VCAP_SERVICES` environment variable, you can do that by going back to the application view and then select the _Settings_ tab. Once there you then click on the `Reveal Env Vars` button on the screen. You should see something like below:
 
    ```text
    {

@@ -143,23 +143,23 @@ Note that you will have to access and use the Fortune Teller UI in order to see 
 
 1. Select your Org and Space and view the two Fortune Teller applications.
 
-    ---
+---
 
 ![env-7](../Common/images/Lab-06-appmanager-1.png)
 
-   ---
+---
 
-1. Select the services tab and select Circuit Breaker service instance.
+3. Select the services tab and select Circuit Breaker service instance.
 
-    ---
+---
 
 ![env-7](../Common/images/lab-09-hystrix-1.png)
 
-   ---
+---
 
-1. Select the Manage link to view the Hystrix dashboard.
+4. Select the Manage link to view the Hystrix dashboard.
 
-    ---
+---
 
 ![env-7](../Common/images/lab-09-hystrix-2.png)
 
