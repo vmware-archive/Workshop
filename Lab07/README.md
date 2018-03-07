@@ -103,7 +103,8 @@ Now that we are using the Discovery service, you will need to alter the configur
 
 ### Step 07 - Run Locally
 
-Run and verify both Fortune-Tellers continue to run as they did before. Run the application in either a command window or VS2017.
+Run and verify both Fortune-Tellers continue to run as they did before. Run the application in either a command window or VS2017.  Verify Eureka has fortuneSerivce registered at http://localhost:8761/. 
+**Note**: Eureka will transform localhost to your fully qualified machine name which may not work for calling your api.  Consider also changing your fortuneService Eureka instance settings to specify `preferIpAddress: true` and `ipAddress: 127.0.0.1`
 
 ## Use Eureka Server on Cloud Foundry
 
