@@ -36,7 +36,7 @@ Here we setup and run a Config Server locally, for easier development and testin
    > ./mvnw spring-boot:run
    ```
 
-   It will start up on port 8888 and serve configuration data from `Workshop/ConfigServer/steeltoe/config-repo`.
+   It will start up on port 8888 and serve configuration data from `Workshop/ConfigServer/steeltoe/config-repo`.  You can verify the config server is running via the health check endpoint http://localhost:8888/admin/health
 
 ### Step 02 - Add Steeltoe Config Server Client Nuget
 
