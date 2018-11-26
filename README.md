@@ -1,6 +1,6 @@
 # Steeltoe Workshop
 
-**This workshop was given at SpringOne Platform 2017. It is no longer maintained. For the labs and course with all the new features of Steeltoe. Please contact the [Pivotal Education](https://pivotal.io/education) team. Thank you.**
+**_This workshop was given at SpringOne Platform 2017. It is no longer maintained. For the labs and course with all the new features of Steeltoe. Please contact the [Pivotal Education](https://pivotal.io/education) team. Thank you._**
 
 Hands on workshop describing how to use the Steeltoe components in developing .NET applications for Cloud Foundry.
  
