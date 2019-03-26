@@ -310,7 +310,7 @@ public void ConfigureServices(IServiceCollection services)
   },
   "redis": {
     "client": {
-      "host": "http://foo.bar",
+      "host": "https://foo.bar",
       "port": 1111
     }
   }

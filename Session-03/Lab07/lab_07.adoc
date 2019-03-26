@@ -181,7 +181,7 @@ The ``Fortune-Teller-UI`` should now be fetching Fortunes from the ``Fortune-Tel
 In this exercise we will startup a Spring Cloud Config Server locally and move some of our configuration data to the locally running Config Server.
 We also make the changes necessary to use the Config Server from our application. Specifically, we will use the Steeltoe Config Server client to pull config data from the Config Server.
 
-For some background information on Spring Cloud Config Server, have a look at this http://cloud.spring.io/spring-cloud-static/Camden.SR4/#_spring_cloud_config[documentation].
+For some background information on Spring Cloud Config Server, have a look at this https://cloud.spring.io/spring-cloud-static/Camden.SR4/#_spring_cloud_config[documentation].
 For some background information on Steeltoe Config Server client, have a look at this https://github.com/SteeltoeOSS/Configuration/tree/master/src/Steeltoe.Extensions.Configuration.ConfigServer[documentation].
 For other samples (ASP.NET Core and 4.x) that use the Steeltoe Config Server client, have a look https://github.com/SteeltoeOSS/Samples/tree/master/Configuration[here].
 
