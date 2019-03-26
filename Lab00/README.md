@@ -29,7 +29,7 @@
 
 ## Install & Verify Java JDK
 
-1. If you haven't already done so, download and install the [Java 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+1. If you haven't already done so, download and install the [Java 8 JDK](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 
    ---
 
