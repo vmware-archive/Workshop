@@ -164,7 +164,7 @@ Like the case above with MySql, the Steeltoe Redis connector can be used to conn
   },
   "redis": {
     "client": {
-      "host": "http://foo.bar",
+      "host": "https://foo.bar",
       "port": 1111
     }
   }

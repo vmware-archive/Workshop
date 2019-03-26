@@ -178,7 +178,7 @@ In order to get the application running on Cloud Foundry we will first publish t
 
    OK
 
-   App env was started using this command `cd . && ./CloudFoundry --server.urls http://0.0.0.0:${PORT}`
+   App env was started using this command `cd . && ./CloudFoundry --server.urls https://0.0.0.0:${PORT}`
 
    Showing health and status for app env in org test / space test as admin...
    OK

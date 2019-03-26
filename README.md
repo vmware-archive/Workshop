@@ -34,7 +34,7 @@ Start by checking out this repository.  This can be accomplished either through 
 * [Git Client](https://git-scm.com/downloads)
 * [.NET Core SDK 2.0](https://www.microsoft.com/net/download)
 * [Visual Studio Code](https://code.visualstudio.com/) or [Visual Studio 2017](https://www.visualstudio.com/downloads/ )
-* [Java 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) - Optional, needed to run Eureka and Config servers locally
+* [Java 8 JDK](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) - Optional, needed to run Eureka and Config servers locally
 
 Follow the steps in Lab 0 to get everything installed and verified.
 
